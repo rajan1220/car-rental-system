@@ -1,108 +1,84 @@
 require("dotenv").config();
 const express = require("express");
 const mongoose = require("mongoose");
-const bcrypt = require("bcrypt");
 const session = require("express-session");
+const bcrypt = require("bcrypt");
 const User = require("./models/User");
 
 const app = express();
-
-// Middleware
-app.use(express.json());
+app.set("view engine", "ejs");
 app.use(express.urlencoded({ extended: true }));
+app.use(express.static("public"));
+app.set("view engine", "ejs");
+app.set("views", __dirname + "/views");
 
-// Session Setup
+
 app.use(
     session({
-        secret: "mysecretkey",
+        secret: "secretkey",
         resave: false,
         saveUninitialized: true,
-        cookie: { secure: false } // Set to true if using HTTPS
+        cookie: { secure: false },
     })
 );
 
 // Connect to MongoDB
-mongoose.connect("mongodb://127.0.0.1:27017/car-rental-system", {
+mongoose.connect("mongodb://127.0.0.1:27017/car-rental", {
     useNewUrlParser: true,
-    useUnifiedTopology: true
+    useUnifiedTopology: true,
 })
-.then(() => console.log("✅ Connected to MongoDB"))
-.catch(err => console.error("❌ MongoDB Connection Error:", err));
+    .then(() => console.log("✅ MongoDB Connected"))
+    .catch(err => console.error("❌ MongoDB Connection Failed:", err));
 
 // Home Route
 app.get("/", (req, res) => {
-    res.send("🚗 Welcome to Car Rental System API");
+    res.render("index", { user: req.session.user });
 });
 
-// Register API
+// Register Route
+app.get("/register", (req, res) => {
+    res.render("register");
+});
+
 app.post("/register", async (req, res) => {
-    try {
-        const { name, email, password } = req.body;
+    const { name, email, password } = req.body;
+    const userExists = await User.findOne({ email });
+    if (userExists) return res.send("User already exists!");
 
-        // Check if user already exists
-        let user = await User.findOne({ email });
-        if (user) {
-            return res.status(400).send("❌ User already exists!");
-        }
-
-        // Hash password
-        const hashedPassword = await bcrypt.hash(password, 10);
-
-        // Save new user
-        user = new User({ name, email, password: hashedPassword });
-        await user.save();
-
-        res.status(201).send("✅ User registered successfully!");
-    } catch (error) {
-        console.error(error);
-        res.status(500).send("❌ Error Registering User");
-    }
+    const hashedPassword = await bcrypt.hash(password, 10);
+    const newUser = new User({ name, email, password: hashedPassword });
+    await newUser.save();
+    res.redirect("/login");
 });
 
-// Login API
+// Login Route
+app.get("/login", (req, res) => {
+    res.render("login");
+});
+
 app.post("/login", async (req, res) => {
-    try {
-        const { email, password } = req.body;
+    const { email, password } = req.body;
+    const user = await User.findOne({ email });
 
-        // Find user by email
-        const user = await User.findOne({ email });
-        if (!user) {
-            return res.status(400).send("❌ User not found!");
-        }
+    if (!user) return res.send("❌ User Not Found!");
+    const isMatch = await bcrypt.compare(password, user.password);
+    if (!isMatch) return res.send("❌ Incorrect Password!");
 
-        // Compare passwords
-        const isMatch = await bcrypt.compare(password, user.password);
-        if (!isMatch) {
-            return res.status(400).send("❌ Incorrect password!");
-        }
-
-        // Store user session
-        req.session.user = user;
-        res.send("✅ Login successful!");
-    } catch (error) {
-        console.error(error);
-        res.status(500).send("❌ Error Logging In");
-    }
+    req.session.user = user;
+    res.redirect("/dashboard");
 });
 
-// Logout API
-app.get("/logout", (req, res) => {
-    req.session.destroy(err => {
-        if (err) {
-            return res.status(500).send("❌ Error Logging Out");
-        }
-        res.send("✅ Logout successful!");
-    });
-});
-
-// Protected Route Example (Only logged-in users can access)
+// Dashboard (Protected Route)
 app.get("/dashboard", (req, res) => {
-    if (!req.session.user) {
-        return res.status(401).send("❌ Unauthorized! Please log in.");
-    }
-    res.send(`Welcome ${req.session.user.name} to your Dashboard!`);
+    if (!req.session.user) return res.redirect("/login");
+    res.render("dashboard", { user: req.session.user });
+});
+
+// Logout
+app.get("/logout", (req, res) => {
+    req.session.destroy();
+    res.redirect("/");
 });
 
 // Start Server
-const PORT = process.env.PORT || 3000;
-app.listen(PORT, () => console.log(`🚀 Server running on http://localhost:${PORT}`));
+app.listen(3000, () => console.log("🚀 Server running on http://localhost:3000"));
