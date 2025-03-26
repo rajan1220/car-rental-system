@@ -1,0 +1,12 @@
+<%- include('../layouts/header') %>
+<div class="container mt-5">
+  <h2>Welcome, <%= user.name %>!</h2>
+  <p>Your current bookings:</p>
+  <ul>
+    <% bookings.forEach(booking => { %>
+      <li><%= booking.carName %> - <%= booking.date %> - <a href="/booking/<%= booking._id %>">View</a></li>
+    <% }) %>
+  </ul>
+  <a href="/cars" class="btn btn-primary">Rent a Car</a>
+</div>
+<%- include('../layouts/footer') %>
