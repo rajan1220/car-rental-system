@@ -57,7 +57,7 @@ router.post(
       return res.status(400).json({ errors: errors.array() });
     }
 
-    const { make, model, type, dailyRate, seats, doors, transmission, aircon, luggage, available } = req.body;
+    const { make, model, type, dailyRate, seats, doors, transmission, aircon, available } = req.body;
 
     try {
       const newCar = new Car({
@@ -69,7 +69,6 @@ router.post(
         doors,
         transmission,
         aircon,
-        luggage,
         available
       });
 

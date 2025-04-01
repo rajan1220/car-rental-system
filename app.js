@@ -5,12 +5,12 @@ const session = require('express-session');
 const passport = require('passport');
 const flash = require('connect-flash');
 const path = require('path');
-
+const Db_name = "car_rental_db";
 // Initialize app
 const app = express();
-
+const dbstring = `${process.env.MONGO_URI}/${Db_name}`;
 // Database connection
-mongoose.connect(process.env.MONGO_URI, {
+mongoose.connect(dbstring, {
   useNewUrlParser: true,
   useUnifiedTopology: true
 })
@@ -66,12 +66,12 @@ app.use('/bookings', bookingRoutes);
 
 // Error handling
 app.use((req, res) => {
-  res.status(404).render('error/404', { title: 'Page Not Found' });
+  res.status(404).render('about.ejs', { title: 'Page Not Found' });
 });
 
 app.use((err, req, res, next) => {
   console.error(err.stack);
-  res.status(500).render('error/500', { title: 'Server Error' });
+  res.status(500).render('about.ejs', { title: 'Server Error' });
 });
 
 // Server setup

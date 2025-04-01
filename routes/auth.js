@@ -40,6 +40,7 @@ router.post('/login', [
 router.get('/register', (req, res) => {
   res.render('auth/register', { 
     title: 'Register',
+    body:'<%- include("../partials/layout") %>',
     success_msg: req.flash('success_msg'),
     error_msg: req.flash('error_msg')
   });
