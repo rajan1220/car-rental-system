@@ -1,15 +1,52 @@
-<!DOCTYPE html>
-<html lang="en">
-<head>
-    <title>Car Rental System</title>
-</head>
-<body>
-    <h1>Welcome to Car Rental System</h1>
-    <% if (user) { %>
-        <p>Hello, <%= user.name %>! <a href="/dashboard">Go to Dashboard</a></p>
-        <a href="/logout">Logout</a>
+<%- include('partials/header') %>
+
+<!-- Hero Section -->
+<div class="hero-section bg-dark text-white py-5 mb-5">
+  <div class="container-fluid py-5">
+    <div class="row align-items-center">
+      <div class="col-lg-6">
+        <h1 class="display-4 fw-bold mb-4">Welcome to <span class="text-primary">DriveEase</span></h1>
+        <p class="lead mb-4">Rent premium vehicles at affordable prices.</p>
+        <div class="d-flex gap-3">
+          <a href="/cars" class="btn btn-primary btn-lg px-4">Browse Cars</a>
+          <% if(!user) { %>
+            <a href="/auth/register" class="btn btn-outline-light btn-lg px-4">Register</a>
+          <% } %>
+        </div>
+      </div>
+      <div class="col-lg-6">
+        <img src="/images/hero-car.png" alt="Luxury Car" class="img-fluid rounded-3 shadow">
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- Featured Cars -->
+<div class="container-fluid mb-5">
+  <h2 class="fw-bold mb-4">Featured Cars</h2>
+  <div class="row g-4">
+    <% if (cars.length > 0) { %>
+      <% cars.forEach(car => { %>
+        <div class="col-md-4">
+          <div class="card h-100 shadow-sm">
+            <img src="/uploads/<%= car.image %>" class="card-img-top" alt="<%= car.make %> <%= car.model %>">
+            <div class="card-body">
+              <h5 class="card-title"><%= car.make %> <%= car.model %></h5>
+              <p class="card-text">
+                <strong>Type:</strong> <%= car.type %><br>
+                <strong>Daily Rate:</strong> $<%= car.dailyRate %>
+              </p>
+              <a href="/cars/<%= car._id %>" class="btn btn-primary">View Details</a>
+            </div>
+          </div>
+        </div>
+      <% }); %>
     <% } else { %>
-        <a href="/login">Login</a> | <a href="/register">Register</a>
+      <div class="col-12">
+        <div class="alert alert-info">No cars available at the moment.</div>
+      </div>
     <% } %>
-</body>
-</html>
+  </div>
+</div>
+
+<%- include('partials/footer') %>

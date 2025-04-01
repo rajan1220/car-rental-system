@@ -1,0 +1,56 @@
+<%- include('../partials/header') %>
+
+<div class="container my-5">
+  <div class="d-flex justify-content-between align-items-center mb-4">
+    <h1 class="display-6 fw-bold">Available Vehicles</h1>
+    <% if(user && user.role === 'admin') { %>
+      <a href="/cars/add" class="btn btn-success">
+        <i class="fas fa-plus me-2"></i>Add New Car
+      </a>
+    <% } %>
+  </div>
+
+  <div class="row g-4">
+    <% if (cars.length > 0) { %>
+      <% cars.forEach(car => { %>
+        <div class="col-md-6 col-lg-4">
+          <div class="card h-100 shadow-sm">
+            <img src="/uploads/<%= car.image || 'default-car.jpg' %>" class="card-img-top" alt="<%= car.make %> <%= car.model %>">
+            <div class="card-body">
+              <div class="d-flex justify-content-between mb-2">
+                <h2 class="h5 card-title mb-0"><%= car.make %> <%= car.model %></h2>
+                <span class="badge bg-primary"><%= car.type %></span>
+              </div>
+              
+              <div class="d-flex gap-2 mb-3">
+                <small class="text-muted"><i class="fas fa-users me-1"></i> <%= car.seats %> seats</small>
+                <small class="text-muted"><i class="fas fa-suitcase me-1"></i> <%= car.luggage %> bags</small>
+                <% if(car.aircon) { %>
+                  <small class="text-muted"><i class="fas fa-snowflake me-1"></i> A/C</small>
+                <% } %>
+              </div>
+              
+              <p class="card-text"><%= car.features.join(', ') %></p>
+              
+              <div class="d-flex justify-content-between align-items-center">
+                <h3 class="text-primary mb-0">$<%= car.dailyRate %>/day</h3>
+                <div>
+                  <a href="/cars/<%= car._id %>" class="btn btn-sm btn-outline-primary me-2">Details</a>
+                  <% if(car.available) { %>
+                    <a href="/bookings/new/<%= car._id %>" class="btn btn-sm btn-success">Book Now</a>
+                  <% } %>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      <% }); %>
+    <% } else { %>
+      <div class="col-12">
+        <div class="alert alert-info">No vehicles available at the moment. Please check back later.</div>
+      </div>
+    <% } %>
+  </div>
+</div>
+
+<%- include('../partials/footer') %>

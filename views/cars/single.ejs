@@ -1,0 +1,115 @@
+<%- include('../partials/header') %>
+
+<div class="container my-5">
+  <div class="row">
+    <div class="col-lg-8">
+      <div class="card border-0 shadow-sm mb-4">
+        <img src="/uploads/<%= car.image || 'default-car.jpg' %>" class="card-img-top" alt="<%= car.make %> <%= car.model %>">
+        <div class="card-body">
+          <h1 class="display-6 fw-bold"><%= car.make %> <%= car.model %></h1>
+          <div class="d-flex align-items-center mb-3">
+            <span class="badge bg-primary me-2"><%= car.type %></span>
+            <% if(car.available) { %>
+              <span class="badge bg-success">Available</span>
+            <% } else { %>
+              <span class="badge bg-danger">Not Available</span>
+            <% } %>
+          </div>
+          
+          <h2 class="h4 fw-bold mt-4">Specifications</h2>
+          <div class="row g-3 mb-4">
+            <div class="col-md-6">
+              <div class="d-flex align-items-center">
+                <div class="bg-light rounded-circle p-3 me-3">
+                  <i class="fas fa-users text-primary"></i>
+                </div>
+                <div>
+                  <h3 class="h6 mb-0">Seating Capacity</h3>
+                  <p class="mb-0"><%= car.seats %> persons</p>
+                </div>
+              </div>
+            </div>
+            <div class="col-md-6">
+              <div class="d-flex align-items-center">
+                <div class="bg-light rounded-circle p-3 me-3">
+                  <i class="fas fa-suitcase text-primary"></i>
+                </div>
+                <div>
+                  <h3 class="h6 mb-0">Luggage Capacity</h3>
+                  <p class="mb-0"><%= car.luggage %> bags</p>
+                </div>
+              </div>
+            </div>
+            <div class="col-md-6">
+              <div class="d-flex align-items-center">
+                <div class="bg-light rounded-circle p-3 me-3">
+                  <i class="fas fa-cog text-primary"></i>
+                </div>
+                <div>
+                  <h3 class="h6 mb-0">Transmission</h3>
+                  <p class="mb-0"><%= car.transmission %></p>
+                </div>
+              </div>
+            </div>
+            <div class="col-md-6">
+              <div class="d-flex align-items-center">
+                <div class="bg-light rounded-circle p-3 me-3">
+                  <i class="fas fa-snowflake text-primary"></i>
+                </div>
+                <div>
+                  <h3 class="h6 mb-0">Air Conditioning</h3>
+                  <p class="mb-0"><%= car.aircon ? 'Yes' : 'No' %></p>
+                </div>
+              </div>
+            </div>
+          </div>
+          
+          <h2 class="h4 fw-bold">Features</h2>
+          <div class="d-flex flex-wrap gap-2 mb-4">
+            <% car.features.forEach(feature => { %>
+              <span class="badge bg-light text-dark"><%= feature %></span>
+            <% }); %>
+          </div>
+          
+          <h2 class="h4 fw-bold">Description</h2>
+          <p>The <%= car.make %> <%= car.model %> is a premium <%= car.type.toLowerCase() %> that combines comfort, style, and performance. Perfect for both city driving and long road trips, this vehicle offers a smooth ride with all the modern amenities you need for a pleasant journey.</p>
+        </div>
+      </div>
+    </div>
+    
+    <div class="col-lg-4">
+      <div class="card border-0 shadow-sm sticky-top" style="top: 20px;">
+        <div class="card-body">
+          <h2 class="h4 fw-bold mb-4">Rental Information</h2>
+          
+          <div class="d-flex justify-content-between mb-3">
+            <span>Daily Rate:</span>
+            <strong>$<%= car.dailyRate %></strong>
+          </div>
+          
+          <% if(car.available) { %>
+            <a href="/bookings/new/<%= car._id %>" class="btn btn-primary w-100 mb-3">
+              <i class="fas fa-calendar-check me-2"></i>Book Now
+            </a>
+          <% } else { %>
+            <button class="btn btn-secondary w-100 mb-3" disabled>
+              Currently Unavailable
+            </button>
+          <% } %>
+          
+          <div class="alert alert-info">
+            <h3 class="h6 fw-bold">Rental Terms</h3>
+            <ul class="small mb-0">
+              <li>Minimum rental period: 1 day</li>
+              <li>Free cancellation up to 24 hours before pickup</li>
+              <li>Mileage: Unlimited</li>
+              <li>Insurance included</li>
+            </ul>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<%- include('../partials/footer') %>
