@@ -1,0 +1,67 @@
+<!-- views/admin/partials/admin-footer.ejs -->
+    <!-- Admin Footer -->
+    <footer class="admin-footer">
+        <div class="container">
+            <div class="row">
+                <div class="col-md-6">
+                    <p>&copy; <%= new Date().getFullYear() %> DriveEase. All rights reserved.</p>
+                </div>
+                <div class="col-md-6 text-right">
+                    <p>v1.0.0 | <a href="#">Terms</a> | <a href="#">Privacy</a></p>
+                </div>
+            </div>
+        </div>
+    </footer>
+
+    <style>
+        /* Footer Specific Styles */
+        .admin-footer {
+            background: #f8f9fa;
+            padding: 1.5rem;
+            margin-top: 2rem;
+            border-top: 1px solid rgba(0, 0, 0, 0.05);
+            color: #6c757d;
+            font-size: 0.9rem;
+        }
+        
+        .admin-footer a {
+            color: #4361ee;
+            text-decoration: none;
+            margin-left: 1rem;
+            transition: color 0.2s ease;
+        }
+        
+        .admin-footer a:hover {
+            color: #3a0ca3;
+            text-decoration: underline;
+        }
+        
+        @media (max-width: 768px) {
+            .admin-footer .col-md-6 {
+                text-align: center !important;
+                margin-bottom: 0.5rem;
+            }
+            
+            .admin-footer a {
+                margin: 0 0.5rem;
+            }
+        }
+    </style>
+    
+    <!-- Scripts -->
+    <script>
+        // Toggle sidebar on mobile
+        document.getElementById('sidebarToggle').addEventListener('click', function() {
+            document.querySelector('.sidebar').classList.toggle('active');
+        });
+        
+        // Toggle dropdown on mobile
+        document.querySelector('.user-profile').addEventListener('click', function(e) {
+            if (window.innerWidth <= 768) {
+                e.preventDefault();
+                document.querySelector('.dropdown-menu').classList.toggle('show');
+            }
+        });
+    </script>
+</body>
+</html>

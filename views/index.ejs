@@ -1,52 +1,623 @@
 <%- include('partials/header') %>
 
+<style>
+  /* Enhanced Color Palette */
+  :root {
+    --primary: #4361ee;
+    --primary-light: #e6f0ff;
+    --primary-dark: #3a0ca3;
+    --secondary: #f72585;
+    --accent: #4cc9f0;
+    --success: #38b000;
+    --warning: #ffaa00;
+    --dark: #212529;
+    --darker: #121416;
+    --light: #f8f9fa;
+    --lighter: #ffffff;
+    --gray: #6c757d;
+    --gray-light: #e9ecef;
+  }
+  
+  /* Base Styles */
+  body {
+    font-family: 'Inter', sans-serif;
+    background-color: var(--light);
+    color: var(--dark);
+    line-height: 1.6;
+  }
+  
+  h1, h2, h3, h4, h5, h6 {
+    font-weight: 700;
+    line-height: 1.2;
+  }
+  
+  /* Hero Section */
+  .hero-section {
+    background: linear-gradient(135deg, var(--darker) 0%, var(--primary-dark) 100%);
+    position: relative;
+    overflow: hidden;
+    padding: 8rem 0;
+    color: white;
+    border-radius: 0 0 2rem 2rem;
+    box-shadow: 0 10px 30px rgba(0,0,0,0.1);
+  }
+  
+  .hero-section::before {
+    content: '';
+    position: absolute;
+    top: -50%;
+    right: -50%;
+    width: 100%;
+    height: 200%;
+    background: radial-gradient(circle, rgba(255,255,255,0.1) 0%, rgba(255,255,255,0) 70%);
+    z-index: 0;
+    animation: pulse 15s infinite alternate;
+  }
+  
+  @keyframes pulse {
+    0% { transform: scale(1); opacity: 0.8; }
+    100% { transform: scale(1.1); opacity: 1; }
+  }
+  
+  .hero-content {
+    position: relative;
+    z-index: 1;
+  }
+  
+  .hero-title {
+    font-size: 3.5rem;
+    font-weight: 800;
+    line-height: 1.1;
+    margin-bottom: 1.5rem;
+  }
+  
+  .hero-title span {
+    color: var(--accent);
+    position: relative;
+    display: inline-block;
+  }
+  
+  .hero-title span::after {
+    content: '';
+    position: absolute;
+    bottom: 5px;
+    left: 0;
+    width: 100%;
+    height: 8px;
+    background-color: rgba(76, 201, 240, 0.3);
+    z-index: -1;
+    border-radius: 4px;
+  }
+  
+  .hero-img {
+    border-radius: 1.5rem;
+    box-shadow: 0 20px 40px rgba(0,0,0,0.3);
+    transform: perspective(1000px) rotateY(-10deg);
+    transition: transform 0.5s ease;
+    border: 4px solid rgba(255,255,255,0.1);
+  }
+  
+  .hero-img:hover {
+    transform: perspective(1000px) rotateY(0deg);
+  }
+  
+  /* Cards */
+  .card {
+    border: none;
+    border-radius: 1rem;
+    overflow: hidden;
+    transition: all 0.3s cubic-bezier(0.25, 0.8, 0.25, 1);
+    box-shadow: 0 4px 8px rgba(0,0,0,0.05);
+    background: white;
+  }
+  
+  .card-hover:hover {
+    transform: translateY(-10px);
+    box-shadow: 0 15px 30px rgba(67, 97, 238, 0.15) !important;
+  }
+  
+  .card-img-top {
+    height: 220px;
+    object-fit: cover;
+    transition: transform 0.5s ease;
+  }
+  
+  .card-hover:hover .card-img-top {
+    transform: scale(1.05);
+  }
+  
+  /* Badges */
+  .car-badge {
+    position: absolute;
+    top: 1rem;
+    right: 1rem;
+    padding: 0.5rem 1rem;
+    border-radius: 50rem;
+    font-weight: 700;
+    background: linear-gradient(135deg, var(--primary) 0%, var(--primary-dark) 100%);
+    color: white;
+    box-shadow: 0 4px 8px rgba(0,0,0,0.1);
+  }
+  
+  .car-type-badge {
+    padding: 0.35rem 0.85rem;
+    border-radius: 50rem;
+    font-size: 0.75rem;
+    font-weight: 600;
+    background-color: var(--primary-light);
+    color: var(--primary);
+  }
+  
+  /* Rating */
+  .rating-stars {
+    color: var(--warning);
+    font-size: 1rem;
+  }
+  
+  /* Buttons */
+  .btn {
+    font-weight: 600;
+    padding: 0.75rem 1.5rem;
+    border-radius: 50rem;
+    transition: all 0.3s ease;
+    border-width: 2px;
+  }
+  
+  .btn-primary {
+    background: linear-gradient(135deg, var(--primary) 0%, var(--primary-dark) 100%);
+    border-color: var(--primary);
+    box-shadow: 0 4px 15px rgba(67, 97, 238, 0.3);
+  }
+  
+  .btn-primary:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 8px 25px rgba(67, 97, 238, 0.4);
+    border-color: var(--primary-dark);
+  }
+  
+  .btn-outline-primary {
+    border-color: var(--primary);
+    color: var(--primary);
+  }
+  
+  .btn-outline-primary:hover {
+    background: linear-gradient(135deg, var(--primary) 0%, var(--primary-dark) 100%);
+    color: white;
+    border-color: var(--primary);
+  }
+  
+  /* Feature Icons */
+  .feature-icon {
+    width: 70px;
+    height: 70px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    border-radius: 1rem;
+    margin-bottom: 1.5rem;
+    font-size: 1.75rem;
+    background: linear-gradient(135deg, var(--primary-light) 0%, rgba(76, 201, 240, 0.1) 100%);
+    color: var(--primary);
+    box-shadow: 0 4px 15px rgba(67, 97, 238, 0.1);
+  }
+  
+  /* Testimonials */
+  .testimonial-img {
+    width: 60px;
+    height: 60px;
+    border-radius: 50%;
+    object-fit: cover;
+    border: 3px solid white;
+    box-shadow: 0 4px 8px rgba(0,0,0,0.1);
+  }
+  
+  .testimonial-card {
+    border-left: 4px solid var(--primary);
+    transition: all 0.3s ease;
+  }
+  
+  .testimonial-card:hover {
+    transform: translateY(-5px);
+    box-shadow: 0 10px 30px rgba(0,0,0,0.1);
+  }
+  
+  /* Section Headings */
+  .section-heading {
+    position: relative;
+    display: inline-block;
+    margin-bottom: 2rem;
+  }
+  
+  .section-heading::after {
+    content: '';
+    position: absolute;
+    bottom: -10px;
+    left: 0;
+    width: 50px;
+    height: 4px;
+    background: linear-gradient(135deg, var(--primary) 0%, var(--accent) 100%);
+    border-radius: 2px;
+  }
+  
+  /* CTA Section */
+  .cta-section {
+    background: linear-gradient(135deg, var(--primary) 0%, var(--primary-dark) 100%);
+    color: white;
+    padding: 4rem 0;
+    border-radius: 1.5rem;
+    overflow: hidden;
+    position: relative;
+    box-shadow: 0 15px 40px rgba(67, 97, 238, 0.3);
+  }
+  
+  .cta-section::before {
+    content: '';
+    position: absolute;
+    top: -50%;
+    right: -50%;
+    width: 100%;
+    height: 200%;
+    background: radial-gradient(circle, rgba(255,255,255,0.1) 0%, rgba(255,255,255,0) 70%);
+    z-index: 0;
+  }
+  
+  .cta-content {
+    position: relative;
+    z-index: 1;
+  }
+  
+  /* Animations */
+  @keyframes float {
+    0% { transform: translateY(0px); }
+    50% { transform: translateY(-15px); }
+    100% { transform: translateY(0px); }
+  }
+  
+  .floating {
+    animation: float 6s ease-in-out infinite;
+  }
+  
+  /* Responsive Adjustments */
+  @media (max-width: 768px) {
+    .hero-title {
+      font-size: 2.5rem;
+    }
+    
+    .hero-section {
+      padding: 4rem 0;
+      border-radius: 0 0 1rem 1rem;
+    }
+  }
+</style>
+
 <!-- Hero Section -->
-<div class="hero-section bg-dark text-white py-5 mb-5">
-  <div class="container-fluid py-5">
-    <div class="row align-items-center">
-      <div class="col-lg-6">
-        <h1 class="display-4 fw-bold mb-4">Welcome to <span class="text-primary">DriveEase</span></h1>
-        <p class="lead mb-4">Rent premium vehicles at affordable prices.</p>
-        <div class="d-flex gap-3">
+<section class="hero-section text-white">
+  <div class="container position-relative">
+    <div class="row align-items-center g-5">
+      <div class="col-lg-6 order-lg-1 order-2 hero-content">
+        <h1 class="hero-title">Drive Your Dream Car with <span>DriveEase</span></h1>
+        <p class="lead mb-4 opacity-75">Premium car rentals at unbeatable prices. Experience luxury without the commitment.</p>
+        <div class="d-flex flex-wrap gap-3 mb-4">
           <a href="/cars" class="btn btn-primary btn-lg px-4">Browse Cars</a>
           <% if(!user) { %>
-            <a href="/auth/register" class="btn btn-outline-light btn-lg px-4">Register</a>
+            <a href="/auth/register" class="btn btn-outline-light btn-lg px-4">Register Now</a>
           <% } %>
         </div>
+        <div class="d-flex flex-wrap align-items-center gap-4">
+          <div class="d-flex align-items-center">
+            <i class="bi bi-check-circle-fill text-primary me-2"></i>
+            <span>No Hidden Fees</span>
+          </div>
+          <div class="d-flex align-items-center">
+            <i class="bi bi-check-circle-fill text-primary me-2"></i>
+            <span>24/7 Support</span>
+          </div>
+          <div class="d-flex align-items-center">
+            <i class="bi bi-check-circle-fill text-primary me-2"></i>
+            <span>Free Cancellation</span>
+          </div>
+        </div>
       </div>
-      <div class="col-lg-6">
-        <img src="/images/hero-car.png" alt="Luxury Car" class="img-fluid rounded-3 shadow">
+      <div class="col-lg-6 order-lg-2 order-1">
+        <img src="/images/hero-car.png" alt="Luxury Car" class="img-fluid hero-img floating" loading="lazy">
       </div>
     </div>
   </div>
-</div>
+</section>
 
-<!-- Featured Cars -->
-<div class="container-fluid mb-5">
-  <h2 class="fw-bold mb-4">Featured Cars</h2>
+<!-- How It Works Section -->
+<section class="container-fluid my-6 py-4">
+  <div class="text-center mb-5">
+    <h2 class="fw-bold mb-3 section-heading">How It Works</h2>
+    <p class="text-muted mx-auto" style="max-width: 600px;">Renting your dream car has never been easier. Just three simple steps to hit the road.</p>
+  </div>
+  
+  <div class="row g-4">
+    <div class="col-md-4">
+      <div class="card border-0 shadow-sm h-100 p-4 rounded-4 card-hover">
+        <div class="feature-icon">
+          <i class="bi bi-search"></i>
+        </div>
+        <h4 class="mb-3">1. Choose Your Car</h4>
+        <p class="text-muted">Browse our extensive fleet of premium vehicles and select your perfect match.</p>
+      </div>
+    </div>
+    <div class="col-md-4">
+      <div class="card border-0 shadow-sm h-100 p-4 rounded-4 card-hover">
+        <div class="feature-icon">
+          <i class="bi bi-calendar-check"></i>
+        </div>
+        <h4 class="mb-3">2. Book & Confirm</h4>
+        <p class="text-muted">Select your dates, provide necessary details, and receive instant confirmation.</p>
+      </div>
+    </div>
+    <div class="col-md-4">
+      <div class="card border-0 shadow-sm h-100 p-4 rounded-4 card-hover">
+        <div class="feature-icon">
+          <i class="bi bi-key"></i>
+        </div>
+        <h4 class="mb-3">3. Pick Up & Drive</h4>
+        <p class="text-muted">Collect your car at the scheduled time and enjoy your premium driving experience.</p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- Featured Cars Section -->
+<section class="container-fluid my-6 py-4">
+  <div class="d-flex justify-content-between align-items-center mb-5">
+    <div>
+      <h2 class="fw-bold mb-2 section-heading">Featured Vehicles</h2>
+      <p class="text-muted">Our most popular rentals</p>
+    </div>
+    <a href="/cars" class="btn btn-outline-primary">View All</a>
+  </div>
+  
   <div class="row g-4">
     <% if (cars.length > 0) { %>
       <% cars.forEach(car => { %>
-        <div class="col-md-4">
-          <div class="card h-100 shadow-sm">
-            <img src="/uploads/<%= car.image %>" class="card-img-top" alt="<%= car.make %> <%= car.model %>">
+        <div class="col-xl-3 col-lg-4 col-md-6">
+          <div class="card card-hover h-100 border-0 shadow-sm overflow-hidden">
+            <div class="position-relative">
+              <img src="/uploads/<%= car.image %>" class="card-img-top" alt="<%= car.make %> <%= car.model %>" loading="lazy">
+              <div class="car-badge">
+                $<%= car.dailyRate %>/day
+              </div>
+            </div>
             <div class="card-body">
-              <h5 class="card-title"><%= car.make %> <%= car.model %></h5>
-              <p class="card-text">
-                <strong>Type:</strong> <%= car.type %><br>
-                <strong>Daily Rate:</strong> $<%= car.dailyRate %>
-              </p>
-              <a href="/cars/<%= car._id %>" class="btn btn-primary">View Details</a>
+              <div class="d-flex justify-content-between align-items-start mb-2">
+                <h5 class="card-title mb-0"><%= car.make %> <%= car.model %></h5>
+                <span class="car-type-badge"><%= car.type %></span>
+              </div>
+              
+              <div class="mb-3">
+                <% const rating = car.averageRating || 0; %>
+                <div class="rating-stars mb-1">
+                  <% for(let i = 1; i <= 5; i++) { %>
+                    <% if(i <= Math.floor(rating)) { %>
+                      <i class="bi bi-star-fill"></i>
+                    <% } else if(i === Math.ceil(rating) && rating % 1 > 0) { %>
+                      <i class="bi bi-star-half"></i>
+                    <% } else { %>
+                      <i class="bi bi-star"></i>
+                    <% } %>
+                  <% } %>
+                  <span class="ms-2 text-muted small">(<%= car.reviewCount || 0 %> reviews)</span>
+                </div>
+              </div>
+              
+              <div class="d-flex flex-wrap gap-3 mb-3">
+                <div class="d-flex align-items-center">
+                  <div class="car-detail-icon">
+                    <i class="bi bi-people"></i>
+                  </div>
+                  <small class="text-muted"><%= car.seats %> Seats</small>
+                </div>
+                <div class="d-flex align-items-center">
+                  <div class="car-detail-icon">
+                    <i class="bi bi-gear"></i>
+                  </div>
+                  <small class="text-muted"><%= car.transmission %></small>
+                </div>
+                <div class="d-flex align-items-center">
+                  <div class="car-detail-icon">
+                    <i class="bi bi-fuel-pump"></i>
+                  </div>
+                  <small class="text-muted"><%= car.fuelType %></small>
+                </div>
+              </div>
+              
+              <div class="d-grid">
+                <a href="/cars/<%= car._id %>" class="btn btn-primary">Rent Now</a>
+              </div>
             </div>
           </div>
         </div>
       <% }); %>
     <% } else { %>
       <div class="col-12">
-        <div class="alert alert-info">No cars available at the moment.</div>
+        <div class="alert alert-info text-center py-4">No cars available at the moment. Please check back later.</div>
       </div>
     <% } %>
   </div>
-</div>
+</section>
+
+<!-- Rental Details Section -->
+<section class="bg-light py-6 my-6">
+  <div class="container-fluid">
+    <div class="text-center mb-5">
+      <h2 class="fw-bold mb-3 section-heading">Rental Details</h2>
+      <p class="text-muted mx-auto" style="max-width: 700px;">Everything you need to know about renting with DriveEase</p>
+    </div>
+    
+    <div class="row g-4">
+      <div class="col-md-6 col-lg-3">
+        <div class="card border-0 h-100 p-4 rounded-4 card-hover">
+          <div class="feature-icon">
+            <i class="bi bi-clock"></i>
+          </div>
+          <h4 class="mb-3">Rental Periods</h4>
+          <ul class="text-muted ps-3">
+            <li class="mb-2">Minimum 1-day rental</li>
+            <li class="mb-2">Long-term discounts available</li>
+            <li>24-hour rental periods</li>
+          </ul>
+        </div>
+      </div>
+      
+      <div class="col-md-6 col-lg-3">
+        <div class="card border-0 h-100 p-4 rounded-4 card-hover">
+          <div class="feature-icon">
+            <i class="bi bi-credit-card"></i>
+          </div>
+          <h4 class="mb-3">Pricing & Payments</h4>
+          <ul class="text-muted ps-3">
+            <li class="mb-2">Competitive daily rates</li>
+            <li class="mb-2">No hidden fees</li>
+            <li>All major credit cards accepted</li>
+          </ul>
+        </div>
+      </div>
+      
+      <div class="col-md-6 col-lg-3">
+        <div class="card border-0 h-100 p-4 rounded-4 card-hover">
+          <div class="feature-icon">
+            <i class="bi bi-shield-check"></i>
+          </div>
+          <h4 class="mb-3">Insurance</h4>
+          <ul class="text-muted ps-3">
+            <li class="mb-2">Comprehensive coverage included</li>
+            <li class="mb-2">Optional premium protection</li>
+            <li>24/7 roadside assistance</li>
+          </ul>
+        </div>
+      </div>
+      
+      <div class="col-md-6 col-lg-3">
+        <div class="card border-0 h-100 p-4 rounded-4 card-hover">
+          <div class="feature-icon">
+            <i class="bi bi-geo-alt"></i>
+          </div>
+          <h4 class="mb-3">Pickup & Return</h4>
+          <ul class="text-muted ps-3">
+            <li class="mb-2">Convenient downtown location</li>
+            <li class="mb-2">Airport pickup available</li>
+            <li>Flexible return options</li>
+          </ul>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- Testimonials Section -->
+<section class="container-fluid my-6 py-4">
+  <div class="text-center mb-5">
+    <h2 class="fw-bold mb-3 section-heading">What Our Customers Say</h2>
+    <p class="text-muted mx-auto" style="max-width: 600px;">Don't just take our word for it - hear from our satisfied customers</p>
+  </div>
+  
+  <div class="row g-4">
+    <% if (typeof testimonials !== 'undefined' && testimonials.length > 0) { %>
+      <% testimonials.forEach(testimonial => { %>
+        <div class="col-md-4">
+          <div class="card border-0 shadow-sm h-100 p-4 rounded-4 testimonial-card">
+            <div class="d-flex align-items-center mb-3">
+              <img src="/uploads/<%= testimonial.user.avatar || 'default-avatar.jpg' %>" class="testimonial-img me-3" alt="<%= testimonial.user.name %>">
+              <div>
+                <h5 class="mb-0"><%= testimonial.user.name %></h5>
+                <div class="rating-stars">
+                  <% for(let i = 1; i <= 5; i++) { %>
+                    <% if(i <= testimonial.rating) { %>
+                      <i class="bi bi-star-fill"></i>
+                    <% } else { %>
+                      <i class="bi bi-star"></i>
+                    <% } %>
+                  <% } %>
+                </div>
+              </div>
+            </div>
+            <p class="text-muted">"<%= testimonial.comment %>"</p>
+            <% if (testimonial.car) { %>
+              <small class="text-muted">Rented: <%= testimonial.car.make %> <%= testimonial.car.model %></small>
+            <% } %>
+          </div>
+        </div>
+      <% }); %>
+    <% } else { %>
+      <div class="col-12">
+        <div class="alert alert-info text-center py-4">No testimonials available yet.</div>
+      </div>
+    <% } %>
+  </div>
+</section>
+
+<!-- FAQ Section -->
+<section class="container-fluid my-6 py-4">
+  <div class="text-center mb-5">
+    <h2 class="fw-bold mb-3 section-heading">Frequently Asked Questions</h2>
+    <p class="text-muted mx-auto" style="max-width: 600px;">Find answers to common questions about our rental service</p>
+  </div>
+  
+  <div class="row justify-content-center">
+    <div class="col-lg-8">
+      <div class="accordion" id="faqAccordion">
+        <div class="accordion-item border-0 shadow-sm mb-3 rounded-4 overflow-hidden">
+          <h3 class="accordion-header" id="headingOne">
+            <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#collapseOne" aria-expanded="false" aria-controls="collapseOne">
+              What do I need to rent a car?
+            </button>
+          </h3>
+          <div id="collapseOne" class="accordion-collapse collapse" aria-labelledby="headingOne" data-bs-parent="#faqAccordion">
+            <div class="accordion-body text-muted">
+              You'll need a valid driver's license, a major credit card in your name, and proof of insurance if you're not purchasing our coverage. Drivers must be at least 21 years old (25 for premium vehicles).
+            </div>
+          </div>
+        </div>
+        
+        <div class="accordion-item border-0 shadow-sm mb-3 rounded-4 overflow-hidden">
+          <h3 class="accordion-header" id="headingTwo">
+            <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#collapseTwo" aria-expanded="false" aria-controls="collapseTwo">
+              Can I cancel or modify my reservation?
+            </button>
+          </h3>
+          <div id="collapseTwo" class="accordion-collapse collapse" aria-labelledby="headingTwo" data-bs-parent="#faqAccordion">
+            <div class="accordion-body text-muted">
+              Yes! You can cancel or modify your reservation up to 24 hours before your scheduled pickup time with no penalty. Changes within 24 hours may incur a small fee.
+            </div>
+          </div>
+        </div>
+        
+        <div class="accordion-item border-0 shadow-sm mb-3 rounded-4 overflow-hidden">
+          <h3 class="accordion-header" id="headingThree">
+            <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#collapseThree" aria-expanded="false" aria-controls="collapseThree">
+              What's included in the rental price?
+            </button>
+          </h3>
+          <div id="collapseThree" class="accordion-collapse collapse" aria-labelledby="headingThree" data-bs-parent="#faqAccordion">
+            <div class="accordion-body text-muted">
+              Our base price includes unlimited mileage, basic insurance coverage, and 24/7 roadside assistance. Optional extras like GPS, child seats, and premium insurance are available for an additional fee.
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- Call to Action Section -->
+<section class="cta-section">
+  <div class="container cta-content">
+    <div class="row align-items-center">
+      <div class="col-lg-8 mb-4 mb-lg-0">
+        <h2 class="fw-bold mb-3">Ready for Your Next Adventure?</h2>
+        <p class="mb-0 opacity-75">Join thousands of satisfied customers who've experienced the DriveEase difference.</p>
+      </div>
+      <div class="col-lg-4 text-lg-end">
+        <a href="/cars" class="btn btn-light btn-lg px-4">Browse Our Fleet</a>
+      </div>
+    </div>
+  </div>
+</section>
 
 <%- include('partials/footer') %>

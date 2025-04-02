@@ -35,6 +35,7 @@
               <div class="d-flex justify-content-between align-items-center">
                 <h3 class="text-primary mb-0">$<%= car.dailyRate %>/day</h3>
                 <div>
+                  <a href="/cars/update/<%=car._id%>" class="btn btn-sm btn-outline-warning me-2">Update</a>
                   <a href="/cars/<%= car._id %>" class="btn btn-sm btn-outline-primary me-2">Details</a>
                   <% if(car.available) { %>
                     <a href="/bookings/new/<%= car._id %>" class="btn btn-sm btn-success">Book Now</a>
