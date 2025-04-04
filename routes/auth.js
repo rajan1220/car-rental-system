@@ -19,7 +19,7 @@ router.get('/login', (req, res) => {
 router.post('/login', [
   check('email', 'Please include a valid email').isEmail(),
   check('password', 'Password is required').exists()
-], (req, res, next) => {
+], async (req, res, next) => {
   const errors = validationResult(req);
   if (!errors.isEmpty()) {
     return res.render('auth/login', {
@@ -28,12 +28,43 @@ router.post('/login', [
       email: req.body.email
     });
   }
+  const { email, password } = req.body;
 
-  passport.authenticate('local', {
-    successRedirect: '/users/dashboard',
-    failureRedirect: '/auth/login',
-    failureFlash: true
-  })(req, res, next);
+  try {
+    // Step 1: Find user by email
+    const user = await User.findOne({ email });
+    if (!user) {
+      return res.render('auth/login', {
+        title: 'Login',
+        error_msg: 'User not found',
+        email: req.body.email
+      });
+    }
+
+    // Step 2: Verify password (assuming password is stored in plain text, if not, use bcrypt or another method)
+    const isPasswordValid = await user.comparePassword(password);
+    if (!isPasswordValid) {
+      return res.render('auth/login', {
+        title: 'Login',
+        error_msg: 'Incorrect password',
+        email: req.body.email
+      });
+    }
+
+    // Step 3: Inject user's role into req.user
+    req.user = user; // Attach user to req
+    req.user.role = user.role; // Inject user's role (assuming `role` is a field in your User model)
+    
+
+    // Step 4: Authenticate using Passport.js
+    passport.authenticate('local', {
+      successRedirect: '/',
+      failureRedirect: '/auth/login',
+      failureFlash: true
+    })(req, res, next);
+  } catch (err) {
+    next(err); // Handle any errors that may occur during user lookup or authentication
+  }
 });
 
 // Register Page

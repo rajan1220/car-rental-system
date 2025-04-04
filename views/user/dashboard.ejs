@@ -2,24 +2,188 @@
 
 <div class="container my-5">
   <div class="row">
-    <div class="col-md-4">
-      <div class="card">
+    <!-- Sidebar -->
+    <div class="col-md-4 mb-4">
+      <div class="card shadow-sm">
         <div class="card-body text-center">
-          <img src="https://via.placeholder.com/150" class="rounded-circle mb-3" alt="Profile">
-          <h3><%= user.name %></h3>
+          <img src="<%= user.profileImage || 'https://via.placeholder.com/150' %>" 
+               class="rounded-circle mb-3" 
+               width="150" 
+               height="150" 
+               alt="Profile">
+          <h3 class="h4"><%= user.firstName %> <%= user.lastName %></h3>
           <p class="text-muted"><%= user.email %></p>
+          <div class="d-grid gap-2">
+            <a href="/users/profile" class="btn btn-outline-primary">Edit Profile</a>
+            <a href="/users/change-password" class="btn btn-outline-secondary">Change Password</a>
+          </div>
+        </div>
+      </div>
+
+      <div class="card shadow-sm mt-4">
+        <div class="card-header bg-light">
+          <h5 class="mb-0">Quick Stats</h5>
+        </div>
+        <div class="card-body">
+          <div class="d-flex justify-content-between mb-2">
+            <span>Total Bookings:</span>
+            <!-- userStats.totalBookings -->
+          </div>
+          <div class="d-flex justify-content-between mb-2">
+            <span>Active Bookings:</span>
+            <!-- <span class="fw-bold"> userStats.activeBookings</span> -->
+          </div>
+          <div class="d-flex justify-content-between">
+            <span>Member Since:</span>
+            <span class="fw-bold"><%= new Date(user.createdAt).toLocaleDateString() %></span>
+          </div>
         </div>
       </div>
     </div>
+
+    <!-- Main Content -->
     <div class="col-md-8">
-      <div class="card">
-        <div class="card-header">
-          <h4 class="mb-0">Dashboard</h4>
+      <div class="card shadow-sm">
+        <div class="card-header bg-light">
+          <ul class="nav nav-tabs card-header-tabs">
+            <li class="nav-item">
+              <a class="nav-link active" href="#bookings" data-bs-toggle="tab">My Bookings</a>
+            </li>
+            <li class="nav-item">
+              <a class="nav-link" href="#favorites" data-bs-toggle="tab">Favorites</a>
+            </li>
+            <li class="nav-item">
+              <a class="nav-link" href="#history" data-bs-toggle="tab">History</a>
+            </li>
+          </ul>
         </div>
         <div class="card-body">
-          <p>Welcome to your dashboard!</p>
-          <a href="/cars" class="btn btn-primary">Browse Cars</a>
-          <a href="/users/profile" class="btn btn-outline-primary ms-2">My Profile</a>
+          <div class="tab-content">
+            <!-- Current Bookings Tab -->
+            <div class="tab-pane fade show active" id="bookings">
+              <h4 class="h5 mb-4">Current Bookings</h4>
+              
+               <!-- if (bookings && bookings.length > 0) {  -->
+                <div class="list-group">
+                   <!-- bookings.forEach(booking =>  -->
+                    <div class="list-group-item">
+                      <div class="d-flex w-100 justify-content-between">
+                        <h5 class="mb-1"><%= booking.car.make %> <%= booking.car.model %></h5>
+                        <span class="badge bg-<%= booking.status === 'confirmed' ? 'success' : 'warning' %>">
+                           <!-- booking.status  -->
+                        </span>
+                      </div>
+                      <div class="d-flex justify-content-between align-items-center">
+                        <div>
+                          <small class="text-muted">
+                             <!-- new Date(booking.pickupDate).toLocaleDateString()  -  -->
+                            <!--  new Date(booking.returnDate).toLocaleDateString()  -->
+                          </small>
+                          <div class="mt-1">
+                            <!-- <span class="fw-bold">$ booking.totalPrice</span> -->
+                            <span class="text-muted"> for <%= booking.totalDays %> days</span>
+                          </div>
+                        </div>
+                        <div>
+                          <a href="/bookings/<%= booking._id %>" class="btn btn-sm btn-outline-primary">Details</a>
+                          <!--  if (booking.status === 'confirmed')  -->
+                            <a href="/bookings/<%= booking._id %>/cancel" class="btn btn-sm btn-outline-danger ms-1">Cancel</a>
+                          <!--  }  -->
+                        </div>
+                      </div>
+                    </div>
+                  <!--  });  -->
+                </div>
+              <!--  } else {  -->
+                <div class="alert alert-info">
+                  You don't have any current bookings. <a href="/cars">Browse our fleet</a> to get started!
+                </div>
+              <!--  }  -->
+            </div>
+
+            <!-- Favorites Tab -->
+            <div class="tab-pane fade" id="favorites">
+              <h4 class="h5 mb-4">Favorite Cars</h4>
+              <!--  if (favorites && favorites.length > 0) {  -->
+                <div class="row">
+                  <% favorites.forEach(car => { %>
+                    <div class="col-md-6 mb-3">
+                      <div class="card h-100">
+                        <img src="/uploads/<%= car.image || 'default-car.jpg' %>" class="card-img-top" alt="<%= car.make %> <%= car.model %>">
+                        <div class="card-body">
+                          <!-- <h5 class="card-title"> car.make  car.model %></h5> -->
+                          <!-- <p class="card-text text-muted"> car.type  •  car.seats  seats</p> -->
+                          <div class="d-flex justify-content-between align-items-center">
+                            <span class="fw-bold text-primary">$<%= car.dailyRate %>/day</span>
+                            <div>
+                              <a href="/cars/<%= car._id %>" class="btn btn-sm btn-outline-primary">View</a>
+                              <a href="/users/favorites/remove/<%= car._id %>" class="btn btn-sm btn-outline-danger ms-1">
+                                <i class="fas fa-heart-broken"></i>
+                              </a>
+                            </div>
+                          </div>
+                        </div>
+                      </div>
+                    </div>
+                  <!--  }); -->
+                </div>
+              <!--  } else {  -->
+                <div class="alert alert-info">
+                  You haven't added any cars to favorites yet.
+                </div>
+              <!--  }  -->
+            </div>
+
+            <!-- History Tab -->
+            <div class="tab-pane fade" id="history">
+              <h4 class="h5 mb-4">Booking History</h4>
+              <!--  if (history && history.length > 0) {  -->
+                <div class="table-responsive">
+                  <table class="table">
+                    <thead>
+                      <tr>
+                        <th>Car</th>
+                        <th>Dates</th>
+                        <th>Price</th>
+                        <th>Status</th>
+                        <th>Actions</th>
+                      </tr>
+                    </thead>
+                    <tbody>
+                      <!--  history.forEach(booking => {  -->
+                        <tr>
+                          <!-- <td> booking.car.make  booking.car.model </td> -->
+                          <td>
+                            <!--  new Date(booking.pickupDate).toLocaleDateString()  -  -->
+                            <!--  new Date(booking.returnDate).toLocaleDateString()  -->
+                          </td>
+                          <!-- <td>$ booking.totalPrice </td> -->
+                          <td>
+                            <span class="badge bg- 
+                              booking.status === 'completed' ? 'success' : 
+                              booking.status === 'cancelled' ? 'secondary' : 'primary'
+                            ">
+                              <!--  booking.status  -->
+                            </span>
+                          </td>
+                          <td>
+                            <a href="/bookings/<%= booking._id %>" class="btn btn-sm btn-outline-primary">Details</a>
+                            <!--  if (booking.status === 'completed') { -->
+                              <a href="#" class="btn btn-sm btn-outline-success ms-1">Review</a>
+                            <!--  }  -->
+                          </td>
+                        </tr>
+                      <!--  });  -->
+                    </tbody>
+                  </table>
+                </div>
+              <!--  } else {  -->
+                <div class="alert alert-info">
+                  Your booking history is empty.
+                </div>
+              <!--  }  -->
+            </div>
+          </div>
         </div>
       </div>
     </div>
@@ -27,3 +191,22 @@
 </div>
 
 <%- include('../partials/footer') %>
+
+<style>
+  .nav-tabs .nav-link {
+    color: #495057;
+    border: none;
+    padding: 0.75rem 1.25rem;
+  }
+  .nav-tabs .nav-link.active {
+    color: #0d6efd;
+    background-color: transparent;
+    border-bottom: 3px solid #0d6efd;
+  }
+  .list-group-item {
+    transition: all 0.2s;
+  }
+  .list-group-item:hover {
+    background-color: #f8f9fa;
+  }
+</style>

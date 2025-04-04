@@ -35,10 +35,10 @@ const CarSchema = new mongoose.Schema({
     type: Boolean,
     default: true
   },
-  // luggage: {
-  //   type: Number,
-  //   required: [true, 'Please enter luggage capacity']
-  // },
+  luggage: {
+    type: Number,
+    required: [true, 'Please enter luggage capacity']
+  },
   available: {
     type: Boolean,
     default: true
@@ -51,6 +51,10 @@ const CarSchema = new mongoose.Schema({
   createdAt: {
     type: Date,
     default: Date.now
+  },
+  fuelType:{
+    type:String,
+    required:true
   }
 });
 

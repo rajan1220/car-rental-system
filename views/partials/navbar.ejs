@@ -1,44 +1,87 @@
-<nav class="navbar navbar-expand-lg navbar-dark bg-dark">
+<nav class="navbar navbar-expand-lg navbar-dark" style="background: linear-gradient(135deg, #1a1a2e, #16213e); box-shadow: 0 4px 12px rgba(0,0,0,0.1);">
   <div class="container">
-    <a class="navbar-brand" href="/">CarRental</a>
-    <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav">
+    <a class="navbar-brand d-flex align-items-center" href="/" style="font-weight: 700; letter-spacing: 1px;">
+      <i class="fas fa-car me-2" style="color: #4cc9f0;"></i>
+      <span style="background: linear-gradient(to right, #4cc9f0, #4895ef); background-clip: text; -webkit-background-clip: text; -webkit-text-fill-color: transparent;">DriveEase
+      </span>
+    </a>
+    
+    <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav" aria-expanded="false">
       <span class="navbar-toggler-icon"></span>
     </button>
+    
     <div class="collapse navbar-collapse" id="navbarNav">
       <ul class="navbar-nav me-auto">
-        <li class="nav-item">
-          <a class="nav-link" href="/cars">Browse Cars</a>
+        <li class="nav-item mx-1">
+          <a class="nav-link position-relative" href="/cars" style="font-weight: 500;">
+            <i></i> Browse Cars
+            <span class="position-absolute bottom-0 start-50 translate-middle-x bg-primary" style="height: 2px; width: 0; transition: width 0.3s ease;"></span>
+          </a>
+        </li>
+        <li class="nav-item mx-1">
+          <a class="nav-link position-relative" href="/about" style="font-weight: 500;">
+            <i></i> About Us
+            <span class="position-absolute bottom-0 start-50 translate-middle-x bg-primary" style="height: 2px; width: 0; transition: width 0.3s ease;"></span>
+          </a>
+        </li>
+        <li class="nav-item mx-1">
+          <a class="nav-link position-relative" href="/contact" style="font-weight: 500;">
+            <i class="fas fa-envelope me-1"></i> Contact
+            <span class="position-absolute bottom-0 start-50 translate-middle-x bg-primary" style="height: 2px; width: 0; transition: width 0.3s ease;"></span>
+          </a>
         </li>
         <% if(user) { %>
           <% if(user.role ==='user'){ %>
-          <li class="nav-item">
-            <a class="nav-link" href="/users/dashboard">Dashboard</a>
+          <li class="nav-item mx-1">
+            <a class="nav-link position-relative" href="/users/dashboard" style="font-weight: 500;">
+              <i class="fas fa-tachometer-alt me-1"></i> Dashboard
+              <span class="position-absolute bottom-0 start-50 translate-middle-x bg-primary" style="height: 2px; width: 0; transition: width 0.3s ease;"></span>
+            </a>
           </li>
           <% } %>
           <% if(user.role === 'admin') { %>
-            <li class="nav-item">
-              <a class="nav-link" href="/admin/dashboard">Admin</a>
+            <li class="nav-item mx-1">
+              <a class="nav-link position-relative" href="/admin/dashboard" style="font-weight: 500;">
+                <i class="fas fa-user-shield me-1"></i> Admin
+                <span class="position-absolute bottom-0 start-50 translate-middle-x bg-primary" style="height: 2px; width: 0; transition: width 0.3s ease;"></span>
+              </a>
             </li>
           <% } %>
         <% } %>
       </ul>
+      
       <ul class="navbar-nav">
         <% if(!user) { %>
-          <li class="nav-item">
-            <a class="nav-link" href="/auth/login">Login</a>
+          <li class="nav-item mx-1">
+            <a class="btn btn-outline-light me-2 px-3" href="/auth/login" style="border-radius: 20px;">
+              <i class="fas fa-sign-in-alt me-1"></i> Login
+            </a>
           </li>
-          <li class="nav-item">
-            <a class="nav-link" href="/auth/register">Register</a>
+          <li class="nav-item mx-1">
+            <a class="btn btn-primary px-3" href="/auth/register" style="border-radius: 20px; background: linear-gradient(to right, #4cc9f0, #4895ef); border: none;">
+              <i class="fas fa-user-plus me-1"></i> Register
+            </a>
           </li>
         <% } else { %>
           <li class="nav-item dropdown">
-            <a class="nav-link dropdown-toggle" href="#" id="navbarDropdown" role="button" data-bs-toggle="dropdown">
+            <a class="nav-link dropdown-toggle d-flex align-items-center" href="#" id="navbarDropdown" role="button" data-bs-toggle="dropdown" style="font-weight: 500;">
+              <div class="me-2" style="width: 32px; height: 32px; border-radius: 50%; background: linear-gradient(to right, #4cc9f0, #4895ef); display: flex; align-items: center; justify-content: center; color: white; font-weight: bold;">
+                <%= user.name.charAt(0).toUpperCase() %>
+              </div>
               <%= user.name %>
             </a>
-            <ul class="dropdown-menu">
-              <li><a class="dropdown-item" href="/users/profile">Profile</a></li>
-              <li><hr class="dropdown-divider"></li>
-              <li><a class="dropdown-item" href="/auth/logout">Logout</a></li>
+            <ul class="dropdown-menu dropdown-menu-end" style="border: none; box-shadow: 0 5px 15px rgba(0,0,0,0.1); border-radius: 10px; overflow: hidden;">
+              <li>
+                <a class="dropdown-item py-2" href="/users/profile" style="font-weight: 500; transition: all 0.2s;">
+                  <i class="fas fa-user-circle me-2 text-primary"></i> Profile
+                </a>
+              </li>
+              <li><hr class="dropdown-divider my-1"></li>
+              <li>
+                <a class="dropdown-item py-2" href="/auth/logout" style="font-weight: 500; transition: all 0.2s;">
+                  <i class="fas fa-sign-out-alt me-2 text-danger"></i> Logout
+                </a>
+              </li>
             </ul>
           </li>
         <% } %>
@@ -46,3 +89,42 @@
     </div>
   </div>
 </nav>
+
+<style>
+  .nav-link:hover span {
+    width: 80% !important;
+  }
+  
+  .dropdown-item:hover {
+    background: linear-gradient(to right, #4cc9f0, #4895ef) !important;
+    color: white !important;
+    padding-left: 20px !important;
+  }
+  
+  .navbar {
+    padding: 0.8rem 0;
+    transition: all 0.3s;
+  }
+  
+  .navbar.scrolled {
+    padding: 0.5rem 0;
+    background: rgba(26, 26, 46, 0.95) !important;
+    backdrop-filter: blur(10px);
+  }
+  .hero-section {
+      padding: 4rem 0;
+      border-radius: 0 0 1rem 1rem;
+    }
+</style>
+
+<script>
+  // Add scroll effect
+  window.addEventListener('scroll', function() {
+    const navbar = document.querySelector('.navbar');
+    if(window.scrollY > 50) {
+      navbar.classList.add('scrolled');
+    } else {
+      navbar.classList.remove('scrolled');
+    }
+  });
+</script>
