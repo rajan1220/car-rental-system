@@ -51,7 +51,7 @@ const carSchema = new mongoose.Schema({
     type: String,
     required: [true, 'Fuel type is required'],
     enum: {
-      values: ['Gasoline', 'Diesel', 'Hybrid', 'Electric', 'CNG', 'LPG'],
+      values: ['Petrol', 'Diesel', 'Hybrid', 'Electric', 'CNG', 'LPG'],
       message: 'Invalid fuel type'
     }
   },
@@ -68,8 +68,9 @@ const carSchema = new mongoose.Schema({
     default: []
   },
   createdBy: {
-    type: mongoose.Schema.Types.ObjectId,
-    ref: 'User',
+    type:mongoose.Schema.Types.ObjectId,
+    ref:'User',
+    // default:req.user._id,
     required: [true, 'Creator user reference is required']
   },
   lastUpdatedBy: {

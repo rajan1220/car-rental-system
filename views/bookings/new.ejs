@@ -195,14 +195,14 @@
                 <input class="form-check-input" type="checkbox" id="insurance" name="insurance">
                 <label class="form-check-label d-flex justify-content-between" for="insurance">
                   <span>Additional Insurance Coverage</span>
-                  <span class="text-primary">+ ₹500/day</span>
+                  <span class="text-primary">+ ₹10/day</span>
                 </label>
               </div>
               <div class="form-check mb-3">
                 <input class="form-check-input" type="checkbox" id="gps" name="gps">
                 <label class="form-check-label d-flex justify-content-between" for="gps">
                   <span>GPS Navigation System</span>
-                  <span class="text-primary">+ ₹300/day</span>
+                  <span class="text-primary">+ ₹10/day</span>
                 </label>
               </div>
               <div class="form-check">
@@ -365,10 +365,10 @@
       // Calculate costs (Indian Rupees)
       const dailyRate = <%= car.dailyRate %>;
       const baseCost = days * dailyRate;
-      const taxes = days * 300; // ₹300 per day taxes
-      const insuranceCost = insuranceCheckbox.checked ? days * 500 : 0; // ₹500 per day
-      const gpsCost = gpsCheckbox.checked ? days * 300 : 0; // ₹300 per day
-      const childSeatCost = childSeatCheckbox.checked ? days * 200 : 0; // ₹200 per day
+      const taxes = days * 300; 
+      const insuranceCost = insuranceCheckbox.checked ? days * 10 : 0;
+      const gpsCost = gpsCheckbox.checked ? days * 10 : 0; 
+      const childSeatCost = childSeatCheckbox.checked ? days * 200 : 0;
       
       document.getElementById('insuranceCost').textContent = `₹${insuranceCost.toLocaleString('en-IN')}`;
       document.getElementById('gpsCost').textContent = `₹${gpsCost.toLocaleString('en-IN')}`;

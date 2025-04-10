@@ -11,7 +11,7 @@ const methodOverride = require('method-override');
 
 // Initialize app
 const app = express();
-const dbstring = `${process.env.MONGO_URI}/${Db_name}`;
+const dbstring = `${process.env.MONGO_URI_LOCAL}/${Db_name}`;
 
 // Database connection
 mongoose.connect(dbstring, {

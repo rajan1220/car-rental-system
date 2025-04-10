@@ -66,7 +66,7 @@ router.get('/vehicles', ensureAuthenticated, ensureAdmin, async (req, res) => {
   }
 });
 
-// Add Vehicle
+// Add Vehicle - GET (show form)
 router.get('/vehicles/add', ensureAuthenticated, ensureAdmin, (req, res) => {
   res.render('admin/add-vehicle', {
     title: 'Add Vehicle',
@@ -75,6 +75,7 @@ router.get('/vehicles/add', ensureAuthenticated, ensureAdmin, (req, res) => {
   });
 });
 
+// Add Vehicle - POST (process form)
 router.post('/vehicles', ensureAuthenticated, ensureAdmin, async (req, res) => {
   try {
     const { make, model, year, type, dailyRate, seats, transmission, fuelType } = req.body;
@@ -102,7 +103,7 @@ router.post('/vehicles', ensureAuthenticated, ensureAdmin, async (req, res) => {
   }
 });
 
-// Edit Vehicle
+// Edit Vehicle - GET (show form)
 router.get('/vehicles/edit/:id', ensureAuthenticated, ensureAdmin, async (req, res) => {
   try {
     const vehicle = await Car.findById(req.params.id);
@@ -124,6 +125,7 @@ router.get('/vehicles/edit/:id', ensureAuthenticated, ensureAdmin, async (req, r
   }
 });
 
+// Edit Vehicle - PUT (process form)
 router.put('/vehicles/:id', ensureAuthenticated, ensureAdmin, async (req, res) => {
   try {
     const { make, model, year, type, dailyRate, seats, transmission, fuelType, available } = req.body;
@@ -150,6 +152,7 @@ router.put('/vehicles/:id', ensureAuthenticated, ensureAdmin, async (req, res) =
   }
 });
 
+// Delete Vehicle
 router.delete('/vehicles/:id', ensureAuthenticated, ensureAdmin, async (req, res) => {
   try {
     // Check if vehicle has active bookings
@@ -281,6 +284,9 @@ router.get('/bookings/:id', ensureAuthenticated, ensureAdmin, async (req, res) =
       req.flash('error_msg', 'Booking not found');
       return res.redirect('/admin/bookings');
     }
+
+    // Ensure totalPrice has a default value if undefined
+    booking.totalPrice = booking.totalPrice || 0;
 
     res.render('admin/booking-details', {
       title: 'Booking Details',
@@ -454,134 +460,5 @@ router.get('/logout', (req, res) => {
     res.redirect('/auth/login');
   });
 });
-router.get('/bookings/:id', ensureAuthenticated, ensureAdmin, async (req, res) => {
-  try {
-    const booking = await Booking.findById(req.params.id)
-      .populate('car')
-      .populate('user');
 
-    if (!booking) {
-      req.flash('error_msg', 'Booking not found');
-      return res.redirect('/admin/bookings');
-    }
-
-    // Ensure totalPrice has a default value if undefined
-    booking.totalPrice = booking.totalPrice || 0;
-
-    res.render('admin/booking-details', {
-      title: 'Booking Details',
-      user: req.user,
-      booking,
-      moment,
-      activePage: 'bookings'
-    });
-  } catch (err) {
-    console.error('Booking details error:', err);
-    req.flash('error_msg', 'Error loading booking details');
-    res.redirect('/admin/bookings');
-  }
-});
-
-// Add Vehicle - GET
-router.get('/vehicles/add', ensureAuthenticated, ensureAdmin, (req, res) => {
-  res.render('admin/add-vehicle', {
-    title: 'Add New Vehicle',
-    activePage: 'vehicles'
-  });
-});
-
-// Add Vehicle - POST
-router.post('/vehicles', ensureAuthenticated, ensureAdmin, async (req, res) => {
-  try {
-    const newCar = new Car({
-      make: req.body.make,
-      model: req.body.model,
-      year: parseInt(req.body.year),
-      type: req.body.type,
-      dailyRate: parseFloat(req.body.dailyRate),
-      seats: parseInt(req.body.seats),
-      transmission: req.body.transmission,
-      fuelType: req.body.fuelType,
-      available: true
-    });
-
-    await newCar.save();
-    req.flash('success_msg', 'Vehicle added successfully');
-    res.redirect('/admin/vehicles');
-  } catch (err) {
-    console.error('Add vehicle error:', err);
-    req.flash('error_msg', 'Error adding vehicle');
-    res.redirect('/admin/vehicles/add');
-  }
-});
-
-router.get('/vehicles/add', ensureAuthenticated, ensureAdmin, (req, res) => {
-  res.render('admin/add-vehicle', {
-    title: 'Add Vehicle',
-    user: req.user,
-    activePage: 'vehicles'
-  });
-});
-
-router.post('/vehicles/add', ensureAuthenticated, ensureAdmin, async (req, res) => {
-  try {
-    const { make, model, year, type, dailyRate, seats, transmission, fuelType } = req.body;
-    
-    const newCar = new Car({
-      make,
-      model,
-      year: parseInt(year),
-      type,
-      dailyRate: parseFloat(dailyRate),
-      seats: parseInt(seats),
-      transmission,
-      fuelType,
-      available: true
-    });
-
-    await newCar.save();
-    req.flash('success_msg', 'Vehicle added successfully');
-    res.redirect('/admin/vehicles');
-  } catch (err) {
-    console.error('Add vehicle error:', err);
-    req.flash('error_msg', 'Error adding vehicle');
-    res.redirect('/admin/vehicles/add');
-  }
-});
-
-// Add Vehicle - GET (show form)
-router.get('/vehicles/add', ensureAuthenticated, ensureAdmin, (req, res) => {
-  res.render('admin/add-vehicle', {
-    title: 'Add Vehicle',
-    activePage: 'vehicles'
-  });
-});
-
-// Add Vehicle - POST (process form)
-router.post('/vehicles/add', ensureAuthenticated, ensureAdmin, async (req, res) => {
-  try {
-    const { make, model, year, type, dailyRate, seats, transmission, fuelType } = req.body;
-    
-    const newCar = new Car({
-      make,
-      model,
-      year: parseInt(year),
-      type,
-      dailyRate: parseFloat(dailyRate),
-      seats: parseInt(seats),
-      transmission,
-      fuelType,
-      available: true
-    });
-
-    await newCar.save();
-    req.flash('success_msg', 'Vehicle added successfully');
-    res.redirect('/admin/vehicles');
-  } catch (err) {
-    console.error('Add vehicle error:', err);
-    req.flash('error_msg', err.message.includes('validation failed') ? 
-      'Please fill all required fields correctly' : 'Error adding vehicle');
-    res.redirect('/admin/vehicles/add');
-  }
-});
 module.exports = router;

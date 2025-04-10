@@ -282,6 +282,30 @@ exports.listBookings = async (req, res) => {
   }
 };
 
+exports.showBookingDetails = async (req, res) => {
+  try {
+    const booking = await Booking.findById(req.params.id)
+      .populate('user car');
+
+    if (!booking) {
+      req.flash('error_msg', 'Booking not found');
+      return res.redirect('/admin/bookings');
+    }
+
+    res.render('admin/booking-details', {
+      title: 'Booking Details',
+      user: req.user,
+      booking,
+      moment,
+      activePage: 'bookings'
+    });
+  } catch (err) {
+    console.error('Booking Details Error:', err);
+    req.flash('error_msg', 'Failed to load booking details');
+    res.redirect('/admin/bookings');
+  }
+};
+
 exports.updateBookingStatus = async (req, res) => {
   try {
     const { status } = req.body;
@@ -399,7 +423,8 @@ exports.updateProfile = async (req, res) => {
     req.flash('success_msg', 'Profile updated successfully');
     res.render('user/profile', {
       title: 'My Profile',
-      user: updatedUser
+      user: updatedUser,
+      activePage: 'profile'
     });
   } catch (err) {
     console.error('Profile Update Error:', err);
@@ -411,22 +436,5 @@ exports.updateProfile = async (req, res) => {
 
     req.flash('error_msg', errorMessage);
     res.redirect('/admin/profile');
-  }
-};
-
-// Booking 
-
-// In your admin controller
-exports.listBookings = async (req, res) => {
-  try {
-    const bookings = await Booking.find().populate('user car');
-    res.render('admin/bookings', {
-      title: 'Booking Management',
-      bookings,
-      activePage: 'bookings' // This is important for sidebar highlighting
-    });
-  } catch (err) {
-    console.error(err);
-    res.redirect('/admin/dashboard');
   }
 };

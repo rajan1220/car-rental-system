@@ -25,7 +25,7 @@ const processFeatures = (features, additionalFeatures) => {
   if (additionalFeatures) {
     featuresArray.push(...additionalFeatures.split(',').map(f => f.trim()));
   }
-  return [...new Set(featuresArray.filter(f => f))]; // Remove duplicates
+  return [...new Set(featuresArray.filter(f => f))]; // Remove duplicates and empty strings
 };
 
 const validateObjectId = (id) => mongoose.Types.ObjectId.isValid(id);
@@ -136,8 +136,46 @@ router.get('/', async (req, res, next) => {
   }
 });
 
-// Show add car form (Admin only)
-router.get('/add', ensureAuthenticated, ensureAdmin, async (req, res, next) => {
+// Show single car details
+router.get('/:id', async (req, res, next) => {
+  try {
+    if (!validateObjectId(req.params.id)) {
+      req.flash('error_msg', 'Invalid car ID');
+      return res.redirect('/cars');
+    }
+
+    const car = await Car.findById(req.params.id).populate('createdBy', 'name email');
+    
+    if (!car) {
+      req.flash('error_msg', 'Car not found');
+      return res.redirect('/cars');
+    }
+
+    const similarCars = await Car.find({
+      type: car.type,
+      _id: { $ne: car._id },
+      available: true
+    })
+    .limit(4)
+    .lean();
+
+    res.render('cars/single', {
+      title: `${car.year} ${car.make} ${car.model}`,
+      car,
+      similarCars,
+      user: req.user || null,
+      isAdmin: req.user?.role === 'admin'
+    });
+  } catch (err) {
+    next(err);
+  }
+});
+
+// ADMIN-ONLY ROUTES
+router.use(ensureAuthenticated, ensureAdmin);
+
+// Show add car form
+router.get('/add', async (req, res, next) => {
   try {
     res.render('cars/add', {
       title: 'Add New Car',
@@ -156,11 +194,9 @@ router.get('/add', ensureAuthenticated, ensureAdmin, async (req, res, next) => {
   }
 });
 
-// Handle new car submission (Admin only)
+// Handle new car submission
 router.post(
   '/',
-  ensureAuthenticated,
-  ensureAdmin,
   upload.fields([
     { name: 'mainImage', maxCount: 1 },
     { name: 'galleryImages', maxCount: 10 }
@@ -237,43 +273,8 @@ router.post(
   }
 );
 
-// Show single car details
-router.get('/:id', async (req, res, next) => {
-  try {
-    if (!validateObjectId(req.params.id)) {
-      req.flash('error_msg', 'Invalid car ID');
-      return res.redirect('/cars');
-    }
-
-    const car = await Car.findById(req.params.id).populate('createdBy', 'name email');
-    
-    if (!car) {
-      req.flash('error_msg', 'Car not found');
-      return res.redirect('/cars');
-    }
-
-    const similarCars = await Car.find({
-      type: car.type,
-      _id: { $ne: car._id },
-      available: true
-    })
-    .limit(4)
-    .lean();
-
-    res.render('cars/single', {
-      title: `${car.year} ${car.make} ${car.model}`,
-      car,
-      similarCars,
-      user: req.user || null,
-      isAdmin: req.user?.role === 'admin'
-    });
-  } catch (err) {
-    next(err);
-  }
-});
-
-// Show edit car form (Admin only)
-router.get('/:id/edit', ensureAuthenticated, ensureAdmin, async (req, res, next) => {
+// Show edit car form
+router.get('/:id/edit', async (req, res, next) => {
   try {
     if (!validateObjectId(req.params.id)) {
       req.flash('error_msg', 'Invalid car ID');
@@ -304,11 +305,9 @@ router.get('/:id/edit', ensureAuthenticated, ensureAdmin, async (req, res, next)
   }
 });
 
-// Handle car update (Admin only)
+// Handle car update
 router.put(
   '/:id',
-  ensureAuthenticated,
-  ensureAdmin,
   upload.fields([
     { name: 'mainImage', maxCount: 1 },
     { name: 'galleryImages', maxCount: 10 }
@@ -419,8 +418,8 @@ router.put(
   }
 );
 
-// Handle car deletion (Admin only)
-router.delete('/:id', ensureAuthenticated, ensureAdmin, async (req, res, next) => {
+// Handle car deletion
+router.delete('/:id', async (req, res, next) => {
   try {
     if (!validateObjectId(req.params.id)) {
       req.flash('error_msg', 'Invalid car ID');
@@ -445,8 +444,8 @@ router.delete('/:id', ensureAuthenticated, ensureAdmin, async (req, res, next) =
   }
 });
 
-// Toggle car availability (Admin only)
-router.post('/:id/toggle-availability', ensureAuthenticated, ensureAdmin, async (req, res, next) => {
+// Toggle car availability
+router.post('/:id/toggle-availability', async (req, res, next) => {
   try {
     if (!validateObjectId(req.params.id)) {
       return res.status(400).json({ success: false, message: 'Invalid car ID' });
