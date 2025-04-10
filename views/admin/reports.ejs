@@ -1,0 +1,314 @@
+<%- include('../partials/header', { title: 'Reports' }) %>
+
+<div class="d-flex">
+    <%- include('../partials/sidebar', { activePage: 'bookings' }) %>
+
+  <div class="main-content">
+    <nav class="topbar">
+      <!-- Your top navigation content -->
+    </nav>
+
+    <div class="container-fluid py-4">
+      <div class="d-flex justify-content-between align-items-center mb-4">
+        <div>
+          <h2 class="mb-0">Reports & Analytics</h2>
+          <nav aria-label="breadcrumb">
+            <ol class="breadcrumb">
+              <li class="breadcrumb-item"><a href="/admin">Dashboard</a></li>
+              <li class="breadcrumb-item active">Reports</li>
+            </ol>
+          </nav>
+        </div>
+        <div class="d-flex">
+          <div class="dropdown me-2">
+            <button class="btn btn-outline-secondary dropdown-toggle" type="button" data-bs-toggle="dropdown">
+              <i class="fas fa-calendar me-1"></i> Last 30 Days
+            </button>
+            <ul class="dropdown-menu">
+              <li><a class="dropdown-item" href="#">Today</a></li>
+              <li><a class="dropdown-item" href="#">Last 7 Days</a></li>
+              <li><a class="dropdown-item" href="#">Last 30 Days</a></li>
+              <li><a class="dropdown-item" href="#">This Month</a></li>
+              <li><a class="dropdown-item" href="#">Custom Range</a></li>
+            </ul>
+          </div>
+          <button class="btn btn-sm btn-primary">
+            <i class="fas fa-download me-1"></i> Export
+          </button>
+        </div>
+      </div>
+
+      <div class="row mb-4">
+        <div class="col-md-8">
+          <div class="card border-0 shadow-sm h-100">
+            <div class="card-header bg-white border-0">
+              <h5 class="card-title m-0">Revenue Overview</h5>
+            </div>
+            <div class="card-body">
+              <canvas id="revenueChart" height="300"></canvas>
+            </div>
+          </div>
+        </div>
+        <div class="col-md-4">
+          <div class="card border-0 shadow-sm h-100">
+            <div class="card-header bg-white border-0">
+              <h5 class="card-title m-0">Vehicle Utilization</h5>
+            </div>
+            <div class="card-body">
+              <canvas id="utilizationChart" height="300"></canvas>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <div class="row mb-4">
+        <div class="col-md-6">
+          <div class="card border-0 shadow-sm h-100">
+            <div class="card-header bg-white border-0">
+              <h5 class="card-title m-0">Booking Sources</h5>
+            </div>
+            <div class="card-body">
+              <canvas id="sourcesChart" height="250"></canvas>
+            </div>
+          </div>
+        </div>
+        <div class="col-md-6">
+          <div class="card border-0 shadow-sm h-100">
+            <div class="card-header bg-white border-0">
+              <h5 class="card-title m-0">Top Vehicles</h5>
+            </div>
+            <div class="card-body">
+              <div class="table-responsive">
+                <table class="table table-sm">
+                  <thead>
+                    <tr>
+                      <th>Vehicle</th>
+                      <th>Bookings</th>
+                      <th>Revenue</th>
+                      <th>Utilization</th>
+                    </tr>
+                  </thead>
+                  <tbody>
+                    <% topVehicles.forEach(vehicle => { %>
+                      <tr>
+                        <td>
+                          <div class="d-flex align-items-center">
+                            <img src="<%= vehicle.images[0] || '/images/car-placeholder.jpg' %>" class="rounded me-2" width="40" height="30" alt="Car">
+                            <div>
+                              <div class="fw-medium"><%= vehicle.make %> <%= vehicle.model %></div>
+                              <small class="text-muted"><%= vehicle.type %></small>
+                            </div>
+                          </div>
+                        </td>
+                        <td><%= vehicle.bookingCount %></td>
+                        <td>$<%= vehicle.revenue.toFixed(2) %></td>
+                        <td>
+                          <div class="progress" style="height: 6px;">
+                            <div class="progress-bar bg-success" style="width:  + '%';""></div>
+                          </div>
+                          <small><%= vehicle.utilization %>%</small>
+                        </td>
+                      </tr>
+                    <% }); %>
+                  </tbody>
+                </table>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <div class="card border-0 shadow-sm">
+        <div class="card-header bg-white border-0">
+          <h5 class="card-title m-0">Detailed Reports</h5>
+        </div>
+        <div class="card-body">
+          <div class="row">
+            <div class="col-md-4 mb-3">
+              <div class="card report-card h-100">
+                <div class="card-body text-center">
+                  <div class="report-icon bg-primary bg-opacity-10 text-primary">
+                    <i class="fas fa-car"></i>
+                  </div>
+                  <h5 class="mt-3">Vehicle Reports</h5>
+                  <p class="text-muted">Detailed analysis of vehicle performance</p>
+                  <a href="#" class="btn btn-sm btn-outline-primary">Generate</a>
+                </div>
+              </div>
+            </div>
+            <div class="col-md-4 mb-3">
+              <div class="card report-card h-100">
+                <div class="card-body text-center">
+                  <div class="report-icon bg-success bg-opacity-10 text-success">
+                    <i class="fas fa-calendar-check"></i>
+                  </div>
+                  <h5 class="mt-3">Booking Reports</h5>
+                  <p class="text-muted">Booking trends and patterns</p>
+                  <a href="#" class="btn btn-sm btn-outline-success">Generate</a>
+                </div>
+              </div>
+            </div>
+            <div class="col-md-4 mb-3">
+              <div class="card report-card h-100">
+                <div class="card-body text-center">
+                  <div class="report-icon bg-info bg-opacity-10 text-info">
+                    <i class="fas fa-credit-card"></i>
+                  </div>
+                  <h5 class="mt-3">Financial Reports</h5>
+                  <p class="text-muted">Revenue, expenses and profitability</p>
+                  <a href="#" class="btn btn-sm btn-outline-info">Generate</a>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- Chart.js Script -->
+<script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+<script>
+  // Revenue Chart
+  const revenueCtx = document.getElementById('revenueChart').getContext('2d');
+  new Chart(revenueCtx, {
+    type: 'line',
+    data: {
+      labels: ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul'],
+      datasets: [{
+        label: 'Revenue',
+        data: [4500, 5200, 4800, 6100, 7300, 8200, 9500],
+        borderColor: '#4361ee',
+        backgroundColor: 'rgba(67, 97, 238, 0.1)',
+        tension: 0.3,
+        fill: true
+      }]
+    },
+    options: {
+      responsive: true,
+      plugins: {
+        legend: {
+          display: false
+        }
+      },
+      scales: {
+        y: {
+          beginAtZero: true
+        }
+      }
+    }
+  });
+
+  // Utilization Chart
+  const utilizationCtx = document.getElementById('utilizationChart').getContext('2d');
+  new Chart(utilizationCtx, {
+    type: 'doughnut',
+    data: {
+      labels: ['Available', 'Booked', 'Maintenance'],
+      datasets: [{
+        data: [35, 55, 10],
+        backgroundColor: [
+          '#4cc9f0',
+          '#4361ee',
+          '#f72585'
+        ],
+        borderWidth: 0
+      }]
+    },
+    options: {
+      responsive: true,
+      cutout: '70%',
+      plugins: {
+        legend: {
+          position: 'bottom'
+        }
+      }
+    }
+  });
+
+  // Sources Chart
+  const sourcesCtx = document.getElementById('sourcesChart').getContext('2d');
+  new Chart(sourcesCtx, {
+    type: 'bar',
+    data: {
+      labels: ['Website', 'Mobile App', 'Walk-in', 'Partner'],
+      datasets: [{
+        label: 'Bookings',
+        data: [120, 90, 45, 60],
+        backgroundColor: [
+          '#4361ee',
+          '#4cc9f0',
+          '#7209b7',
+          '#f72585'
+        ]
+      }]
+    },
+    options: {
+      responsive: true,
+      plugins: {
+        legend: {
+          display: false
+        }
+      }
+    }
+  });
+</script>
+<style>
+    /* Reports Page Styles */
+.report-card {
+  transition: all 0.3s ease;
+  border-radius: 0.5rem;
+}
+
+.report-card:hover {
+  transform: translateY(-5px);
+  box-shadow: 0 10px 20px rgba(0,0,0,0.1);
+}
+
+.report-icon {
+  width: 50px;
+  height: 50px;
+  border-radius: 50%;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 1.25rem;
+}
+
+/* Table Improvements */
+.table-sm td, .table-sm th {
+  padding: 0.75rem;
+}
+
+/* Chart Containers */
+.card-body canvas {
+  width: 100% !important;
+  height: auto !important;
+}
+
+/* Status Badges */
+.badge.bg-success {
+  background-color: #28a745 !important;
+}
+
+.badge.bg-warning {
+  background-color: #ffc107 !important;
+  color: #212529;
+}
+
+.badge.bg-danger {
+  background-color: #dc3545 !important;
+}
+
+.badge.bg-secondary {
+  background-color: #6c757d !important;
+}
+
+/* Payment Method Badges */
+.badge.bg-light {
+  background-color: #f8f9fa !important;
+}
+</style>
+
+<%- include('../partials/footer') %>

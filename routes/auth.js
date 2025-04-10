@@ -54,14 +54,23 @@ router.post('/login', [
     // Step 3: Inject user's role into req.user
     req.user = user; // Attach user to req
     req.user.role = user.role; // Inject user's role (assuming `role` is a field in your User model)
-    
+
+    if(user.role === 'admin'){
+      passport.authenticate('local', {
+        successRedirect: '/admin/dashboard',
+        failureRedirect: '/auth/login',
+        failureFlash: true
+      })(req, res, next);
+    }else if(user.role === 'user'){
+      passport.authenticate('local', {
+        successRedirect: '/',
+        failureRedirect: '/auth/login',
+        failureFlash: true
+      })(req, res, next);
+    }
 
     // Step 4: Authenticate using Passport.js
-    passport.authenticate('local', {
-      successRedirect: '/',
-      failureRedirect: '/auth/login',
-      failureFlash: true
-    })(req, res, next);
+    
   } catch (err) {
     next(err); // Handle any errors that may occur during user lookup or authentication
   }

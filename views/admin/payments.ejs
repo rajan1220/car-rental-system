@@ -1,0 +1,197 @@
+<%- include('../partials/header', { title: 'Payments' }) %>
+
+<div class="d-flex">
+  <%- include('../partials/sidebar') %>
+
+  <div class="main-content">
+    <nav class="topbar">
+      <!-- Your top navigation content -->
+    </nav>
+
+    <div class="container-fluid py-4">
+      <div class="d-flex justify-content-between align-items-center mb-4">
+        <div>
+          <h2 class="mb-0">Payment Management</h2>
+          <nav aria-label="breadcrumb">
+            <ol class="breadcrumb">
+              <li class="breadcrumb-item"><a href="/admin">Dashboard</a></li>
+              <li class="breadcrumb-item active">Payments</li>
+            </ol>
+          </nav>
+        </div>
+        <div class="d-flex">
+          <div class="input-group me-3" style="width: 250px;">
+            <input type="text" class="form-control" placeholder="Search payments...">
+            <button class="btn btn-outline-secondary" type="button">
+              <i class="fas fa-search"></i>
+            </button>
+          </div>
+          <button class="btn btn-sm btn-outline-secondary me-2" data-bs-toggle="modal" data-bs-target="#exportModal">
+            <i class="fas fa-file-export me-1"></i> Export
+          </button>
+        </div>
+      </div>
+
+      <div class="row mb-4">
+        <div class="col-md-3">
+          <div class="card stat-card">
+            <div class="card-body">
+              <h6 class="stat-title">Total Revenue</h6>
+              <h2 class="stat-value">$12,450.75</h2>
+              <p class="stat-desc"><i class="fas fa-arrow-up text-success me-1"></i> 8.2% from last month</p>
+            </div>
+          </div>
+        </div>
+        <div class="col-md-3">
+          <div class="card stat-card">
+            <div class="card-body">
+              <h6 class="stat-title">Successful Payments</h6>
+              <h2 class="stat-value">1,245</h2>
+              <p class="stat-desc"><i class="fas fa-check-circle text-success me-1"></i> 97% success rate</p>
+            </div>
+          </div>
+        </div>
+        <div class="col-md-3">
+          <div class="card stat-card">
+            <div class="card-body">
+              <h6 class="stat-title">Pending Payments</h6>
+              <h2 class="stat-value">28</h2>
+              <p class="stat-desc"><i class="fas fa-clock text-warning me-1"></i> Needs attention</p>
+            </div>
+          </div>
+        </div>
+        <div class="col-md-3">
+          <div class="card stat-card">
+            <div class="card-body">
+              <h6 class="stat-title">Failed Payments</h6>
+              <h2 class="stat-value">15</h2>
+              <p class="stat-desc"><i class="fas fa-times-circle text-danger me-1"></i> 1.2% failure rate</p>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <div class="card border-0 shadow-sm">
+        <div class="card-body px-0 pb-0">
+          <div class="table-responsive">
+            <table class="table table-hover align-middle">
+              <thead class="table-light">
+                <tr>
+                  <th class="ps-4">Payment ID</th>
+                  <th>Booking</th>
+                  <th>Customer</th>
+                  <th>Amount</th>
+                  <th>Method</th>
+                  <th>Status</th>
+                  <th>Date</th>
+                  <th class="text-end pe-4">Actions</th>
+                </tr>
+              </thead>
+              <tbody>
+                <% payments.forEach(payment => { %>
+                  <tr>
+                    <td class="ps-4 fw-semibold">#<%= payment._id.toString().slice(-6) %></td>
+                    <td>
+                      <a href="/admin/bookings/<%= payment.booking._id %>" class="text-primary">
+                        #<%= payment.booking._id.toString().slice(-6) %>
+                      </a>
+                    </td>
+                    <td>
+                      <div class="d-flex align-items-center">
+                        <img src="<%= payment.user.avatar || '/images/default-avatar.jpg' %>" class="rounded-circle me-2" width="30" height="30" alt="User">
+                        <div><%= payment.user.name %></div>
+                      </div>
+                    </td>
+                    <td class="fw-semibold">$<%= payment.amount.toFixed(2) %></td>
+                    <td>
+                      <span class="badge bg-light text-dark">
+                        <i class="fab fa-cc-<%= payment.method.toLowerCase() %> me-1"></i>
+                        <%= payment.method %>
+                      </span>
+                    </td>
+                    <td>
+                      <span class="badge <%= 
+                        payment.status === 'completed' ? 'bg-success' : 
+                        payment.status === 'pending' ? 'bg-warning' : 'bg-danger' 
+                      %> rounded-pill py-1 px-2">
+                        <%= payment.status %>
+                      </span>
+                    </td>
+                    <td><%= new Date(payment.createdAt).toLocaleDateString() %></td>
+                    <td class="text-end pe-4">
+                      <div class="d-flex justify-content-end">
+                        <button class="btn btn-sm btn-outline-primary me-1">
+                          <i class="fas fa-receipt"></i> Invoice
+                        </button>
+                        <% if (payment.status === 'pending') { %>
+                          <button class="btn btn-sm btn-success me-1">
+                            <i class="fas fa-check"></i> Approve
+                          </button>
+                        <% } %>
+                      </div>
+                    </td>
+                  </tr>
+                <% }); %>
+              </tbody>
+            </table>
+          </div>
+          
+          <div class="d-flex justify-content-between align-items-center px-4 py-3 border-top">
+            <div class="text-muted">
+              Showing <span class="fw-semibold">1</span> to <span class="fw-semibold">10</span> of <span class="fw-semibold"><%= payments.length %></span> payments
+            </div>
+            <nav>
+              <ul class="pagination mb-0">
+                <li class="page-item disabled">
+                  <a class="page-link" href="#" tabindex="-1">Previous</a>
+                </li>
+                <li class="page-item active"><a class="page-link" href="#">1</a></li>
+                <li class="page-item"><a class="page-link" href="#">2</a></li>
+                <li class="page-item"><a class="page-link" href="#">3</a></li>
+                <li class="page-item">
+                  <a class="page-link" href="#">Next</a>
+                </li>
+              </ul>
+            </nav>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- Export Modal -->
+<div class="modal fade" id="exportModal" tabindex="-1" aria-hidden="true">
+  <div class="modal-dialog">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h5 class="modal-title">Export Payments</h5>
+        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+      </div>
+      <div class="modal-body">
+        <div class="mb-3">
+          <label class="form-label">Date Range</label>
+          <div class="input-group">
+            <input type="date" class="form-control">
+            <span class="input-group-text">to</span>
+            <input type="date" class="form-control">
+          </div>
+        </div>
+        <div class="mb-3">
+          <label class="form-label">Format</label>
+          <select class="form-select">
+            <option value="csv">CSV</option>
+            <option value="excel">Excel</option>
+            <option value="pdf">PDF</option>
+          </select>
+        </div>
+      </div>
+      <div class="modal-footer">
+        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancel</button>
+        <button type="button" class="btn btn-primary">Export</button>
+      </div>
+    </div>
+  </div>
+</div>
+
+<%- include('../partials/footer') %>

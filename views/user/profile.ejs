@@ -2,94 +2,150 @@
 
 <div class="container my-5">
   <div class="row">
-    <div class="col-md-4">
-      <div class="card shadow-sm">
-        <div class="card-body text-center">
-          <img src="<%= user.profileImage || 'https://via.placeholder.com/150' %>" 
-               class="rounded-circle mb-3" 
-               width="150" 
-               height="150" 
-               alt="Profile">
-          <h3 class="h4"><%= user.firstName %> <%= user.lastName %></h3>
-          <p class="text-muted"><%= user.email %></p>
-          
-          <form action="/users/profile/upload" method="POST" enctype="multipart/form-data" class="mb-3">
-            <div class="input-group">
-              <input type="file" class="form-control" name="profileImage" accept="image/*">
-              <button class="btn btn-outline-primary" type="submit">Upload</button>
-            </div>
-          </form>
-          
-          <div class="d-grid gap-2">
-            <a href="/users/change-password" class="btn btn-outline-secondary">Change Password</a>
+    <!-- Profile Sidebar -->
+    <div class="col-lg-4">
+      <div class="profile-card mb-4">
+        <div class="profile-header text-center py-4">
+          <div class="profile-avatar">
+            <img src="<%= user.profileImage || 'https://ui-avatars.com/api/?name='+user.name.split(' ').join('+')+'&background=random' %>" 
+                 class="rounded-circle shadow" 
+                 width="120" 
+                 height="120" 
+                 alt="Profile">
+            <form action="/users/profile/upload" method="POST" enctype="multipart/form-data" class="avatar-upload-form">
+              <label for="avatarUpload" class="avatar-edit-btn">
+                <i class="fas fa-camera"></i>
+                <input type="file" id="avatarUpload" name="profileImage" accept="image/*">
+              </label>
+              <button type="submit" class="d-none">Upload</button>
+            </form>
           </div>
+          <h3 class="mt-3 mb-0"><%= user.name %></h3>
+          <p class="text-muted mb-3">Member since <%= new Date(user.createdAt).toLocaleDateString() %></p>
+        </div>
+        
+        <div class="profile-info p-4">
+          <div class="info-item">
+            <i class="fas fa-envelope"></i>
+            <div>
+              <h6>Email</h6>
+              <p><%= user.email %></p>
+            </div>
+          </div>
+          
+          <div class="info-item">
+            <i class="fas fa-phone"></i>
+            <div>
+              <h6>Phone</h6>
+              <p><%= user.phone || 'Not provided' %></p>
+            </div>
+          </div>
+          
+          <div class="info-item">
+            <i class="fas fa-map-marker-alt"></i>
+            <div>
+              <h6>Address</h6>
+              <p><%= user.address || 'Not provided' %></p>
+            </div>
+          </div>
+        </div>
+        
+        <div class="profile-actions p-3">
+          <a href="/users/change-password" class="btn btn-outline-primary w-100 mb-2">
+            <i class="fas fa-lock me-2"></i> Change Password
+          </a>
+          <button class="btn btn-outline-danger w-100" data-bs-toggle="modal" data-bs-target="#deleteAccountModal">
+            <i class="fas fa-trash-alt me-2"></i> Delete Account
+          </button>
         </div>
       </div>
     </div>
-
-    <div class="col-md-8">
-      <div class="card shadow-sm">
-        <div class="card-header bg-light">
-          <h4 class="mb-0">Profile Information</h4>
+    
+    <!-- Main Profile Form -->
+    <div class="col-lg-8">
+      <div class="card shadow-sm mb-4">
+        <div class="card-header bg-white border-bottom">
+          <h4 class="mb-0"><i class="fas fa-user-edit me-2"></i>Edit Profile</h4>
         </div>
         <div class="card-body">
-          <form action="/users/profile" method="POST">
-            <div class="row mb-3">
-              <div class="col-md-6">
-                <label for="firstName" class="form-label">First Name</label>
-                <input type="text" class="form-control" id="firstName" name="firstName" value="<%= user.firstName %>" required>
+          <form action="/users/profile/<%= user._id %>?_method=PUT" method="POST">
+            <div class="row">
+              <div class="col-md-6 mb-3">
+                <label for="name" class="form-label">Full Name</label>
+                <input type="text" class="form-control" id="name" name="name" value="<%= user.name %>" required>
               </div>
-              <div class="col-md-6">
-                <label for="lastName" class="form-label">Last Name</label>
-                <input type="text" class="form-control" id="lastName" name="lastName" value="<%= user.lastName %>" required>
+              
+              <div class="col-md-6 mb-3">
+                <label for="email" class="form-label">Email</label>
+                <input type="email" class="form-control bg-light" id="email" value="<%= user.email %>" disabled>
+                <small class="text-muted">Contact support to change email</small>
               </div>
             </div>
-
-            <div class="mb-3">
-              <label for="email" class="form-label">Email</label>
-              <input type="email" class="form-control" id="email" value="<%= user.email %>" disabled>
-              <small class="text-muted">Contact support to change your email</small>
-            </div>
-
-            <div class="row mb-3">
-              <div class="col-md-6">
-                <label for="phone" class="form-label">Phone</label>
+            
+            <div class="row">
+              <div class="col-md-6 mb-3">
+                <label for="phone" class="form-label">Phone Number</label>
                 <input type="tel" class="form-control" id="phone" name="phone" value="<%= user.phone || '' %>">
               </div>
-              <div class="col-md-6">
+              
+              <div class="col-md-6 mb-3">
                 <label for="dob" class="form-label">Date of Birth</label>
-                <input type="date" class="form-control" id="dob" name="dob" value="<%= user.dob ? user.dob.toISOString().split('T')[0] : '' %>">
+                <input type="date" class="form-control bg-light" id="dob" value="<%= user.dob ? user.dob.toISOString().split('T')[0] : '' %>" disabled>
               </div>
             </div>
-
+            
             <div class="mb-3">
               <label for="address" class="form-label">Address</label>
-              <textarea class="form-control" id="address" name="address" rows="3"><%= user.address || '' %></textarea>
+              <textarea class="form-control" id="address" name="address" rows="2"><%= user.address || '' %></textarea>
             </div>
-
-            <div class="mb-3">
-              <label for="licenseNumber" class="form-label">Driver's License Number</label>
-              <input type="text" class="form-control" id="licenseNumber" name="licenseNumber" value="<%= user.licenseNumber || '' %>">
+            
+            <div class="mb-4">
+              <label for="licenseNumber" class="form-label">Driver's License</label>
+              <input type="text" class="form-control bg-light" id="licenseNumber" value="<%= user.licenseNumber || 'Not provided' %>" disabled>
             </div>
-
-            <div class="d-flex justify-content-between">
+            
+            <div class="d-flex justify-content-end gap-3">
               <a href="/users/dashboard" class="btn btn-outline-secondary">Cancel</a>
-              <button type="submit" class="btn btn-primary">Update Profile</button>
+              <button type="submit" class="btn btn-primary px-4">
+                <i class="fas fa-save me-2"></i> Save Changes
+              </button>
             </div>
           </form>
         </div>
       </div>
-
-      <div class="card shadow-sm mt-4">
-        <div class="card-header bg-light">
-          <h4 class="mb-0">Account Settings</h4>
+      
+      <!-- Account Security Card -->
+      <div class="card shadow-sm">
+        <div class="card-header bg-white border-bottom">
+          <h4 class="mb-0"><i class="fas fa-shield-alt me-2"></i>Account Security</h4>
         </div>
         <div class="card-body">
-          <div class="d-grid gap-2">
-            <a href="/users/change-password" class="btn btn-outline-warning">Change Password</a>
-            <button class="btn btn-outline-danger" data-bs-toggle="modal" data-bs-target="#deleteAccountModal">
-              Delete Account
-            </button>
+          <div class="security-item mb-3">
+            <div class="security-icon">
+              <i class="fas fa-lock"></i>
+            </div>
+            <div class="security-content">
+              <h5>Password</h5>
+              <p class="text-muted">Last changed <%= user.passwordChangedAt ? new Date(user.passwordChangedAt).toLocaleDateString() : 'never' %></p>
+            </div>
+            <div class="security-action">
+              <a href="/users/change-password" class="btn btn-outline-primary">Change</a>
+            </div>
+          </div>
+          
+          <div class="security-item">
+            <div class="security-icon text-danger">
+              <i class="fas fa-trash-alt"></i>
+            </div>
+            <div class="security-content">
+              <h5>Delete Account</h5>
+              <p class="text-muted">Permanently remove your account and all data</p>
+            </div>
+            <div class="security-action">
+              <button class="btn btn-outline-danger" data-bs-toggle="modal" data-bs-target="#deleteAccountModal">
+                Delete
+              </button>
+            </div>
           </div>
         </div>
       </div>
@@ -99,20 +155,26 @@
 
 <!-- Delete Account Modal -->
 <div class="modal fade" id="deleteAccountModal" tabindex="-1" aria-hidden="true">
-  <div class="modal-dialog">
+  <div class="modal-dialog modal-dialog-centered">
     <div class="modal-content">
-      <div class="modal-header">
-        <h5 class="modal-title">Confirm Account Deletion</h5>
+      <div class="modal-header border-bottom-0">
+        <h5 class="modal-title text-danger"><i class="fas fa-exclamation-triangle me-2"></i>Delete Account</h5>
         <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
       </div>
-      <div class="modal-body">
-        <p>Are you sure you want to delete your account? This action cannot be undone.</p>
-        <p class="text-danger">All your bookings and data will be permanently removed.</p>
+      <div class="modal-body py-4">
+        <div class="alert alert-danger">
+          <i class="fas fa-exclamation-circle me-2"></i>
+          This action cannot be undone!
+        </div>
+        <p>All your data including bookings, favorites, and personal information will be permanently deleted.</p>
+        <p>Are you sure you want to proceed?</p>
       </div>
-      <div class="modal-footer">
+      <div class="modal-footer border-top-0">
         <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancel</button>
         <form action="/users/delete" method="POST">
-          <button type="submit" class="btn btn-danger">Delete My Account</button>
+          <button type="submit" class="btn btn-danger">
+            <i class="fas fa-trash-alt me-2"></i> Delete My Account
+          </button>
         </form>
       </div>
     </div>
@@ -122,8 +184,175 @@
 <%- include('../partials/footer') %>
 
 <style>
+  /* Profile Card Styles */
+  .profile-card {
+    background: #fff;
+    border-radius: 12px;
+    box-shadow: 0 4px 20px rgba(0,0,0,0.05);
+    overflow: hidden;
+  }
+  
+  .profile-header {
+    background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+    color: white;
+    position: relative;
+  }
+  
+  .profile-avatar {
+    position: relative;
+    display: inline-block;
+  }
+  
+  .avatar-upload-form {
+    position: absolute;
+    bottom: 5px;
+    right: 5px;
+  }
+  
+  .avatar-edit-btn {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: 36px;
+    height: 36px;
+    border-radius: 50%;
+    background: rgba(255,255,255,0.9);
+    color: #0d6efd;
+    cursor: pointer;
+    transition: all 0.2s;
+  }
+  
+  .avatar-edit-btn:hover {
+    background: #fff;
+    transform: scale(1.1);
+  }
+  
+  #avatarUpload {
+    display: none;
+  }
+  
+  .profile-info {
+    padding: 1.5rem;
+  }
+  
+  .info-item {
+    display: flex;
+    align-items: flex-start;
+    gap: 15px;
+    margin-bottom: 1.25rem;
+  }
+  
+  .info-item i {
+    font-size: 1.1rem;
+    color: #0d6efd;
+    margin-top: 3px;
+  }
+  
+  .info-item h6 {
+    font-size: 0.875rem;
+    color: #6c757d;
+    margin-bottom: 0.25rem;
+  }
+  
+  .info-item p {
+    font-size: 1rem;
+    margin-bottom: 0;
+  }
+  
+  .profile-actions {
+    background: #f8f9fa;
+    border-top: 1px solid #eee;
+  }
+  
+  /* Form Styles */
   .form-control:disabled {
-    background-color: #e9ecef;
+    background-color: #f8f9fa;
     opacity: 1;
   }
+  
+  .form-label {
+    font-weight: 500;
+    margin-bottom: 0.5rem;
+  }
+  
+  /* Security Items */
+  .security-item {
+    display: flex;
+    align-items: center;
+    padding: 1rem;
+    background: #f8f9fa;
+    border-radius: 8px;
+    margin-bottom: 1rem;
+  }
+  
+  .security-icon {
+    width: 40px;
+    height: 40px;
+    border-radius: 50%;
+    background: rgba(13, 110, 253, 0.1);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    margin-right: 1rem;
+    color: #0d6efd;
+    font-size: 1.1rem;
+  }
+  
+  .security-icon.text-danger {
+    background: rgba(220, 53, 69, 0.1);
+    color: #dc3545;
+  }
+  
+  .security-content {
+    flex: 1;
+  }
+  
+  .security-content h5 {
+    font-size: 1rem;
+    margin-bottom: 0.25rem;
+  }
+  
+  .security-content p {
+    font-size: 0.875rem;
+    color: #6c757d;
+    margin-bottom: 0;
+  }
+  
+  /* Modal Styles */
+  .modal-content {
+    border-radius: 12px;
+    border: none;
+  }
+  
+  /* Responsive Adjustments */
+  @media (max-width: 768px) {
+    .profile-header {
+      padding: 2rem 1rem;
+    }
+    
+    .info-item {
+      flex-direction: column;
+      gap: 5px;
+    }
+    
+    .security-item {
+      flex-wrap: wrap;
+    }
+    
+    .security-action {
+      width: 100%;
+      margin-top: 1rem;
+    }
+    
+    .security-action .btn {
+      width: 100%;
+    }
+  }
 </style>
+
+<script>
+  // Auto-submit avatar upload when file is selected
+  document.getElementById('avatarUpload').addEventListener('change', function() {
+    this.closest('form').submit();
+  });
+</script>

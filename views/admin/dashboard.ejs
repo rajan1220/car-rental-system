@@ -1,131 +1,408 @@
-<!-- Dashboard Layout -->
- <head>
- <link rel="stylesheet" href="/css/admin-dashboard.css">
-</head>
-<div class="d-flex">
-  <!-- Sidebar -->
-  <aside class="sidebar">
-    <div class="sidebar-brand">
-      <h3 class="m-0 text-primary">DriveEase Admin</h3>
-    </div>
-    
-    <div class="sidebar-menu">
-      <a href="/admin" class="sidebar-link active">
-        <i class="fas fa-tachometer-alt"></i>
-        <span>Dashboard</span>
-      </a>
-      <a href="/admin/cars" class="sidebar-link">
-        <i class="fas fa-car"></i>
-        <span>Vehicle Management</span>
-      </a>
-      <a href="/admin/bookings" class="sidebar-link">
-        <i class="fas fa-calendar-check"></i>
-        <span>Bookings</span>
-      </a>
-      <a href="/admin/users" class="sidebar-link">
-        <i class="fas fa-users"></i>
-        <span>User Management</span>
-      </a>
-      <a href="/admin/payments" class="sidebar-link">
-        <i class="fas fa-credit-card"></i>
-        <span>Payments</span>
-      </a>
-      <a href="/admin/reports" class="sidebar-link">
-        <i class="fas fa-chart-bar"></i>
-        <span>Reports</span>
-      </a>
-      <a href="/admin/settings" class="sidebar-link">
-        <i class="fas fa-cog"></i>
-        <span>Settings</span>
-      </a>
-    </div>
-  </aside>
+<%- include('partials/sidebar', {currentPage: 'vehicles'}) %>
 
+<!-- CSS Libraries -->
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+<link href="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/css/bootstrap.min.css" rel="stylesheet">
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/charts.css/dist/charts.min.css">
+
+<!-- Custom CSS -->
+<link rel="stylesheet" href="/css/admin-dashboard.css">
+<link rel="stylesheet" href="/css/style.css">
+
+<div class="d-flex">
   <!-- Main Content -->
   <div class="main-content">
     <!-- Top Navigation -->
-    <nav class="topbar">
-      <div class="d-flex align-items-center">
-        <button class="btn btn-outline mr-3 d-lg-none" id="sidebarToggle">
-          <i class="fas fa-bars"></i>
-        </button>
-        <div class="search-bar">
-          <i class="fas fa-search"></i>
-          <input type="text" placeholder="Search...">
-        </div>
-      </div>
-      
-      <div class="user-menu">
-        <div class="dropdown">
-          <a href="#" class="d-flex align-items-center text-decoration-none" id="userDropdown">
-            <img src="/images/admin-avatar.jpg" class="user-avatar">
-            <span class="mr-1">Admin User</span>
-            <i class="fas fa-caret-down"></i>
-          </a>
-          <div class="dropdown-menu dropdown-menu-right">
-            <a class="dropdown-item" href="#"><i class="fas fa-user mr-2"></i> Profile</a>
-            <a class="dropdown-item" href="#"><i class="fas fa-cog mr-2"></i> Settings</a>
-            <div class="dropdown-divider"></div>
-            <a class="dropdown-item" href="/auth/logout"><i class="fas fa-sign-out-alt mr-2"></i> Logout</a>
+    <nav class="topbar navbar navbar-expand">
+      <div class="container-fluid">
+        <div class="d-flex align-items-center">
+          <button class="btn btn-icon d-lg-none me-3" id="sidebarToggle">
+            <i class="fas fa-bars"></i>
+          </button>
+          <div class="search-bar position-relative">
+            <i class="fas fa-search search-icon"></i>
+            <input type="text" class="form-control search-input" placeholder="Search bookings, vehicles...">
           </div>
         </div>
-        <button class="btn btn-outline ml-3">
-          <i class="fas fa-bell"></i>
-          <span class="badge badge-danger badge-pill" id="notificationCount">0</span>
-        </button>
-      </div>
-    </nav>
-
-    <!-- Stats Overview -->
-    <div class="row" id="statsContainer">
-      <div class="col-12 text-center py-5">
-        <div class="loading-spinner text-primary"></div>
-        <p class="mt-2">Loading dashboard statistics...</p>
-      </div>
-    </div>
-
-    <!-- Recent Bookings -->
-    <div class="card">
-      <div class="card-header">
-        <h4 class="card-title">Recent Bookings</h4>
-        <a href="/admin/bookings" class="btn btn-sm btn-outline">View All</a>
-      </div>
-      <div class="card-body">
-        <div id="bookingsTable">
-          <div class="text-center py-5">
-            <div class="loading-spinner text-primary"></div>
-            <p class="mt-2">Loading recent bookings...</p>
-          </div>
-        </div>
-      </div>
-    </div>
-
-    <!-- Recent Vehicles & Activity Log -->
-    <div class="row">
-      <div class="col-md-6">
-        <div class="card">
-          <div class="card-header">
-            <h4 class="card-title">Recently Added Vehicles</h4>
-            <a href="/admin/cars" class="btn btn-sm btn-outline">View All</a>
-          </div>
-          <div class="card-body" id="vehiclesTable">
-            <div class="text-center py-5">
-              <div class="loading-spinner text-primary"></div>
-              <p class="mt-2">Loading recent vehicles...</p>
+        
+        <div class="user-menu d-flex align-items-center">
+          <button class="btn btn-icon notification-btn position-relative me-3">
+            <i class="fas fa-bell"></i>
+            <span class="badge notification-badge">3</span>
+          </button>
+          
+          <div class="dropdown user-dropdown">
+            <a href="#" class="d-flex align-items-center text-decoration-none" id="userDropdown" data-bs-toggle="dropdown">
+              <div class="avatar-container position-relative">
+                <img src="/images/admin-avatar.jpg" class="user-avatar rounded-circle">
+                <span class="status-indicator bg-success"></span>
+              </div>
+              <div class="user-info ms-2 d-none d-md-block">
+                <div class="user-name">Admin User</div>
+                <div class="user-role text-muted">Super Admin</div>
+              </div>
+            </a>
+            <div class="dropdown-menu dropdown-menu-end shadow">
+              <a class="dropdown-item" href="#">
+                <i class="fas fa-user me-2"></i> Profile
+              </a>
+              <a class="dropdown-item" href="#">
+                <i class="fas fa-cog me-2"></i> Settings
+              </a>
+              <div class="dropdown-divider"></div>
+              <a class="dropdown-item" href="/admin/logout">
+                <i class="fas fa-sign-out-alt me-2"></i> Logout
+              </a>
             </div>
           </div>
         </div>
       </div>
-      
-      <div class="col-md-6">
-        <div class="card">
-          <div class="card-header">
-            <h4 class="card-title">Activity Log</h4>
+    </nav>
+
+    <!-- Main Content Area -->
+    <div class="container-fluid px-4 py-3">
+      <!-- Page Header -->
+      <div class="page-header mb-4">
+        <h1 class="page-title">Dashboard Overview</h1>
+        <div class="breadcrumb">
+          <a href="#">Home</a> / <span>Dashboard</span>
+        </div>
+      </div>
+
+      <!-- Stats Overview -->
+      <div class="row g-4 mb-4">
+        <div class="col-xl-3 col-md-6">
+          <div class="card stat-card">
+            <div class="card-body">
+              <div class="d-flex justify-content-between align-items-center">
+                <div>
+                  <h6 class="stat-title">Total Vehicles</h6>
+                  <h2 class="stat-value"><%= dashboardStats.totalVehicles %></h2>
+                  <div class="stat-trend text-success">
+                    <i class="fas fa-arrow-up me-1"></i> 12.5% from last month
+                  </div>
+                </div>
+                <div class="stat-icon bg-primary-light">
+                  <i class="fas fa-car text-primary"></i>
+                </div>
+              </div>
+            </div>
           </div>
-          <div class="card-body" id="activityLog">
-            <div class="text-center py-5">
-              <div class="loading-spinner text-primary"></div>
-              <p class="mt-2">Loading activities...</p>
+        </div>
+        
+        <div class="col-xl-3 col-md-6">
+          <div class="card stat-card">
+            <div class="card-body">
+              <div class="d-flex justify-content-between align-items-center">
+                <div>
+                  <h6 class="stat-title">Active Bookings</h6>
+                  <h2 class="stat-value"><%= dashboardStats.activeBookings %></h2>
+                  <div class="stat-trend text-success">
+                    <i class="fas fa-arrow-up me-1"></i> 8.3% from last week
+                  </div>
+                </div>
+                <div class="stat-icon bg-success-light">
+                  <i class="fas fa-calendar-check text-success"></i>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+        
+        <div class="col-xl-3 col-md-6">
+          <div class="card stat-card">
+            <div class="card-body">
+              <div class="d-flex justify-content-between align-items-center">
+                <div>
+                  <h6 class="stat-title">Registered Users</h6>
+                  <h2 class="stat-value"><%= dashboardStats.registeredUsers %></h2>
+                  <div class="stat-trend text-success">
+                    <i class="fas fa-arrow-up me-1"></i> 5.2% new users
+                  </div>
+                </div>
+                <div class="stat-icon bg-warning-light">
+                  <i class="fas fa-users text-warning"></i>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+        
+        <div class="col-xl-3 col-md-6">
+          <div class="card stat-card">
+            <div class="card-body">
+              <div class="d-flex justify-content-between align-items-center">
+                <div>
+                  <h6 class="stat-title">Today's Revenue</h6>
+                  <h2 class="stat-value">$<%= dashboardStats.todaysRevenue ? dashboardStats.todaysRevenue.toFixed(2) : '0.00' %></h2>
+                  <div class="stat-trend text-success">
+                    <i class="fas fa-arrow-up me-1"></i> $1,240 total
+                  </div>
+                </div>
+                <div class="stat-icon bg-danger-light">
+                  <i class="fas fa-dollar-sign text-danger"></i>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Charts Row -->
+      <div class="row g-4 mb-4">
+        <div class="col-lg-8">
+          <div class="card">
+            <div class="card-header">
+              <h5 class="card-title">Booking Trends</h5>
+              <div class="chart-actions">
+                <select class="form-select form-select-sm">
+                  <option>Last 7 Days</option>
+                  <option selected>Last 30 Days</option>
+                  <option>Last 90 Days</option>
+                </select>
+              </div>
+            </div>
+            <div class="card-body">
+              <div class="chart-container" style="height: 300px;">
+                <!-- This would be replaced with your actual chart implementation -->
+                <div class="text-center py-5">
+                  <i class="fas fa-chart-line fa-3x text-muted mb-3"></i>
+                  <p>Booking trends chart would display here</p>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+        <div class="col-lg-4">
+          <div class="card">
+            <div class="card-header">
+              <h5 class="card-title">Vehicle Types Distribution</h5>
+            </div>
+            <div class="card-body">
+              <div class="chart-container" style="height: 300px;">
+                <!-- This would be replaced with your actual chart implementation -->
+                <div class="text-center py-5">
+                  <i class="fas fa-chart-pie fa-3x text-muted mb-3"></i>
+                  <p>Vehicle types pie chart would display here</p>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Recent Bookings -->
+      <div class="row g-4">
+        <div class="col-lg-8">
+          <div class="card">
+            <div class="card-header">
+              <div class="d-flex justify-content-between align-items-center">
+                <h5 class="card-title">Recent Bookings</h5>
+                <div>
+                  <button class="btn btn-sm btn-outline-secondary me-2" data-bs-toggle="modal" data-bs-target="#filterModal">
+                    <i class="fas fa-filter me-1"></i> Filter
+                  </button>
+                  <a href="/admin/bookings" class="btn btn-sm btn-primary">
+                    <i class="fas fa-list me-1"></i> View All
+                  </a>
+                </div>
+              </div>
+            </div>
+            <div class="card-body p-0">
+              <% if (recentBookings.length === 0) { %>
+                <div class="alert alert-info mx-3 my-3">No bookings found</div>
+              <% } else { %>
+                <div class="table-responsive">
+                  <table class="table table-hover align-middle mb-0">
+                    <thead class="table-light">
+                      <tr>
+                        <th class="ps-4">Booking ID</th>
+                        <th>Customer</th>
+                        <th>Vehicle</th>
+                        <th>Dates</th>
+                        <th>Amount</th>
+                        <th>Status</th>
+                        <th class="text-end pe-4">Actions</th>
+                      </tr>
+                    </thead>
+                    <tbody>
+                      <% recentBookings.forEach(booking => { %>
+                        <tr>
+                          <td class="ps-4 fw-semibold">#<%= booking.bookingId || 'N/A' %></td>
+                          <td>
+                            <div class="d-flex align-items-center">
+                              <% if (booking.user && booking.user.avatar) { %>
+                                <img src="<%= booking.user.avatar %>" class="rounded-circle me-2" width="36" height="36" alt="User">
+                              <% } else { %>
+                                <div class="avatar-placeholder rounded-circle me-2">
+                                  <i class="fas fa-user"></i>
+                                </div>
+                              <% } %>
+                              <div>
+                                <div class="fw-medium"><%= booking.user ? booking.user.name : 'Unknown User' %></div>
+                                <small class="text-muted"><%= booking.user ? booking.user.email : '' %></small>
+                              </div>
+                            </div>
+                          </td>
+                          <td>
+                            <div class="d-flex align-items-center">
+                              <% if (booking.car && booking.car.images && booking.car.images.length > 0) { %>
+                                <img src="<%= booking.car.images[0] %>" class="rounded me-2" width="40" height="30" alt="Car">
+                              <% } else { %>
+                                <div class="car-placeholder rounded me-2">
+                                  <i class="fas fa-car"></i>
+                                </div>
+                              <% } %>
+                              <div>
+                                <div class="fw-medium">
+                                  <%= booking.car ? `${booking.car.make || ''} ${booking.car.model || ''}` : 'Unknown Vehicle' %>
+                                </div>
+                                <small class="text-muted"><%= booking.car ? booking.car.type : '' %></small>
+                              </div>
+                            </div>
+                          </td>
+                          <td>
+                            <div class="text-nowrap">
+                              <%= booking.startDate ? new Date(booking.startDate).toLocaleDateString() : 'N/A' %>
+                            </div>
+                            <small class="text-muted text-nowrap">
+                              to <%= booking.endDate ? new Date(booking.endDate).toLocaleDateString() : 'N/A' %>
+                            </small>
+                          </td>
+                          <td class="fw-semibold">$<%= booking.totalAmount ? booking.totalAmount.toFixed(2) : '0.00' %></td>
+                          <td>
+                            <span class="badge <%= getStatusBadgeClass(booking.status) %> rounded-pill py-1 px-2">
+                              <%= booking.bookingStatus %>
+                            </span>
+                          </td>
+                          <td class="text-end pe-4">
+                            <div class="d-flex justify-content-end">
+                              <% if (booking.status === 'pending') { %>
+                                <button class="btn btn-sm btn-success me-1" 
+                                        title="Approve"
+                                        onclick="approveBooking('<%= booking._id %>')">
+                                  <i class="fas fa-check"></i>
+                                </button>
+                                <button class="btn btn-sm btn-danger me-2" 
+                                        title="Reject"
+                                        onclick="rejectBooking('<%= booking._id %>')">
+                                  <i class="fas fa-times"></i>
+                                </button>
+                              <% } %>
+                              
+                              <div class="dropdown">
+                                <button class="btn btn-sm btn-outline-secondary dropdown-toggle" 
+                                        type="button" 
+                                        data-bs-toggle="dropdown"
+                                        aria-expanded="false">
+                                  <i class="fas fa-ellipsis-v"></i>
+                                </button>
+                                <ul class="dropdown-menu dropdown-menu-end shadow">
+                                  <li>
+                                    <button class="dropdown-item" 
+                                            data-bs-toggle="modal" 
+                                            data-bs-target="#statusModal"
+                                            data-booking-id="<%= booking._id %>"
+                                            data-current-status="<%= booking.status || '' %>">
+                                      <i class="fas fa-exchange-alt me-2"></i> Change Status
+                                    </button>
+                                  </li>
+                                  <li>
+                                    <a class="dropdown-item" href="/admin/bookings/<%= booking._id %>">
+                                      <i class="fas fa-eye me-2"></i> View Details
+                                    </a>
+                                  </li>
+                                  <li>
+                                    <a class="dropdown-item" href="/admin/bookings/<%= booking._id %>/edit">
+                                      <i class="fas fa-edit me-2"></i> Edit
+                                    </a>
+                                  </li>
+                                </ul>
+                              </div>
+                            </div>
+                          </td>
+                        </tr>
+                      <% }); %>
+                    </tbody>
+                  </table>
+                </div>
+              <% } %>
+            </div>
+          </div>
+        </div>
+
+        <!-- Recent Vehicles & Activity -->
+        <div class="col-lg-4">
+          <div class="card mb-4">
+            <div class="card-header">
+              <h5 class="card-title">Recently Added Vehicles</h5>
+              <a href="/cars/add.ejs" class="btn btn-sm btn-primary">
+                <i class="fas fa-plus me-1"></i> Add New
+              </a>
+            </div>
+            <div class="card-body">
+              <div class="recent-vehicles-list">
+                <% recentVehicles.forEach(car => { %>
+                  <div class="recent-vehicle-item">
+                    <div class="vehicle-image">
+                      <% if (car.images && car.images.length > 0) { %>
+                        <img src="<%= car.images[0] %>" alt="<%= car.make %> <%= car.model %>">
+                      <% } else { %>
+                        <div class="no-image">
+                          <i class="fas fa-car"></i>
+                        </div>
+                      <% } %>
+                      <span class="availability-badge <%= car.available ? 'available' : 'unavailable' %>">
+                        <%= car.available ? 'Available' : 'Unavailable' %>
+                      </span>
+                    </div>
+                    <div class="vehicle-info">
+                      <h6><%= car.make %> <%= car.model %></h6>
+                      <div class="vehicle-meta">
+                        <span><i class="fas fa-gas-pump"></i> <%= car.fuelType %></span>
+                        <span><i class="fas fa-cogs"></i> <%= car.transmission %></span>
+                        <span><i class="fas fa-chair"></i> <%= car.seats %></span>
+                      </div>
+                      <div class="vehicle-footer">
+                        <div class="price">$<%= car.dailyRate %> <small>/day</small></div>
+                        <a href="/admin/cars/<%= car._id %>" class="btn btn-sm btn-outline-primary">
+                          <i class="fas fa-arrow-right"></i>
+                        </a>
+                      </div>
+                    </div>
+                  </div>
+                <% }); %>
+              </div>
+            </div>
+          </div>
+
+          <div class="card">
+            <div class="card-header">
+              <h5 class="card-title">Recent Activity</h5>
+            </div>
+            <div class="card-body">
+              <div class="activity-timeline">
+                <% if (typeof activityLog !== 'undefined' && activityLog && activityLog.length > 0) { %>
+                  <% activityLog.forEach(activity => { %>
+                    <div class="activity-item">
+                      <div class="activity-icon <%= getActivityIconClass(activity.type) %>">
+                        <i class="fas <%= activity.icon || 'fa-info-circle' %>"></i>
+                      </div>
+                      <div class="activity-content">
+                        <p><%= activity.message %></p>
+                        <small class="text-muted">
+                          <%= activity.date ? new Date(activity.date).toLocaleString() : 'Just now' %>
+                        </small>
+                      </div>
+                    </div>
+                  <% }); %>
+                <% } else { %>
+                  <div class="empty-state">
+                    <i class="fas fa-info-circle fa-2x text-muted mb-3"></i>
+                    <p class="text-muted">No activity data available</p>
+                  </div>
+                <% } %>
+              </div>
             </div>
           </div>
         </div>
@@ -134,356 +411,635 @@
   </div>
 </div>
 
+<!-- Include modals -->
+<%- include('partials/modals') %>
+
+<% function getStatusBadgeClass(status) {
+  if (!status) return 'bg-secondary';
+  
+  switch (status.toLowerCase()) {
+    case 'confirmed': return 'bg-success bg-opacity-10 text-success';
+    case 'pending': return 'bg-warning bg-opacity-10 text-warning';
+    case 'rejected':
+    case 'cancelled': return 'bg-danger bg-opacity-10 text-danger';
+    case 'completed': return 'bg-info bg-opacity-10 text-info';
+    default: return 'bg-secondary bg-opacity-10 text-secondary';
+  }
+} %>
+
+<% function getActivityIconClass(type) {
+  switch (type) {
+    case 'booking': return 'bg-success-light text-success';
+    case 'car': return 'bg-primary-light text-primary';
+    case 'user': return 'bg-warning-light text-warning';
+    default: return 'bg-secondary-light text-secondary';
+  }
+} %>
+
+<%- include('partials/scripts') %>
+
+<!-- Custom JavaScript -->
 <script>
-  // API Base URL
-  const API_BASE_URL = 'http://localhost:3000';
-
-  /**
-   * Fetches dashboard statistics and updates the UI
-   */
-  async function loadDashboardStats() {
-    const statsContainer = document.getElementById('statsContainer');
-    
-    try {
-      const response = await fetch(`${API_BASE_URL}/admin/dashboard`);
-      console.log('response : ',response);
-      const { success, data, message } = await response.json();
-      
-      if (!success) {
-        throw new Error(message || 'Failed to load dashboard statistics');
-      }
-      
-      statsContainer.innerHTML = `
-        <div class="col-md-3">
-          <div class="card stat-card">
-            <div class="stat-icon bg-primary bg-opacity-10 text-primary">
-              <i class="fas fa-car"></i>
-            </div>
-            <div class="stat-info">
-              <h3>${data.totalVehicles}</h3>
-              <p>Total Vehicles</p>
-            </div>
-          </div>
-        </div>
-        <div class="col-md-3">
-          <div class="card stat-card">
-            <div class="stat-icon bg-success bg-opacity-10 text-success">
-              <i class="fas fa-calendar-check"></i>
-            </div>
-            <div class="stat-info">
-              <h3>${data.activeBookings}</h3>
-              <p>Active Bookings</p>
-            </div>
-          </div>
-        </div>
-        <div class="col-md-3">
-          <div class="card stat-card">
-            <div class="stat-icon bg-warning bg-opacity-10 text-warning">
-              <i class="fas fa-users"></i>
-            </div>
-            <div class="stat-info">
-              <h3>${data.registeredUsers}</h3>
-              <p>Registered Users</p>
-            </div>
-          </div>
-        </div>
-        <div class="col-md-3">
-          <div class="card stat-card">
-            <div class="stat-icon bg-danger bg-opacity-10 text-danger">
-              <i class="fas fa-dollar-sign"></i>
-            </div>
-            <div class="stat-info">
-              <h3>$${data.todaysRevenue.toFixed(2)}</h3>
-              <p>Today's Revenue</p>
-            </div>
-          </div>
-        </div>
-      `;
-    } catch (error) {
-      console.error('Error loading dashboard stats:', error);
-      statsContainer.innerHTML = `
-        <div class="col-12">
-          <div class="error-state">
-            <h5 class="text-danger"><i class="fas fa-exclamation-circle mr-2"></i>Error Loading Statistics</h5>
-            <p class="mb-0">${error.message}</p>
-          </div>
-        </div>
-      `;
-    }
-  }
-
-  /**
-   * Fetches recent bookings and updates the UI
-   */
-  async function loadRecentBookings() {
-    const bookingsTable = document.getElementById('bookingsTable');
-    
-    try {
-      const response = await fetch(`${API_BASE_URL}/bookings/`);
-      const { success, data, message } = await response.json();
-      
-      if (!success) {
-        throw new Error(message || 'Failed to load recent bookings');
-      }
-      
-      if (data.length === 0) {
-        bookingsTable.innerHTML = `
-          <div class="empty-state">
-            <i class="fas fa-calendar-times fa-3x mb-3 text-muted"></i>
-            <h5>No Recent Bookings</h5>
-            <p>There are no recent bookings to display</p>
-          </div>
-        `;
-        return;
-      }
-      
-      bookingsTable.innerHTML = `
-        <div class="table-responsive">
-          <table class="table">
-            <thead>
-              <tr>
-                <th>Booking ID</th>
-                <th>Customer</th>
-                <th>Vehicle</th>
-                <th>Dates</th>
-                <th>Amount</th>
-                <th>Status</th>
-                <th>Actions</th>
-              </tr>
-            </thead>
-            <tbody>
-              ${data.map(booking => `
-                <tr>
-                  <td>#${booking.bookingId || booking._id.substring(18)}</td>
-                  <td>${booking.user?.name || 'Unknown User'}</td>
-                  <td>${booking.car?.make || 'Unknown'} ${booking.car?.model || 'Vehicle'}</td>
-                  <td>${booking.startDate} - ${booking.endDate}</td>
-                  <td>$${booking.totalAmount?.toFixed(2) || '0.00'}</td>
-                  <td>
-                    <span class="badge ${getStatusBadgeClass(booking.status)}">
-                      ${booking.status || 'unknown'}
-                    </span>
-                  </td>
-                  <td>
-                    <button class="btn btn-sm btn-outline mr-1 view-booking" data-id="${booking._id}">
-                      <i class="fas fa-eye"></i>
-                    </button>
-                    <button class="btn btn-sm btn-outline edit-booking" data-id="${booking._id}">
-                      <i class="fas fa-edit"></i>
-                    </button>
-                  </td>
-                </tr>
-              `).join('')}
-            </tbody>
-          </table>
-        </div>
-      `;
-      
-      // Add event listeners to booking action buttons
-      document.querySelectorAll('.view-booking').forEach(btn => {
-        btn.addEventListener('click', () => viewBooking(btn.dataset.id));
-      });
-      
-      document.querySelectorAll('.edit-booking').forEach(btn => {
-        btn.addEventListener('click', () => editBooking(btn.dataset.id));
-      });
-    } catch (error) {
-      console.error('Error loading recent bookings:', error);
-      bookingsTable.innerHTML = `
-        <div class="error-state">
-          <h5 class="text-danger"><i class="fas fa-exclamation-circle mr-2"></i>Error Loading Bookings</h5>
-          <p class="mb-0">${error.message}</p>
-          <button class="btn btn-sm btn-primary mt-2" onclick="loadRecentBookings()">
-            <i class="fas fa-sync-alt mr-1"></i> Try Again
-          </button>
-        </div>
-      `;
-    }
-  }
-
-  /**
-   * Fetches recent vehicles and updates the UI
-   */
-  async function loadRecentVehicles() {
-    const vehiclesTable = document.getElementById('vehiclesTable');
-    
-    try {
-      const response = await fetch(`${API_BASE_URL}/cars/`);
-      const { success, data, message } = await response.json();
-      
-      if (!success) {
-        throw new Error(message || 'Failed to load recent vehicles');
-      }
-      
-      if (data.length === 0) {
-        vehiclesTable.innerHTML = `
-          <div class="empty-state">
-            <i class="fas fa-car-side fa-3x mb-3 text-muted"></i>
-            <h5>No Vehicles Found</h5>
-            <p>There are no vehicles in the system yet</p>
-          </div>
-        `;
-        return;
-      }
-      
-      vehiclesTable.innerHTML = `
-        <div class="table-responsive">
-          <table class="table">
-            <thead>
-              <tr>
-                <th>Make</th>
-                <th>Model</th>
-                <th>Type</th>
-                <th>Rate</th>
-                <th>Status</th>
-                <th>Added On</th>
-              </tr>
-            </thead>
-            <tbody>
-              ${data.map(car => `
-                <tr>
-                  <td>${car.make}</td>
-                  <td>${car.model}</td>
-                  <td>${car.type}</td>
-                  <td>$${car.dailyRate}/day</td>
-                  <td>
-                    <span class="badge ${car.available ? 'badge-success' : 'badge-warning'}">
-                      ${car.available ? 'Available' : 'Unavailable'}
-                    </span>
-                  </td>
-                  <td>${car.createdAt}</td>
-                </tr>
-              `).join('')}
-            </tbody>
-          </table>
-        </div>
-      `;
-    } catch (error) {
-      console.error('Error loading recent vehicles:', error);
-      vehiclesTable.innerHTML = `
-        <div class="error-state">
-          <h5 class="text-danger"><i class="fas fa-exclamation-circle mr-2"></i>Error Loading Vehicles</h5>
-          <p class="mb-0">${error.message}</p>
-          <button class="btn btn-sm btn-primary mt-2" onclick="loadRecentVehicles()">
-            <i class="fas fa-sync-alt mr-1"></i> Try Again
-          </button>
-        </div>
-      `;
-    }
-  }
-
-  /**
-   * Fetches activity log and updates the UI
-   */
-  async function loadActivityLog() {
-    const activityLog = document.getElementById('activityLog');
-    
-    try {
-      const response = await fetch(`${API_BASE_URL}/cars/`);
-      const { success, data, message } = await response.json();
-      
-      if (!success) {
-        throw new Error(message || 'Failed to load activities');
-      }
-      
-      if (data.length === 0) {
-        activityLog.innerHTML = `
-          <div class="empty-state">
-            <i class="fas fa-list-alt fa-3x mb-3 text-muted"></i>
-            <h5>No Recent Activities</h5>
-            <p>There are no recent activities to display</p>
-          </div>
-        `;
-        return;
-      }
-      
-      activityLog.innerHTML = `
-        <div class="activity-list">
-          ${data.map(activity => `
-            <div class="activity-item d-flex mb-3">
-              <div class="activity-icon ${getActivityIconClass(activity.type)} rounded-circle p-2 mr-3">
-                <i class="fas ${activity.icon}"></i>
-              </div>
-              <div>
-                <p class="mb-0"><strong>${activity.message}</strong></p>
-                <small class="text-muted">${activity.date}</small>
-              </div>
-            </div>
-          `).join('')}
-        </div>
-      `;
-    } catch (error) {
-      console.error('Error loading activity log:', error);
-      activityLog.innerHTML = `
-        <div class="error-state">
-          <h5 class="text-danger"><i class="fas fa-exclamation-circle mr-2"></i>Error Loading Activities</h5>
-          <p class="mb-0">${error.message}</p>
-          <button class="btn btn-sm btn-primary mt-2" onclick="loadActivityLog()">
-            <i class="fas fa-sync-alt mr-1"></i> Try Again
-          </button>
-        </div>
-      `;
-    }
-  }
-
-  /**
-   * Helper function to get status badge class
-   */
-  function getStatusBadgeClass(status) {
-    if (!status) return 'badge-secondary';
-    
-    switch (status.toLowerCase()) {
-      case 'confirmed': return 'badge-success';
-      case 'pending': return 'badge-warning';
-      case 'cancelled': return 'badge-danger';
-      case 'completed': return 'badge-info';
-      default: return 'badge-secondary';
-    }
-  }
-
-  /**
-   * Helper function to get activity icon class
-   */
-  function getActivityIconClass(type) {
-    switch (type) {
-      case 'booking': return 'bg-success bg-opacity-10 text-success';
-      case 'car': return 'bg-primary bg-opacity-10 text-primary';
-      case 'user': return 'bg-warning bg-opacity-10 text-warning';
-      default: return 'bg-secondary bg-opacity-10 text-secondary';
-    }
-  }
-
-  /**
-   * View booking details
-   */
-  function viewBooking(bookingId) {
-    window.location.href = `/admin/bookings/${bookingId}`;
-  }
-
-  /**
-   * Edit booking
-   */
-  function editBooking(bookingId) {
-    window.location.href = `/admin/bookings/${bookingId}/edit`;
-  }
-
-  /**
-   * Toggle sidebar on mobile
-   */
-  function setupSidebarToggle() {
-    document.getElementById('sidebarToggle').addEventListener('click', function() {
-      document.querySelector('.sidebar').classList.toggle('active');
+  document.addEventListener('DOMContentLoaded', function() {
+    // Initialize tooltips
+    const tooltipTriggerList = [].slice.call(document.querySelectorAll('[data-bs-toggle="tooltip"]'));
+    tooltipTriggerList.map(function(tooltipTriggerEl) {
+      return new bootstrap.Tooltip(tooltipTriggerEl);
     });
+
+    // Initialize status modal
+    const statusModal = document.getElementById('statusModal');
+    if (statusModal) {
+      statusModal.addEventListener('show.bs.modal', function(event) {
+        const button = event.relatedTarget;
+        const bookingId = button.getAttribute('data-booking-id');
+        const currentStatus = button.getAttribute('data-current-status');
+        
+        const form = statusModal.querySelector('#statusForm');
+        form.action = `/admin/bookings/${bookingId}/status`;
+        
+        const statusSelect = form.querySelector('select[name="status"]');
+        statusSelect.value = currentStatus;
+      });
+    }
+  });
+
+  function approveBooking(bookingId) {
+    if (confirm('Are you sure you want to approve this booking?')) {
+      fetch(`/admin/bookings/${bookingId}/approve`, {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        }
+      })
+      .then(response => {
+        if (response.ok) {
+          showToast('Booking approved successfully', 'success');
+          setTimeout(() => window.location.reload(), 1500);
+        } else {
+          showToast('Failed to approve booking', 'error');
+        }
+      })
+      .catch(error => {
+        console.error('Error:', error);
+        showToast('An error occurred while approving the booking', 'error');
+      });
+    }
+  }
+  
+  function rejectBooking(bookingId) {
+    if (confirm('Are you sure you want to reject this booking?')) {
+      fetch(`/admin/bookings/${bookingId}/reject`, {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        }
+      })
+      .then(response => {
+        if (response.ok) {
+          showToast('Booking rejected successfully', 'success');
+          setTimeout(() => window.location.reload(), 1500);
+        } else {
+          showToast('Failed to reject booking', 'error');
+        }
+      })
+      .catch(error => {
+        console.error('Error:', error);
+        showToast('An error occurred while rejecting the booking', 'error');
+      });
+    }
+  }
+  
+  function showToast(message, type = 'info') {
+    const toastContainer = document.getElementById('toastContainer');
+    if (!toastContainer) return;
+    
+    const toastEl = document.createElement('div');
+    toastEl.className = `toast show align-items-center text-white bg-${type} border-0`;
+    toastEl.setAttribute('role', 'alert');
+    toastEl.setAttribute('aria-live', 'assertive');
+    toastEl.setAttribute('aria-atomic', 'true');
+    
+    toastEl.innerHTML = `
+      <div class="d-flex">
+        <div class="toast-body">
+          ${message}
+        </div>
+        <button type="button" class="btn-close btn-close-white me-2 m-auto" data-bs-dismiss="toast" aria-label="Close"></button>
+      </div>
+    `;
+    
+    toastContainer.appendChild(toastEl);
+    
+    setTimeout(() => {
+      toastEl.classList.remove('show');
+      setTimeout(() => toastEl.remove(), 300);
+    }, 3000);
+  }
+</script>
+
+<!-- Toast Container -->
+<div class="toast-container position-fixed top-0 end-0 p-3" id="toastContainer"></div>
+
+<!-- Custom CSS -->
+<style>
+  :root {
+    --primary-color: #4361ee;
+    --primary-light: rgba(67, 97, 238, 0.1);
+    --secondary-color: #3f37c9;
+    --success-color: #4cc9f0;
+    --success-light: rgba(76, 201, 240, 0.1);
+    --danger-color: #f72585;
+    --danger-light: rgba(247, 37, 133, 0.1);
+    --warning-color: #f8961e;
+    --warning-light: rgba(248, 150, 30, 0.1);
+    --info-color: #4895ef;
+    --light-color: #f8f9fa;
+    --dark-color: #212529;
+    --border-radius: 0.5rem;
+    --border-radius-sm: 0.375rem;
+    --box-shadow: 0 0.5rem 1rem rgba(0, 0, 0, 0.05);
+    --transition: all 0.3s ease;
+    --sidebar-width: 280px;
   }
 
-  /**
-   * Initialize the dashboard when page loads
-   */
-  document.addEventListener('DOMContentLoaded', () => {
-    setupSidebarToggle();
-    loadDashboardStats();
-    loadRecentBookings();
-    loadRecentVehicles();
-    loadActivityLog();
-  });
-</script>
+  body {
+    font-family: 'Inter', -apple-system, BlinkMacSystemFont, sans-serif;
+    background-color: #f8fafc;
+    color: #4a5568;
+    line-height: 1.6;
+  }
+
+  /* Main Layout */
+  .main-content {
+    flex: 1;
+    min-height: 100vh;
+    transition: var(--transition);
+    margin-left: var(--sidebar-width);
+    background-color: #f8fafc;
+  }
+
+  /* Top Navigation */
+  .topbar {
+    background: white;
+    box-shadow: 0 1px 2px rgba(0, 0, 0, 0.05);
+    padding: 1rem 1.5rem;
+    position: sticky;
+    top: 0;
+    z-index: 1020;
+  }
+
+  .search-bar {
+    position: relative;
+    width: 300px;
+  }
+
+  .search-icon {
+    position: absolute;
+    left: 12px;
+    top: 50%;
+    transform: translateY(-50%);
+    color: #adb5bd;
+  }
+
+  .search-input {
+    padding-left: 40px;
+    border-radius: 50px;
+    border: 1px solid #e2e8f0;
+    background-color: #f8fafc;
+    transition: var(--transition);
+  }
+
+  .search-input:focus {
+    background-color: white;
+    border-color: var(--primary-color);
+    box-shadow: 0 0 0 0.25rem rgba(67, 97, 238, 0.15);
+  }
+
+  .user-avatar {
+    width: 40px;
+    height: 40px;
+    object-fit: cover;
+  }
+
+  .status-indicator {
+    position: absolute;
+    bottom: 0;
+    right: 0;
+    width: 10px;
+    height: 10px;
+    border-radius: 50%;
+    border: 2px solid white;
+  }
+
+  .notification-btn {
+    position: relative;
+    color: #64748b;
+    transition: var(--transition);
+    border: none;
+    background: transparent;
+  }
+
+  .notification-btn:hover {
+    color: var(--primary-color);
+  }
+
+  .notification-badge {
+    position: absolute;
+    top: -5px;
+    right: -5px;
+    font-size: 10px;
+    padding: 3px 6px;
+  }
+
+  /* Page Header */
+  .page-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 1.5rem;
+  }
+
+  .page-title {
+    font-size: 1.75rem;
+    font-weight: 600;
+    color: #1e293b;
+    margin: 0;
+  }
+
+  .breadcrumb {
+    font-size: 0.875rem;
+    color: #64748b;
+  }
+
+  .breadcrumb a {
+    color: var(--primary-color);
+    text-decoration: none;
+  }
+
+  /* Cards */
+  .card {
+    border: none;
+    border-radius: var(--border-radius);
+    box-shadow: var(--box-shadow);
+    margin-bottom: 1.5rem;
+    background-color: white;
+    transition: var(--transition);
+  }
+
+  .card:hover {
+    box-shadow: 0 10px 20px rgba(0, 0, 0, 0.1);
+  }
+
+  .card-header {
+    background-color: white;
+    border-bottom: 1px solid #f1f5f9;
+    padding: 1.25rem 1.5rem;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+  }
+
+  .card-title {
+    font-size: 1.125rem;
+    font-weight: 600;
+    color: #1e293b;
+    margin: 0;
+  }
+
+  .card-body {
+    padding: 1.5rem;
+  }
+
+  /* Stats Cards */
+  .stat-card {
+    border: none;
+    border-radius: var(--border-radius);
+    box-shadow: var(--box-shadow);
+    transition: var(--transition);
+    background: white;
+    height: 100%;
+  }
+
+  .stat-card:hover {
+    transform: translateY(-5px);
+    box-shadow: 0 10px 20px rgba(0, 0, 0, 0.1);
+  }
+
+  .stat-icon {
+    width: 48px;
+    height: 48px;
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 1.25rem;
+  }
+
+  .bg-primary-light {
+    background-color: var(--primary-light);
+  }
+
+  .bg-success-light {
+    background-color: var(--success-light);
+  }
+
+  .bg-warning-light {
+    background-color: var(--warning-light);
+  }
+
+  .bg-danger-light {
+    background-color: var(--danger-light);
+  }
+
+  .stat-title {
+    font-size: 0.875rem;
+    color: #64748b;
+    margin-bottom: 0.5rem;
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+    font-weight: 500;
+  }
+
+  .stat-value {
+    font-size: 1.75rem;
+    font-weight: 700;
+    color: #1e293b;
+    margin-bottom: 0.25rem;
+  }
+
+  .stat-trend {
+    font-size: 0.75rem;
+    color: #94a3b8;
+    margin-bottom: 0;
+  }
+
+  /* Tables */
+  .table {
+    --bs-table-hover-bg: rgba(67, 97, 238, 0.03);
+    margin-bottom: 0;
+  }
+
+  .table th {
+    font-weight: 600;
+    text-transform: uppercase;
+    font-size: 0.75rem;
+    letter-spacing: 0.5px;
+    color: #64748b;
+    border-bottom-width: 1px;
+    padding: 0.75rem 1rem;
+  }
+
+  .table td {
+    vertical-align: middle;
+    padding: 1rem;
+    border-color: #f1f5f9;
+  }
+
+  /* Badges */
+  .badge {
+    font-weight: 500;
+    padding: 0.35em 0.65em;
+    font-size: 0.75em;
+    letter-spacing: 0.5px;
+  }
+
+  /* Recent Vehicles */
+  .recent-vehicles-list {
+    display: flex;
+    flex-direction: column;
+    gap: 1rem;
+  }
+
+  .recent-vehicle-item {
+    display: flex;
+    gap: 1rem;
+    padding: 0.75rem;
+    border-radius: var(--border-radius-sm);
+    background-color: #f8fafc;
+    transition: var(--transition);
+  }
+
+  .recent-vehicle-item:hover {
+    background-color: #f1f5f9;
+  }
+
+  .vehicle-image {
+    position: relative;
+    width: 80px;
+    height: 60px;
+    border-radius: var(--border-radius-sm);
+    overflow: hidden;
+    flex-shrink: 0;
+  }
+
+  .vehicle-image img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+  }
+
+  .no-image {
+    width: 100%;
+    height: 100%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    background-color: #e2e8f0;
+    color: #94a3b8;
+  }
+
+  .availability-badge {
+    position: absolute;
+    bottom: 5px;
+    right: 5px;
+    font-size: 0.6rem;
+    padding: 0.25rem 0.5rem;
+    border-radius: 50px;
+  }
+
+  .availability-badge.available {
+    background-color: var(--success-light);
+    color: var(--success-color);
+  }
+
+  .availability-badge.unavailable {
+    background-color: #e2e8f0;
+    color: #64748b;
+  }
+
+  .vehicle-info {
+    flex: 1;
+  }
+
+  .vehicle-info h6 {
+    font-size: 0.875rem;
+    font-weight: 600;
+    margin: 0 0 0.25rem 0;
+    color: #1e293b;
+  }
+
+  .vehicle-meta {
+    display: flex;
+    gap: 0.75rem;
+    font-size: 0.75rem;
+    color: #64748b;
+    margin-bottom: 0.5rem;
+  }
+
+  .vehicle-meta span {
+    display: flex;
+    align-items: center;
+    gap: 0.25rem;
+  }
+
+  .vehicle-footer {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+  }
+
+  .price {
+    font-weight: 600;
+    color: var(--primary-color);
+    font-size: 0.875rem;
+  }
+
+  .price small {
+    font-weight: normal;
+    color: #94a3b8;
+    font-size: 0.75rem;
+  }
+
+  /* Activity Timeline */
+  .activity-timeline {
+    display: flex;
+    flex-direction: column;
+    gap: 1.25rem;
+  }
+
+  .activity-item {
+    display: flex;
+    gap: 1rem;
+    position: relative;
+    padding-bottom: 1.25rem;
+  }
+
+  .activity-item:not(:last-child)::after {
+    content: '';
+    position: absolute;
+    left: 18px;
+    top: 32px;
+    bottom: 0;
+    width: 2px;
+    background-color: #f1f5f9;
+  }
+
+  .activity-icon {
+    width: 36px;
+    height: 36px;
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    flex-shrink: 0;
+    z-index: 1;
+  }
+
+  .activity-content {
+    flex: 1;
+  }
+
+  .activity-content p {
+    margin: 0 0 0.25rem 0;
+    font-size: 0.875rem;
+    color: #1e293b;
+  }
+
+  .activity-content small {
+    font-size: 0.75rem;
+    color: #94a3b8;
+  }
+
+  /* Buttons */
+  .btn {
+    font-weight: 500;
+    padding: 0.5rem 1rem;
+    border-radius: 50px;
+    transition: var(--transition);
+  }
+
+  .btn-sm {
+    padding: 0.25rem 0.75rem;
+    font-size: 0.875rem;
+  }
+
+  .btn-icon {
+    width: 36px;
+    height: 36px;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    padding: 0;
+    border-radius: 50%;
+  }
+
+  /* Dropdowns */
+  .dropdown-menu {
+    border: none;
+    box-shadow: 0 5px 15px rgba(0, 0, 0, 0.1);
+    border-radius: var(--border-radius-sm);
+    padding: 0.5rem;
+  }
+
+  .dropdown-item {
+    border-radius: var(--border-radius-sm);
+    padding: 0.5rem 1rem;
+    font-size: 0.875rem;
+    transition: var(--transition);
+  }
+
+  /* Toast Notifications */
+  .toast-container {
+    position: fixed;
+    top: 20px;
+    right: 20px;
+    z-index: 1100;
+  }
+
+  .toast {
+    margin-bottom: 1rem;
+    border-radius: var(--border-radius);
+  }
+
+  /* Empty State */
+  .empty-state {
+    padding: 2rem;
+    text-align: center;
+  }
+
+  /* Responsive Adjustments */
+  @media (max-width: 992px) {
+    .main-content {
+      margin-left: 0;
+    }
+  }
+
+  @media (max-width: 768px) {
+    .search-bar {
+      width: 100%;
+    }
+    
+    .page-header {
+      flex-direction: column;
+      align-items: flex-start;
+      gap: 0.5rem;
+    }
+    
+    .card-header {
+      flex-direction: column;
+      align-items: flex-start;
+      gap: 0.75rem;
+    }
+  }
+</style>

@@ -1,238 +1,413 @@
 <%- include('../partials/header') %>
 
-<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
-<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/css/bootstrap.min.css">
-<!-- <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.5.0/font/bootstrap-icons.css"> -->
+<!-- Custom CSS -->
+<style>
+  :root {
+    --primary: #4361ee;
+    --primary-dark: #3a0ca3;
+    --secondary: #f72585;
+    --light: #f8f9fa;
+    --dark: #212529;
+    --gray: #6c757d;
+    --light-gray: #e9ecef;
+  }
+  
+  body {
+    background-color: #f5f7fa;
+    font-family: 'Inter', -apple-system, BlinkMacSystemFont, sans-serif;
+    color: var(--dark);
+  }
+  
+  /* Hero Section */
+  .car-hero {
+    position: relative;
+    overflow: hidden;
+    border-radius: 16px;
+    box-shadow: 0 10px 30px rgba(0,0,0,0.08);
+    margin-bottom: 2rem;
+  }
+  
+  .car-hero-image {
+    height: 500px;
+    object-fit: cover;
+    width: 100%;
+  }
+  
+  .car-hero-overlay {
+    position: absolute;
+    bottom: 0;
+    left: 0;
+    right: 0;
+    background: linear-gradient(to top, rgba(0,0,0,0.8), transparent);
+    padding: 2rem;
+    color: white;
+  }
+  
+  /* Main Content */
+  .car-title {
+    font-weight: 800;
+    font-size: 2.5rem;
+    margin-bottom: 0.5rem;
+  }
+  
+  .car-subtitle {
+    color: var(--gray);
+    font-weight: 500;
+    margin-bottom: 1.5rem;
+  }
+  
+  .price-badge {
+    background: linear-gradient(135deg, var(--primary), var(--primary-dark));
+    color: white;
+    padding: 0.75rem 2rem;
+    border-radius: 50px;
+    font-weight: 700;
+    font-size: 1.5rem;
+    display: inline-block;
+    box-shadow: 0 10px 20px rgba(67, 97, 238, 0.3);
+  }
+  
+  /* Specs Grid */
+  .specs-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
+    gap: 1rem;
+    margin: 2rem 0;
+  }
+  
+  .spec-card {
+    background: white;
+    border-radius: 12px;
+    padding: 1.5rem;
+    box-shadow: 0 5px 15px rgba(0,0,0,0.05);
+    text-align: center;
+    transition: transform 0.3s;
+  }
+  
+  .spec-card:hover {
+    transform: translateY(-5px);
+  }
+  
+  .spec-icon {
+    font-size: 2rem;
+    color: var(--primary);
+    margin-bottom: 1rem;
+  }
+  
+  .spec-value {
+    font-weight: 700;
+    font-size: 1.25rem;
+    margin-bottom: 0.25rem;
+  }
+  
+  .spec-label {
+    color: var(--gray);
+    font-size: 0.9rem;
+  }
+  
+  /* Features Section */
+  .features-section {
+    background: white;
+    border-radius: 16px;
+    padding: 2rem;
+    box-shadow: 0 5px 15px rgba(0,0,0,0.05);
+    margin: 2rem 0;
+  }
+  
+  .feature-item {
+    display: flex;
+    align-items: center;
+    padding: 0.75rem 0;
+    border-bottom: 1px solid var(--light-gray);
+  }
+  
+  .feature-item:last-child {
+    border-bottom: none;
+  }
+  
+  .feature-icon {
+    width: 40px;
+    height: 40px;
+    background: rgba(67, 97, 238, 0.1);
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    margin-right: 1rem;
+    color: var(--primary);
+  }
+  
+  /* Booking Card */
+  .booking-card {
+    background: white;
+    border-radius: 16px;
+    padding: 2rem;
+    box-shadow: 0 10px 30px rgba(0,0,0,0.08);
+    position: sticky;
+    top: 2rem;
+  }
+  
+  .booking-btn {
+    background: linear-gradient(135deg, var(--primary), var(--primary-dark));
+    border: none;
+    padding: 1rem;
+    font-weight: 700;
+    font-size: 1.1rem;
+    width: 100%;
+    border-radius: 12px;
+    color: white;
+    margin: 1.5rem 0;
+    transition: transform 0.3s, box-shadow 0.3s;
+  }
+  
+  .booking-btn:hover {
+    transform: translateY(-3px);
+    box-shadow: 0 15px 30px rgba(67, 97, 238, 0.4);
+  }
+  
+  .price-breakdown {
+    background: var(--light);
+    border-radius: 12px;
+    padding: 1.5rem;
+    margin: 1.5rem 0;
+  }
+  
+  .price-row {
+    display: flex;
+    justify-content: space-between;
+    padding: 0.5rem 0;
+  }
+  
+  /* Similar Cars */
+  .similar-car-card {
+    background: white;
+    border-radius: 12px;
+    overflow: hidden;
+    box-shadow: 0 5px 15px rgba(0,0,0,0.05);
+    transition: transform 0.3s;
+    margin-bottom: 1.5rem;
+  }
+  
+  .similar-car-card:hover {
+    transform: translateY(-5px);
+  }
+  
+  .similar-car-image {
+    height: 180px;
+    object-fit: cover;
+    width: 100%;
+  }
+  
+  /* Responsive Adjustments */
+  @media (max-width: 992px) {
+    .car-hero-image {
+      height: 400px;
+    }
+    
+    .car-title {
+      font-size: 2rem;
+    }
+  }
+  
+  @media (max-width: 768px) {
+    .car-hero-image {
+      height: 300px;
+    }
+    
+    .specs-grid {
+      grid-template-columns: repeat(2, 1fr);
+    }
+  }
+  
+  @media (max-width: 576px) {
+    .car-hero-image {
+      height: 250px;
+    }
+    
+    .car-title {
+      font-size: 1.75rem;
+    }
+    
+    .specs-grid {
+      grid-template-columns: 1fr;
+    }
+  }
+</style>
 
-<div class="container my-5">
+<div class="container py-5">
   <!-- Breadcrumb Navigation -->
   <nav aria-label="breadcrumb" class="mb-4">
-    <ol class="breadcrumb">
-      <li class="breadcrumb-item"><a href="/">Home</a></li>
-      <li class="breadcrumb-item"><a href="/cars">Our Fleet</a></li>
+    <ol class="breadcrumb bg-transparent px-0">
+      <li class="breadcrumb-item"><a href="/" class="text-decoration-none">Home</a></li>
+      <li class="breadcrumb-item"><a href="/cars" class="text-decoration-none">Our Fleet</a></li>
       <li class="breadcrumb-item active" aria-current="page"><%= car.make %> <%= car.model %></li>
     </ol>
   </nav>
 
   <div class="row">
     <!-- Main Content Column -->
-    <div class="col-lg-8 order-lg-first order-last">
-      <!-- Main Car Card -->
-      <div class="card border-0 shadow-sm mb-4 overflow-hidden">
-        <div class="position-relative">
-          <img src="/uploads/cars/<%= car.image %>" class="card-img-top w-100 car-detail-image" alt="<%= car.make %> <%= car.model %>">
-          <div class="position-absolute top-0 end-0 m-3">
-            <% if(car.available) { %>
-              <span class="badge bg-success bg-opacity-90 px-3 py-2 rounded-pill shadow-sm">
-                <i class="fas fa-check-circle me-1"></i> Available Now
-              </span>
-            <% } else { %>
-              <span class="badge bg-danger bg-opacity-90 px-3 py-2 rounded-pill shadow-sm">
-                <i class="fas fa-times-circle me-1"></i> Currently Booked
-              </span>
-            <% } %>
-          </div>
-        </div>
-        
-        <div class="card-body p-4">
-          <div class="d-flex justify-content-between align-items-start mb-3">
-            <div>
-              <h1 class="display-6 fw-bold mb-1"><%= car.make %> </h1>
-              <p class="text-muted mb-2"><%= car.year %> Model • <%= car.model %></p>
-              <p class="text-muted mb-2">Type • <%= car.type %></p>
-            </div>
-            <div class="text-end">
-              <div class="h3 fw-bold text-primary">$<%= car.dailyRate %><span class="h6 text-muted fw-normal"> /day</span></div>
-              <div class="small text-muted">+ taxes & fees</div>
-            </div>
-          </div>
-          
-          <!-- Quick Specs -->
-          <div class="d-flex flex-wrap gap-3 mb-4">
-            <div class="d-flex align-items-center">
-              <div class="bg-light bg-opacity-50 rounded-circle p-2 me-2">
-                <i class="fas fa-users text-primary"></i>
-              </div>
-              <span><%= car.seats %> Seats</span>
-            </div>
-            <div class="d-flex align-items-center">
-              <div class="bg-light bg-opacity-50 rounded-circle p-2 me-2">
-                <i class="fas fa-suitcase text-primary"></i>
-              </div>
-              <span><%= car.luggage %> Bags</span>
-            </div>
-            <div class="d-flex align-items-center">
-              <div class="bg-light bg-opacity-50 rounded-circle p-2 me-2">
-                <i class="fas fa-cog text-primary"></i>
-              </div>
-              <span><%= car.transmission %></span>
-            </div>
-            <div class="d-flex align-items-center">
-              <div class="bg-light bg-opacity-50 rounded-circle p-2 me-2">
-                <i class="fas fa-gas-pump text-primary"></i>
-              </div>
-              <span><%= car.fuelType || 'Gasoline' %></span>
-            </div>
-          </div>
-          
-          <!-- Description -->
-          <div class="mb-4">
-            <h2 class="h5 fw-bold mb-3 border-bottom pb-2">Description</h2>
-            <p class="mb-0"><%= car.description || `The ${car.make} ${car.model} is a premium ${car.type.toLowerCase()} that combines comfort, style, and performance. Perfect for both city driving and long road trips, this vehicle offers a smooth ride with all the modern amenities you need for a pleasant journey.` %></p>
-          </div>
-          
-          <!-- Features -->
-          <div class="mb-4">
-            <h2 class="h5 fw-bold mb-3 border-bottom pb-2">Features & Amenities</h2>
-            <div class="row g-3">
-              <% const features = car.features || ['Bluetooth', 'Navigation', 'Keyless Entry', 'Backup Camera', 'USB Ports']; %>
-              <% features.forEach(feature => { %>
-                <div class="col-md-6">
-                  <div class="d-flex align-items-center">
-                    <i class="fas fa-check-circle text-success me-2"></i>
-                    <span><%= feature %></span>
-                  </div>
-                </div>
-              <% }); %>
-            </div>
-          </div>
-          
-          <!-- Technical Specifications -->
-          <div class="mb-4">
-            <h2 class="h5 fw-bold mb-3 border-bottom pb-2">Technical Specifications</h2>
-            <div class="table-responsive">
-              <table class="table table-bordered">
-                <tbody>
-                  <tr>
-                    <th scope="row" class="w-25">Vehicle Type</th>
-                    <td><%= car.type %></td>
-                  </tr>
-                  <tr>
-                    <th scope="row">Engine</th>
-                    <td><%= car.engine || '2.0L 4-cylinder' %></td>
-                  </tr>
-                  <tr>
-                    <th scope="row">Horsepower</th>
-                    <td><%= car.horsepower || '180 hp' %></td>
-                  </tr>
-                  <tr>
-                    <th scope="row">Fuel Economy</th>
-                    <td><%= car.mpg || '28 city / 35 highway' %></td>
-                  </tr>
-                  <tr>
-                    <th scope="row">Air Conditioning</th>
-                    <td><%= car.aircon ? 'Yes' : 'No' %></td>
-                  </tr>
-                </tbody>
-              </table>
-            </div>
-          </div>
+    <div class="col-lg-8">
+      <!-- Car Hero Section -->
+      <div class="car-hero">
+        <img src="/uploads/cars/<%= car.image %>" class="car-hero-image" alt="<%= car.make %> <%= car.model %>">
+        <div class="car-hero-overlay">
+          <h1 class="car-title text-white"><%= car.make %> <%= car.model %></h1>
+          <p class="car-subtitle text-white-50"><%= car.year %> • <%= car.type %></p>
+          <div class="price-badge">$<%= car.dailyRate %>/day</div>
         </div>
       </div>
       
-      <!-- Similar Vehicles Section -->
-      <div class="card border-0 shadow-sm mb-4">
-        <div class="card-body p-4">
-          <h2 class="h5 fw-bold mb-3">Similar Vehicles</h2>
-          <div class="row" id="similarVehicles">
-            <% if (typeof similarCars !== 'undefined' && similarCars.length > 0) { %>
-              <% similarCars.forEach(function(car) { %>
-                <div class="col-md-6 mb-3">
-                  <div class="card h-100 border">
-                    <img src="/uploads/cars/<%= car.image %>" class="card-img-top" alt="<%= car.make %> <%= car.model %>" style="height: 180px; object-fit: cover;">
-                    <div class="card-body">
-                      <h5 class="card-title"><%= car.make %> <%= car.model %></h5>
-                      <p class="card-text text-muted small"><%= car.type %> • <%= car.transmission || 'Automatic' %> • <%= car.seats %> Seats</p>
-                      <div class="d-flex justify-content-between align-items-center">
-                        <span class="fw-bold text-primary">$<%= car.dailyRate %>/day</span>
-                        <a href="/cars/<%= car._id %>" class="btn btn-sm btn-outline-primary">View</a>
-                      </div>
+      <!-- Key Specifications -->
+      <div class="specs-grid">
+        <div class="spec-card">
+          <div class="spec-icon"><i class="fas fa-users"></i></div>
+          <div class="spec-value"><%= car.seats %></div>
+          <div class="spec-label">Passengers</div>
+        </div>
+        <div class="spec-card">
+          <div class="spec-icon"><i class="fas fa-suitcase"></i></div>
+          <div class="spec-value"><%= car.luggage %></div>
+          <div class="spec-label">Bags</div>
+        </div>
+        <div class="spec-card">
+          <div class="spec-icon"><i class="fas fa-tachometer-alt"></i></div>
+          <div class="spec-value"><%= car.transmission %></div>
+          <div class="spec-label">Transmission</div>
+        </div>
+        <div class="spec-card">
+          <div class="spec-icon"><i class="fas fa-gas-pump"></i></div>
+          <div class="spec-value"><%= car.fuelType %></div>
+          <div class="spec-label">Fuel Type</div>
+        </div>
+      </div>
+      
+      <!-- Description -->
+      <div class="features-section">
+        <h2 class="mb-4">Vehicle Description</h2>
+        <p><%= car.description || `The ${car.make} ${car.model} is a premium ${car.type.toLowerCase()} that combines comfort, style, and performance. Perfect for both city driving and long road trips, this vehicle offers a smooth ride with all the modern amenities you need for a pleasant journey.` %></p>
+      </div>
+      
+      <!-- Features & Amenities -->
+      <div class="features-section">
+        <h2 class="mb-4">Features & Amenities</h2>
+        <% const features = car.features || ['Bluetooth Connectivity', 'GPS Navigation', 'Keyless Entry', 'Backup Camera', 'USB Ports', 'Heated Seats', 'Sunroof', 'Premium Sound System']; %>
+        <% features.forEach(feature => { %>
+          <div class="feature-item">
+            <div class="feature-icon">
+              <i class="fas fa-check"></i>
+            </div>
+            <div><%= feature %></div>
+          </div>
+        <% }); %>
+      </div>
+      
+      <!-- Technical Specifications -->
+      <div class="features-section">
+        <h2 class="mb-4">Technical Specifications</h2>
+        <div class="table-responsive">
+          <table class="table">
+            <tbody>
+              <tr>
+                <th scope="row">Vehicle Type</th>
+                <td><%= car.type %></td>
+              </tr>
+              <tr>
+                <th scope="row">Engine</th>
+                <td><%= car.engine || '2.0L 4-cylinder' %></td>
+              </tr>
+              <tr>
+                <th scope="row">Horsepower</th>
+                <td><%= car.horsepower || '180 hp' %></td>
+              </tr>
+              <tr>
+                <th scope="row">Fuel Economy</th>
+                <td><%= car.mpg || '12 kmpl city / 16 kmpl highway' %></td>
+              </tr>
+              <tr>
+                <th scope="row">Air Conditioning</th>
+                <td><%= car.aircon ? 'Yes' : 'No' %></td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+      </div>
+      
+      <!-- Similar Vehicles -->
+      <div class="features-section">
+        <h2 class="mb-4">Similar Vehicles</h2>
+        <div class="row">
+          <% if (typeof similarCars !== 'undefined' && similarCars.length > 0) { %>
+            <% similarCars.forEach(function(car) { %>
+              <div class="col-md-6">
+                <div class="similar-car-card">
+                  <img src="/uploads/cars/<%= car.image %>" class="similar-car-image" alt="<%= car.make %> <%= car.model %>">
+                  <div class="p-3">
+                    <h5 class="mb-1"><%= car.make %> <%= car.model %></h5>
+                    <p class="text-muted small mb-2"><%= car.type %> • <%= car.transmission %></p>
+                    <div class="d-flex justify-content-between align-items-center">
+                      <span class="fw-bold text-primary">$<%= car.dailyRate %>/day</span>
+                      <a href="/cars/<%= car._id %>" class="btn btn-sm btn-outline-primary">View</a>
                     </div>
                   </div>
                 </div>
-              <% }); %>
-            <% } else { %>
-              <div class="col-12">
-                <div class="alert alert-info mb-0">No similar vehicles available</div>
               </div>
-            <% } %>
-          </div>
+            <% }); %>
+          <% } else { %>
+            <div class="col-12">
+              <div class="alert alert-info text-center py-3">
+                No similar vehicles available at this time
+              </div>
+            </div>
+          <% } %>
         </div>
       </div>
     </div>
     
-    <!-- Booking Sidebar Column -->
-    <div class="col-lg-4 order-lg-last order-first mb-4 mb-lg-0">
-      <div class="card border-0 shadow-sm sticky-top" style="top: 20px;">
-        <div class="card-body p-4">
-          <h2 class="h5 fw-bold mb-4">Reserve This Vehicle</h2>
-          
-          <% if(!car.available) { %>
-            <button class="btn btn-secondary w-100 mb-3 py-3 fw-bold fs-5" disabled>
-              <i class="fas fa-clock me-2"></i>Currently Unavailable
-            </button>
-            
-            <div class="alert alert-warning">
-              <h3 class="h6 fw-bold mb-2">Check Availability</h3>
-              <form action="/cars/check-availability" method="POST">
-                <input type="hidden" name="carId" value="<%= car._id %>">
-                <div class="mb-3">
-                  <label class="form-label small">Pickup Date</label>
-                  <input type="date" name="pickupDate" class="form-control form-control-sm" required>
-                </div>
-                <div class="mb-3">
-                  <label class="form-label small">Return Date</label>
-                  <input type="date" name="returnDate" class="form-control form-control-sm" required>
-                </div>
-                <button type="submit" class="btn btn-sm btn-outline-primary w-100">Check Dates</button>
-              </form>
-            </div>
-            
-          <% } else { %>
-            
-            <a href="/bookings/new/<%= car._id %>" class="btn btn-primary btn-sm w-100 mb-3 py-3 fw-bold fs-5">
-              <i class="fas fa-calendar-check me-2"></i>Book Now
-            </a>
-          <% } %>
-          
-          <!-- Pricing Breakdown -->
-          <div class="mb-4">
-            <h3 class="h6 fw-bold mb-3">Pricing Breakdown</h3>
-            <div class="d-flex justify-content-between mb-2">
-              <span class="text-muted">Daily Rate</span>
-              <span>$<%= car.dailyRate %></span>
-            </div>
-            <div class="d-flex justify-content-between mb-2">
-              <span class="text-muted">Taxes & Fees</span>
-              <span>$15/day</span>
-            </div>
-            <hr>
-            <div class="d-flex justify-content-between fw-bold">
-              <span>Estimated Total</span>
-              <span>$<%= car.dailyRate + 15 %>/day</span>
-            </div>
+    <!-- Booking Sidebar -->
+    <div class="col-lg-4">
+      <div class="booking-card">
+        <h2 class="mb-4">Book This Vehicle</h2>
+        
+        <a href="/bookings/new/<%= car._id %>" class="btn btn-primary btn-lg w-100">
+          <i class="fas fa-calendar-check me-2"></i> Book Now
+        </a>
+        
+        <!-- Pricing Breakdown -->
+        <div class="price-breakdown">
+          <h3 class="h5 mb-3">Pricing Breakdown</h3>
+          <div class="price-row">
+            <span>Daily Rate</span>
+            <span>$<%= car.dailyRate %></span>
           </div>
-          
-          <!-- Rental Terms -->
-          <div class="alert alert-light border">
-            <h3 class="h6 fw-bold mb-2">Rental Terms</h3>
-            <ul class="small mb-0 ps-3">
-              <li class="mb-1">Minimum rental period: 1 day</li>
-              <li class="mb-1">Free cancellation up to 24 hours before pickup</li>
-              <li class="mb-1">Unlimited mileage included</li>
-              <li class="mb-1">Comprehensive insurance coverage</li>
-              <li class="mb-1">24/7 roadside assistance</li>
-            </ul>
+          <div class="price-row">
+            <span>Taxes & Fees</span>
+            <span>$50</span>
           </div>
-          
-          <!-- Safety Info -->
-          <div class="alert alert-light border mt-3">
-            <div class="d-flex">
-              <i class="fas fa-shield-alt text-success me-2 mt-1"></i>
-              <div>
-                <h3 class="h6 fw-bold mb-1">Enhanced Cleaning</h3>
-                <p class="small mb-0">This vehicle undergoes thorough cleaning and sanitization between each rental.</p>
-              </div>
+          <hr>
+          <div class="price-row fw-bold">
+            <span>Estimated Total</span>
+            <span>$<%= parseInt(car.dailyRate) + 50 %>/day</span>
+          </div>
+        </div>
+        
+        <!-- Rental Terms -->
+        <div class="alert alert-light">
+          <h3 class="h5 mb-3">Rental Terms</h3>
+          <ul class="list-unstyled">
+            <li class="mb-2"><i class="fas fa-check text-success me-2"></i> Minimum 1 day rental</li>
+            <li class="mb-2"><i class="fas fa-check text-success me-2"></i> Free cancellation</li>
+            <li class="mb-2"><i class="fas fa-check text-success me-2"></i> Unlimited mileage</li>
+            <li><i class="fas fa-check text-success me-2"></i> 24/7 Roadside assistance</li>
+          </ul>
+        </div>
+        
+        <!-- Safety Info -->
+        <div class="alert alert-primary">
+          <div class="d-flex">
+            <i class="fas fa-shield-alt fa-2x me-3"></i>
+            <div>
+              <h3 class="h5 mb-2">Enhanced Safety</h3>
+              <p class="small mb-0">All vehicles are thoroughly cleaned and sanitized between rentals.</p>
             </div>
           </div>
         </div>
@@ -240,81 +415,5 @@
     </div>
   </div>
 </div>
-
-<style>
-  .car-detail-image {
-    height: 400px;
-    object-fit: cover;
-    object-position: center;
-  }
-  
-  .breadcrumb {
-    background-color: transparent;
-    padding: 0;
-  }
-  
-  .card {
-    border-radius: 12px;
-    overflow: hidden;
-  }
-  
-  .table th {
-    background-color: #f8f9fa;
-  }
-  
-  .sticky-top {
-    position: -webkit-sticky;
-    position: sticky;
-    align-self: flex-start;
-  }
-</style>
-
-<script>
-  document.addEventListener('DOMContentLoaded', function() {
-    // Get current car ID from URL or data attribute
-    const carId = '<%= car._id %>';
-    
-    // Fetch similar vehicles
-    fetch(`/cars/similar/${carId}`)
-      .then(response => response.json())
-      .then(cars => {
-        const container = document.getElementById('similarVehicles');
-        
-        if (!cars || cars.length === 0) {
-          container.innerHTML = `
-            <div class="col-12">
-              <div class="alert alert-info mb-0">No similar vehicles found</div>
-            </div>
-          `;
-          return;
-        }
-        
-        // Generate HTML for each similar car
-        container.innerHTML = cars.map(car => `
-          <div class="col-md-6 mb-3">
-            <div class="card h-100 border">
-              <img src="/uploads/cars/${car.image}" class="card-img-top" alt="${car.make} ${car.model}" style="height: 180px; object-fit: cover;">
-              <div class="card-body">
-                <h5 class="card-title">${car.make} ${car.model}</h5>
-                <p class="card-text text-muted small">${car.type} • ${car.transmission || 'Automatic'} • ${car.seats} Seats</p>
-                <div class="d-flex justify-content-between align-items-center">
-                  <span class="fw-bold text-primary">$${car.dailyRate}/day</span>
-                  <a href="/cars/${car._id}" class="btn btn-sm btn-outline-primary">View</a>
-                </div>
-              </div>
-            </div>
-          </div>
-        `).join('');
-      })
-      .catch(error => {
-        console.error('Error fetching similar vehicles:', error);
-        document.getElementById('similarVehicles').innerHTML = `
-          <div class="col-12">
-            <div class="alert alert-danger mb-0">Failed to load similar vehicles</div>
-          </div>
-        `;
-      });
-  });
-</script>
 
 <%- include('../partials/footer') %>

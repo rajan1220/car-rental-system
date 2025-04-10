@@ -1,94 +1,262 @@
 <%- include('../partials/header') %>
 
-<div class="container my-5">
-  <div class="row justify-content-center">
-    <div class="col-lg-8">
-      <div class="card shadow-sm">
-        <div class="card-header bg-primary text-white">
-          <h2 class="h4 mb-0">Add New Car</h2>
+<div class="d-flex">
+  <!-- Sidebar -->
+  <%- include('../partials/sidebar') %>
+
+  <!-- Main Content -->
+  <main class="main-content flex-grow-1 p-4">
+    <div class="container-fluid">
+      <!-- Page Header -->
+      <div class="d-flex justify-content-between align-items-center mb-4">
+        <div>
+          <h1 class="h3 mb-2 text-gray-800 fw-bold">Add New Vehicle</h1>
+          <nav aria-label="breadcrumb">
+            <ol class="breadcrumb">
+              <li class="breadcrumb-item"><a href="/admin">Dashboard</a></li>
+              <li class="breadcrumb-item"><a href="/admin/vehicles">Vehicles</a></li>
+              <li class="breadcrumb-item active">Add New</li>
+            </ol>
+          </nav>
+        </div>
+        <a href="/admin/vehicles" class="btn btn-outline-secondary">
+          <i class="fas fa-arrow-left me-1"></i> Back to Vehicles
+        </a>
+      </div>
+
+      <!-- Add Vehicle Card -->
+      <div class="card shadow-sm border-0">
+        <div class="card-header bg-white py-3">
+          <h5 class="mb-0 fw-bold text-primary"><i class="fas fa-car me-2"></i>Vehicle Information</h5>
         </div>
         <div class="card-body">
-          <form action="/cars" method="POST" enctype="multipart/form-data">
-            <div class="row g-3">
-              <div class="col-md-6">
-                <label for="make" class="form-label">Make</label>
-                <input type="text" class="form-control" id="make" name="make" required>
+          <form id="addVehicleForm" action="/admin/vehicles" method="POST" enctype="multipart/form-data">
+            <!-- Basic Information Section -->
+            <div class="row mb-4">
+              <div class="col-12">
+                <h6 class="fw-bold text-gray-700 mb-3 border-bottom pb-2">Basic Information</h6>
               </div>
-              <div class="col-md-6">
-                <label for="model" class="form-label">Model</label>
-                <input type="text" class="form-control" id="model" name="model" required>
+              
+              <div class="col-md-6 mb-3">
+                <label class="form-label">Make <span class="text-danger">*</span></label>
+                <input type="text" class="form-control" name="make" required placeholder="e.g., Toyota">
               </div>
-              <div class="col-md-6">
-                <label for="type" class="form-label">Type</label>
-                <select class="form-select" id="type" name="type" required>
-                  <option value="">Select type</option>
-                  <option value="Sedan">Sedan</option>
-                  <option value="SUV">SUV</option>
-                  <option value="Truck">Truck</option>
-                  <option value="Van">Van</option>
-                  <option value="Sports">Sports</option>
-                  <option value="Luxury">Luxury</option>
+              
+              <div class="col-md-6 mb-3">
+                <label class="form-label">Model <span class="text-danger">*</span></label>
+                <input type="text" class="form-control" name="model" required placeholder="e.g., Camry">
+              </div>
+              
+              <div class="col-md-4 mb-3">
+                <label class="form-label">Year <span class="text-danger">*</span></label>
+                <select class="form-select" name="year" required>
+                  <option value="">Select Year</option>
+                  <% for(let year = new Date().getFullYear() + 1; year >= 2000; year--) { %>
+                    <option value="<%= year %>"><%= year %></option>
+                  <% } %>
                 </select>
               </div>
-              <div class="col-md-6">
-                <label for="dailyRate" class="form-label">Daily Rate ($)</label>
-                <input type="number" class="form-control" id="dailyRate" name="dailyRate" min="0" step="0.01" required>
+              
+              <div class="col-md-4 mb-3">
+                <label class="form-label">Vehicle Type <span class="text-danger">*</span></label>
+                <select class="form-select" name="type" required>
+                  <option value="">Select Type</option>
+                  <option value="Sedan">Sedan</option>
+                  <option value="SUV">SUV</option>
+                  <option value="Hatchback">Hatchback</option>
+                  <option value="Luxury">Luxury</option>
+                  <option value="Electric">Electric</option>
+                </select>
               </div>
-              <div class="col-md-6">
-                <label for="seats" class="form-label">Seats</label>
-                <input type="number" class="form-control" id="seats" name="seats" min="1" required>
+              
+              <div class="col-md-4 mb-3">
+                <label class="form-label">License Plate <span class="text-danger">*</span></label>
+                <input type="text" class="form-control" name="licensePlate" required placeholder="e.g., ABC-1234">
               </div>
-              <div class="col-md-6">
-                <label for="doors" class="form-label">Doors</label>
-                <input type="number" class="form-control" id="doors" name="doors" min="1" required>
+            </div>
+
+            <!-- Pricing & Status Section -->
+            <div class="row mb-4">
+              <div class="col-12">
+                <h6 class="fw-bold text-gray-700 mb-3 border-bottom pb-2">Pricing & Status</h6>
               </div>
-              <div class="col-md-6">
-                <label for="transmission" class="form-label">Transmission</label>
-                <select class="form-select" id="transmission" name="transmission" required>
+              
+              <div class="col-md-4 mb-3">
+                <label class="form-label">Daily Rate (₹) <span class="text-danger">*</span></label>
+                <div class="input-group">
+                  <span class="input-group-text">₹</span>
+                  <input type="number" class="form-control" name="dailyRate" min="0" required placeholder="1500">
+                </div>
+              </div>
+              
+              <div class="col-md-4 mb-3">
+                <label class="form-label">Hourly Rate (₹)</label>
+                <div class="input-group">
+                  <span class="input-group-text">₹</span>
+                  <input type="number" class="form-control" name="hourlyRate" min="0" placeholder="200">
+                </div>
+              </div>
+              
+              <div class="col-md-4 mb-3">
+                <label class="form-label">Status <span class="text-danger">*</span></label>
+                <select class="form-select" name="status" required>
+                  <option value="available">Available</option>
+                  <option value="maintenance">Maintenance</option>
+                  <option value="unavailable">Unavailable</option>
+                </select>
+              </div>
+            </div>
+
+            <!-- Vehicle Details Section -->
+            <div class="row mb-4">
+              <div class="col-12">
+                <h6 class="fw-bold text-gray-700 mb-3 border-bottom pb-2">Vehicle Details</h6>
+              </div>
+              
+              <div class="col-md-3 mb-3">
+                <label class="form-label">Transmission</label>
+                <select class="form-select" name="transmission">
                   <option value="Automatic">Automatic</option>
                   <option value="Manual">Manual</option>
                 </select>
               </div>
-              <div class="col-md-6">
-                <label for="luggage" class="form-label">Luggage Cap</label>
-                <input type="number" class="form-control" id="luggage" name="luggage" min="0" required>
-              </div>
-              <div class="col-md-6">
-                <label for="fuelType" class="form-label">Fuel Type</label>
-                <select class="form-select" id="fuelType" name="type" required>
-                  <option value="">Select type</option>
+              
+              <div class="col-md-3 mb-3">
+                <label class="form-label">Fuel Type</label>
+                <select class="form-select" name="fuelType">
                   <option value="Petrol">Petrol</option>
                   <option value="Diesel">Diesel</option>
-                  <option value="CNG">CNG</option>
-                  <option value="EV">EV</option>
-                  <!-- <option value="Sports">Sports</option> -->
-                  <!-- <option value="Luxury">Luxury</option> -->
+                  <option value="Electric">Electric</option>
+                  <option value="Hybrid">Hybrid</option>
                 </select>
               </div>
-              <div class="col-md-6">
-                <div class="form-check mt-4 pt-2">
-                  <input class="form-check-input" type="checkbox" id="aircon" name="aircon" checked>
-                  <label class="form-check-label" for="aircon">Air Conditioning</label>
+              
+              <div class="col-md-3 mb-3">
+                <label class="form-label">Seating Capacity</label>
+                <input type="number" class="form-control" name="seats" min="2" max="12" value="5">
+              </div>
+              
+              <div class="col-md-3 mb-3">
+                <label class="form-label">Luggage Capacity</label>
+                <input type="number" class="form-control" name="luggage" min="1" value="2">
+              </div>
+            </div>
+
+            <!-- Features Section -->
+            <div class="row mb-4">
+              <div class="col-12">
+                <h6 class="fw-bold text-gray-700 mb-3 border-bottom pb-2">Features & Amenities</h6>
+                <div class="row">
+                  <% const features = [
+                    'Air Conditioning', 'Bluetooth', 'Navigation', 'Sunroof',
+                    'Backup Camera', 'Keyless Entry', 'USB Ports', 'Heated Seats',
+                    'Child Seat', 'GPS Tracking', 'Toll Pass', 'First Aid Kit'
+                  ]; %>
+                  <% features.forEach(feature => { %>
+                    <div class="col-md-3 mb-2">
+                      <div class="form-check">
+                        <input class="form-check-input" type="checkbox" name="features" value="<%= feature %>" id="feature<%= feature.replace(/\s+/g, '') %>">
+                        <label class="form-check-label" for="feature<%= feature.replace(/\s+/g, '') %>">
+                          <i class="fas fa-check-circle text-success me-1"></i> <%= feature %>
+                        </label>
+                      </div>
+                    </div>
+                  <% }); %>
                 </div>
               </div>
+            </div>
+
+            <!-- Images Section -->
+            <div class="row mb-4">
               <div class="col-12">
-                <label for="features" class="form-label">Features (comma separated)</label>
-                <input type="text" class="form-control" id="features" name="features" placeholder="GPS, Bluetooth, Sunroof">
+                <h6 class="fw-bold text-gray-700 mb-3 border-bottom pb-2">Vehicle Images</h6>
+                <div class="mb-3">
+                  <label class="form-label">Upload Images (Max 5) <span class="text-danger">*</span></label>
+                  <input type="file" class="form-control" name="images" multiple accept="image/*" required>
+                  <small class="text-muted">First image will be used as the thumbnail</small>
+                </div>
+                <div class="image-preview d-flex flex-wrap gap-3 mt-3"></div>
               </div>
+            </div>
+
+            <!-- Description Section -->
+            <div class="row mb-4">
               <div class="col-12">
-                <label for="image" class="form-label">Car Image</label>
-                <input class="form-control" type="file" id="image" name="image" accept="image/*">
+                <h6 class="fw-bold text-gray-700 mb-3 border-bottom pb-2">Description</h6>
+                <div class="mb-3">
+                  <label class="form-label">Vehicle Description</label>
+                  <textarea class="form-control" name="description" rows="4" placeholder="Enter detailed description about the vehicle..."></textarea>
+                </div>
               </div>
+            </div>
+
+            <!-- Form Actions -->
+            <div class="row">
               <div class="col-12">
-                <button type="submit" class="btn btn-primary">Add Car</button>
-                <a href="/cars" class="btn btn-outline-secondary ms-2">Cancel</a>
+                <div class="d-flex justify-content-end gap-3">
+                  <button type="reset" class="btn btn-outline-secondary px-4">
+                    <i class="fas fa-undo me-1"></i> Reset
+                  </button>
+                  <button type="submit" class="btn btn-primary px-4">
+                    <i class="fas fa-save me-1"></i> Save Vehicle
+                  </button>
+                </div>
               </div>
             </div>
           </form>
         </div>
       </div>
     </div>
-  </div>
+  </main>
 </div>
 
 <%- include('../partials/footer') %>
+
+<script>
+  // Image preview functionality
+  document.querySelector('input[name="images"]').addEventListener('change', function(e) {
+    const previewContainer = document.querySelector('.image-preview');
+    previewContainer.innerHTML = '';
+    
+    if (this.files.length > 5) {
+      alert('Maximum 5 images allowed');
+      this.value = '';
+      return;
+    }
+    
+    Array.from(this.files).forEach(file => {
+      if (!file.type.match('image.*')) return;
+      
+      const reader = new FileReader();
+      reader.onload = function(e) {
+        const img = document.createElement('img');
+        img.src = e.target.result;
+        img.classList.add('img-thumbnail');
+        img.style.width = '150px';
+        img.style.height = '100px';
+        img.style.objectFit = 'cover';
+        previewContainer.appendChild(img);
+      }
+      reader.readAsDataURL(file);
+    });
+  });
+
+  // Form validation
+  document.getElementById('addVehicleForm').addEventListener('submit', function(e) {
+    const make = this.elements.make.value.trim();
+    const model = this.elements.model.value.trim();
+    const images = this.elements.images.files;
+    
+    if (!make || !model) {
+      e.preventDefault();
+      alert('Make and Model are required fields');
+      return;
+    }
+    
+    if (images.length === 0) {
+      e.preventDefault();
+      alert('Please upload at least one image');
+      return;
+    }
+  });
+</script>

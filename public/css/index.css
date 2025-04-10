@@ -35,7 +35,7 @@
     overflow: hidden;
     padding: 8rem 0;
     color: white;
-    border-radius: 0 0 2rem 2rem;
+    border-radius: 2rem;
     box-shadow: 0 10px 30px rgba(0,0,0,0.1);
   }
   

@@ -1,0 +1,229 @@
+<%- include('partials/sidebar', {currentPage: 'vehicles'}) %>
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+<link href="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/css/bootstrap.min.css" rel="stylesheet">
+<style>
+  /* Main Content Area */
+  .main-content {
+    margin-left: 250px; /* Match sidebar width */
+    padding: 20px;
+    min-height: 100vh;
+    background-color: #f8f9fa;
+    transition: all 0.3s;
+  }
+
+  @media (max-width: 768px) {
+    .main-content {
+      margin-left: 0;
+    }
+  }
+
+  /* Booking Card Styling */
+  .booking-card {
+    background: #fff;
+    border-radius: 10px;
+    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.05);
+    transition: all 0.3s ease;
+    margin-bottom: 20px;
+    border: none;
+    overflow: hidden;
+    height: 100%;
+  }
+
+  .car-image-container {
+    height: 160px;
+    overflow: hidden;
+  }
+
+  .car-image {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    transition: transform 0.3s ease;
+  }
+
+  .status-badge {
+    font-size: 12px;
+    padding: 5px 10px;
+    border-radius: 20px;
+    font-weight: 500;
+    text-transform: capitalize;
+  }
+
+  .status-pending {
+    background-color: #fff3cd;
+    color: #856404;
+  }
+
+  .status-approved {
+    background-color: #d4edda;
+    color: #155724;
+  }
+
+  .status-rejected {
+    background-color: #f8d7da;
+    color: #721c24;
+  }
+
+  .status-completed {
+    background-color: #d1ecf1;
+    color: #0c5460;
+  }
+
+  .action-buttons .btn {
+    padding: 5px 10px;
+    font-size: 13px;
+  }
+</style>
+
+<div class="main-content">
+  <div class="container-fluid">
+    <!-- Page Header -->
+    <div class="d-flex justify-content-between align-items-center mb-4">
+      <h1 class="h3 mb-0 text-gray-800">Booking Management</h1>
+      <button class="btn btn-primary">
+        <i class="fas fa-download me-1"></i> Export
+      </button>
+    </div>
+
+    <!-- Filter Section -->
+    <div class="card shadow mb-4">
+      <div class="card-body">
+        <div class="row g-3">
+          <div class="col-md-3">
+            <label class="form-label">Status</label>
+            <select class="form-select">
+              <option>All Bookings</option>
+              <option>Pending</option>
+              <option>Approved</option>
+              <option>Rejected</option>
+              <option>Completed</option>
+            </select>
+          </div>
+          <div class="col-md-3">
+            <label class="form-label">From Date</label>
+            <input type="date" class="form-control">
+          </div>
+          <div class="col-md-3">
+            <label class="form-label">To Date</label>
+            <input type="date" class="form-control">
+          </div>
+          <div class="col-md-3 d-flex align-items-end">
+            <button class="btn btn-primary w-100">
+              <i class="fas fa-filter me-1"></i> Filter
+            </button>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Bookings Grid -->
+    <div class="row">
+      <% if (bookings && bookings.length > 0) { %>
+        <% bookings.forEach(booking => { %>
+          <div class="col-xl-4 col-lg-6 mb-4">
+            <div class="booking-card">
+              <div class="car-image-container">
+                <img src="/uploads/cars/<%= booking.car?.image || 'default-car.jpg' %>" 
+                     class="car-image" 
+                     alt="<%= booking.car?.make %> <%= booking.car?.model %>">
+              </div>
+              <div class="card-body">
+                <div class="d-flex justify-content-between mb-2">
+                  <span class="text-muted small">#<%= booking._id?.toString().slice(-6).toUpperCase() || 'N/A' %></span>
+                  <span class="status-badge status-<%= booking.status?.toLowerCase() || 'pending' %>">
+                    <%= booking.status || 'Pending' %>
+                  </span>
+                </div>
+                <h5 class="card-title mb-1"><%= booking.car?.make || 'Car' %> <%= booking.car?.model || 'Not Specified' %></h5>
+                <p class="text-muted small mb-2"><%= booking.car?.type || 'N/A' %> • <%= booking.car?.seats || 'N/A' %> seats</p>
+                
+                <div class="d-flex justify-content-between mb-2">
+                  <span class="text-muted">Dates:</span>
+                  <span>
+                    <%= booking.pickupDate ? new Date(booking.pickupDate).toLocaleDateString() : 'N/A' %> - 
+                    <%= booking.returnDate ? new Date(booking.returnDate).toLocaleDateString() : 'N/A' %>
+                  </span>
+                </div>
+                
+                <div class="d-flex justify-content-between align-items-center mt-3">
+                  <span class="fw-bold text-success">
+                    ₹<%= booking.totalPrice ? booking.totalPrice.toLocaleString('en-IN') : '0' %>
+                  </span>
+                  <div class="action-buttons">
+                    <a href="/admin/bookings/<%= booking._id %>" class="btn btn-outline-primary btn-sm">
+                      <i class="fas fa-eye"></i>
+                    </a>
+                    <% if (booking.status === 'Pending') { %>
+                      <button class="btn btn-success btn-sm approve-btn" data-booking-id="<%= booking._id %>">
+                        <i class="fas fa-check"></i>
+                      </button>
+                      <button class="btn btn-danger btn-sm reject-btn" data-booking-id="<%= booking._id %>">
+                        <i class="fas fa-times"></i>
+                      </button>
+                    <% } %>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+        <% }); %>
+      <% } else { %>
+        <div class="col-12">
+          <div class="text-center py-5">
+            <i class="fas fa-calendar-times fa-4x text-gray-400 mb-3"></i>
+            <h4 class="text-gray-500">No Bookings Found</h4>
+            <p class="text-muted">There are currently no bookings to display.</p>
+          </div>
+        </div>
+      <% } %>
+    </div>
+  </div>
+</div>
+
+<script>
+document.addEventListener('DOMContentLoaded', function() {
+  // Approve booking
+  document.querySelectorAll('.approve-btn').forEach(btn => {
+    btn.addEventListener('click', function() {
+      const bookingId = this.getAttribute('data-booking-id');
+      updateBookingStatus(bookingId, 'Approved');
+    });
+  });
+
+  // Reject booking
+  document.querySelectorAll('.reject-btn').forEach(btn => {
+    btn.addEventListener('click', function() {
+      const bookingId = this.getAttribute('data-booking-id');
+      updateBookingStatus(bookingId, 'Rejected');
+    });
+  });
+
+  function updateBookingStatus(bookingId, status) {
+    if (!confirm(`Are you sure you want to ${status.toLowerCase()} this booking?`)) {
+      return;
+    }
+
+    fetch(`/admin/bookings/${bookingId}/status`, {
+      method: 'PUT',
+      headers: {
+        'Content-Type': 'application/json'
+      },
+      body: JSON.stringify({
+        status: status
+      })
+    })
+    .then(response => response.json())
+    .then(data => {
+      if (data.success) {
+        location.reload();
+      } else {
+        alert(data.message || 'Failed to update booking status');
+      }
+    })
+    .catch(error => {
+      console.error('Error:', error);
+      alert('An error occurred. Please try again.');
+    });
+  }
+});
+</script>

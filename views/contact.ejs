@@ -1,56 +1,216 @@
 <%- include('partials/header') %>
 
-<div class="container my-5">
-  <div class="row">
-    <div class="col-lg-6 mb-4 mb-lg-0">
-      <h1 class="display-4 fw-bold mb-4">Contact Us</h1>
-      
-      <div class="card border-0 shadow-sm mb-4">
-        <div class="card-body">
-          <h2 class="h4 fw-bold">Get in Touch</h2>
-          <form>
-            <div class="mb-3">
-              <label for="name" class="form-label">Your Name</label>
-              <input type="text" class="form-control" id="name" required>
+<div class="contact-page">
+  <!-- Hero Section -->
+  <section class="contact-hero bg-primary text-white py-5">
+    <div class="container py-4">
+      <div class="row align-items-center">
+        <div class="col-lg-6">
+          <h1 class="display-4 fw-bold mb-3">We'd Love to Hear From You</h1>
+          <p class="lead mb-4">Have questions about our services or need assistance? Our team is ready to help you with all your car rental needs.</p>
+          <div class="d-flex align-items-center">
+            <div class="me-4">
+              <div class="d-flex align-items-center mb-2">
+                <i class="fas fa-phone-alt me-3 fs-5"></i>
+                <div>
+                  <div class="text-white-50 small">Call us at</div>
+                  <div class="h5 mb-0">123 456-7890</div>
+                </div>
+              </div>
             </div>
-            <div class="mb-3">
-              <label for="email" class="form-label">Email Address</label>
-              <input type="email" class="form-control" id="email" required>
+            <div>
+              <div class="d-flex align-items-center mb-2">
+                <i class="fas fa-envelope me-3 fs-5"></i>
+                <div>
+                  <div class="text-white-50 small">Email us at</div>
+                  <div class="h5 mb-0">info@driveease.com</div>
+                </div>
+              </div>
             </div>
-            <div class="mb-3">
-              <label for="subject" class="form-label">Subject</label>
-              <input type="text" class="form-control" id="subject" required>
-            </div>
-            <div class="mb-3">
-              <label for="message" class="form-label">Message</label>
-              <textarea class="form-control" id="message" rows="5" required></textarea>
-            </div>
-            <button type="submit" class="btn btn-primary">Send Message</button>
-          </form>
+          </div>
+        </div>
+        <div class="col-lg-6  d-lg-block ">
+          <img src="/images/image (1).jpg" alt="Customer service" class="img-fluid">
         </div>
       </div>
     </div>
+  </section>
 
-    <div class="col-lg-6">
-      <div class="card border-0 shadow-sm h-100">
-        <div class="card-body">
-          <h2 class="h4 fw-bold">Our Location</h2>
-          <div class="mb-4">
-            <iframe src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d3022.215209179054!2d-73.9878449245255!3d40.7484404713896!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x89c259a9b3117469%3A0xd134e199a405a163!2sEmpire%20State%20Building!5e0!3m2!1sen!2sus!4v1689870587292!5m2!1sen!2sus" 
-              width="100%" height="300" style="border:0;" allowfullscreen="" loading="lazy" referrerpolicy="no-referrer-when-downgrade"></iframe>
+  <!-- Main Content -->
+  <div class="container my-5">
+    <div class="row g-4">
+      <!-- Contact Form -->
+      <div class="col-lg-7">
+        <div class="card border-0 shadow-sm h-100">
+          <div class="card-body p-4 p-md-5">
+            <h2 class="fw-bold mb-4">Send Us a Message</h2>
+            <form class="needs-validation" novalidate>
+              <div class="row g-3">
+                <div class="col-md-6">
+                  <label for="name" class="form-label">Your Name *</label>
+                  <input type="text" class="form-control" id="name" required>
+                  <div class="invalid-feedback">
+                    Please provide your name.
+                  </div>
+                </div>
+                <div class="col-md-6">
+                  <label for="email" class="form-label">Email Address *</label>
+                  <input type="email" class="form-control" id="email" required>
+                  <div class="invalid-feedback">
+                    Please provide a valid email.
+                  </div>
+                </div>
+                <div class="col-12">
+                  <label for="subject" class="form-label">Subject *</label>
+                  <input type="text" class="form-control" id="subject" required>
+                  <div class="invalid-feedback">
+                    Please provide a subject.
+                  </div>
+                </div>
+                <div class="col-12">
+                  <label for="message" class="form-label">Your Message *</label>
+                  <textarea class="form-control" id="message" rows="6" required></textarea>
+                  <div class="invalid-feedback">
+                    Please write your message.
+                  </div>
+                </div>
+                <div class="col-12">
+                  <button type="submit" class="btn btn-primary btn-lg px-4">
+                    <i class="fas fa-paper-plane me-2"></i> Send Message
+                  </button>
+                </div>
+              </div>
+            </form>
           </div>
-          
-          <h2 class="h4 fw-bold">Contact Information</h2>
-          <ul class="list-unstyled">
-            <li class="mb-2"><i class="fas fa-map-marker-alt me-2"></i> 123 Rental St, New York, NY 10001</li>
-            <li class="mb-2"><i class="fas fa-phone me-2"></i> (123) 456-7890</li>
-            <li class="mb-2"><i class="fas fa-envelope me-2"></i> info@driveease.com</li>
-            <li><i class="fas fa-clock me-2"></i> Mon-Fri: 9AM - 6PM</li>
-          </ul>
+        </div>
+      </div>
+
+      <!-- Contact Info -->
+      <div class="col-lg-5">
+        <div class="card border-0 shadow-sm h-100">
+          <div class="card-body p-4 p-md-5">
+            <h2 class="fw-bold mb-4">Contact Information</h2>
+            
+            <div class="mb-5">
+              <h3 class="h5 fw-bold mb-3"><i class="fas fa-map-marker-alt text-primary me-2"></i> Our Location</h3>
+              <p class="mb-4">Phagwara, Punjab-144411, India</p>
+              <div class="ratio ratio-16x9 rounded overflow-hidden">
+                <iframe src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d3022.215209179054!2d-73.9878449245255!3d40.7484404713896!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x89c259a9b3117469%3A0xd134e199a405a163!2sEmpire%20State%20Building!5e0!3m2!1sen!2sus!4v1689870587292!5m2!1sen!2sus" 
+                  style="border:0;" allowfullscreen="" loading="lazy" referrerpolicy="no-referrer-when-downgrade"></iframe>
+              </div>
+            </div>
+            
+            <div class="mb-4">
+              <h3 class="h5 fw-bold mb-3"><i class="fas fa-clock text-primary me-2"></i> Working Hours</h3>
+              <ul class="list-unstyled">
+                <li class="mb-1"><strong>Monday-Friday:</strong> 9:00 AM - 6:00 PM</li>
+                <li class="mb-1"><strong>Saturday:</strong> 10:00 AM - 4:00 PM</li>
+                <li><strong>Sunday:</strong> Closed</li>
+              </ul>
+            </div>
+            
+            <div>
+              <h3 class="h5 fw-bold mb-3"><i class="fas fa-headset text-primary me-2"></i> Quick Contact</h3>
+              <ul class="list-unstyled">
+                <li class="mb-2"><i class="fas fa-phone-alt me-2"></i> <strong>Phone:</strong> 123 456-7890</li>
+                <li class="mb-2"><i class="fas fa-envelope me-2"></i> <strong>Email:</strong> info@driveease.com</li>
+                <li><i class="fas fa-comment-dots me-2"></i> <strong>Live Chat:</strong> Available 24/7</li>
+              </ul>
+            </div>
+          </div>
         </div>
       </div>
     </div>
   </div>
+
+  <!-- FAQ Section -->
+  <section class="bg-light py-5 mt-4">
+    <div class="container py-4">
+      <div class="text-center mb-5">
+        <h2 class="fw-bold">Frequently Asked Questions</h2>
+        <p class="text-muted mx-auto" style="max-width: 600px;">Find quick answers to common questions about our car rental services and policies.</p>
+      </div>
+      
+      <div class="row g-4">
+        <div class="col-md-6">
+          <div class="card border-0 shadow-sm h-100">
+            <div class="card-body p-4">
+              <h3 class="h5 fw-bold"><i class="fas fa-car text-primary me-2"></i> Rental Requirements</h3>
+              <p class="mb-0">What documents do I need to rent a car? You'll need a valid driver's license, credit card, and proof of insurance.</p>
+            </div>
+          </div>
+        </div>
+        <div class="col-md-6">
+          <div class="card border-0 shadow-sm h-100">
+            <div class="card-body p-4">
+              <h3 class="h5 fw-bold"><i class="fas fa-gas-pump text-primary me-2"></i> Fuel Policy</h3>
+              <p class="mb-0">Our policy is full-to-full. You'll receive the car with a full tank and should return it full.</p>
+            </div>
+          </div>
+        </div>
+        <div class="col-md-6">
+          <div class="card border-0 shadow-sm h-100">
+            <div class="card-body p-4">
+              <h3 class="h5 fw-bold"><i class="fas fa-calendar-alt text-primary me-2"></i> Extending Rental</h3>
+              <p class="mb-0">Contact us at least 24 hours before your scheduled return to extend your rental period.</p>
+            </div>
+          </div>
+        </div>
+        <div class="col-md-6">
+          <div class="card border-0 shadow-sm h-100">
+            <div class="card-body p-4">
+              <h3 class="h5 fw-bold"><i class="fas fa-credit-card text-primary me-2"></i> Payment Options</h3>
+              <p class="mb-0">We accept all major credit cards and also offer cash payment options at select locations.</p>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
 </div>
 
 <%- include('partials/footer') %>
+
+<style>
+  .contact-hero {
+    background: linear-gradient(135deg, #0d6efd 0%, #0b5ed7 100%);
+  }
+  
+  .contact-page .form-control, .contact-page .form-select {
+    padding: 0.75rem 1rem;
+    border-radius: 0.5rem;
+  }
+  
+  .contact-page .card {
+    border-radius: 1rem;
+    transition: transform 0.3s ease;
+  }
+  
+  .contact-page .card:hover {
+    transform: translateY(-5px);
+  }
+  .img-fluid {
+    max-width: 100%;
+    height: auto;
+    border-radius: 40px;
+  }
+</style>
+
+<script>
+// Form validation example
+(function() {
+  'use strict';
+  window.addEventListener('load', function() {
+    var forms = document.getElementsByClassName('needs-validation');
+    var validation = Array.prototype.filter.call(forms, function(form) {
+      form.addEventListener('submit', function(event) {
+        if (form.checkValidity() === false) {
+          event.preventDefault();
+          event.stopPropagation();
+        }
+        form.classList.add('was-validated');
+      }, false);
+    });
+  }, false);
+})();
+</script>

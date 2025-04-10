@@ -1,0 +1,278 @@
+<%- include('../../partials/header') %>
+
+<div class="d-flex">
+  <%- include('../../partials/sidebar', {currentPage: 'vehicles'}) %>
+
+  <div class="main-content">
+    <nav class="topbar navbar navbar-expand navbar-light bg-white shadow-sm">
+      <!-- Topbar content same as vehicles.ejs -->
+    </nav>
+
+    <div class="container-fluid py-4">
+      <div class="d-flex justify-content-between align-items-center mb-4">
+        <div>
+          <h2 class="mb-0 fw-bold">Vehicle Details</h2>
+          <nav aria-label="breadcrumb">
+            <ol class="breadcrumb">
+              <li class="breadcrumb-item"><a href="/admin">Dashboard</a></li>
+              <li class="breadcrumb-item"><a href="/admin/vehicles">Vehicles</a></li>
+              <li class="breadcrumb-item active"><%= vehicle.make %> <%= vehicle.model %></li>
+            </ol>
+          </nav>
+        </div>
+        <div>
+          <a href="/admin/vehicles/<%= vehicle._id %>/edit" class="btn btn-primary me-2">
+            <i class="fas fa-edit me-1"></i> Edit
+          </a>
+          <a href="/admin/vehicles" class="btn btn-outline-secondary">
+            <i class="fas fa-arrow-left me-1"></i> Back
+          </a>
+        </div>
+      </div>
+
+      <div class="row">
+        <!-- Vehicle Images -->
+        <div class="col-lg-6 mb-4">
+          <div class="card border-0 shadow-sm h-100">
+            <div class="card-body">
+              <% if (vehicle.images && vehicle.images.length > 0) { %>
+                <div id="vehicleImages" class="carousel slide" data-bs-ride="carousel">
+                  <div class="carousel-inner rounded">
+                    <% vehicle.images.forEach((image, index) => { %>
+                      <div class="carousel-item <%= index === 0 ? 'active' : '' %>">
+                        <img src="<%= image %>" class="d-block w-100" style="height: 400px; object-fit: cover;" alt="<%= vehicle.make %> <%= vehicle.model %>">
+                      </div>
+                    <% }); %>
+                  </div>
+                  <% if (vehicle.images.length > 1) { %>
+                    <button class="carousel-control-prev" type="button" data-bs-target="#vehicleImages" data-bs-slide="prev">
+                      <span class="carousel-control-prev-icon" aria-hidden="true"></span>
+                      <span class="visually-hidden">Previous</span>
+                    </button>
+                    <button class="carousel-control-next" type="button" data-bs-target="#vehicleImages" data-bs-slide="next">
+                      <span class="carousel-control-next-icon" aria-hidden="true"></span>
+                      <span class="visually-hidden">Next</span>
+                    </button>
+                  <% } %>
+                </div>
+                <div class="d-flex flex-wrap gap-2 mt-3">
+                  <% vehicle.images.forEach((image, index) => { %>
+                    <img src="<%= image %>" class="img-thumbnail" style="width: 80px; height: 60px; object-fit: cover; cursor: pointer;" 
+                         onclick="document.querySelector('#vehicleImages .carousel-item:nth-child(<%= index + 1 %>)').click()">
+                  <% }); %>
+                </div>
+              <% } else { %>
+                <div class="d-flex align-items-center justify-content-center bg-light rounded" style="height: 400px;">
+                  <div class="text-center text-muted">
+                    <i class="fas fa-car fa-4x mb-3"></i>
+                    <h5>No Images Available</h5>
+                  </div>
+                </div>
+              <% } %>
+            </div>
+          </div>
+        </div>
+
+        <!-- Vehicle Details -->
+        <div class="col-lg-6 mb-4">
+          <div class="card border-0 shadow-sm h-100">
+            <div class="card-body">
+              <h3 class="card-title fw-bold mb-4"><%= vehicle.make %> <%= vehicle.model %></h3>
+              
+              <div class="row g-3 mb-4">
+                <div class="col-md-6">
+                  <div class="d-flex align-items-center mb-3">
+                    <div class="bg-light bg-opacity-50 rounded-circle p-2 me-3">
+                      <i class="fas fa-calendar-alt text-primary"></i>
+                    </div>
+                    <div>
+                      <div class="text-muted small">Year</div>
+                      <div class="fw-semibold"><%= vehicle.year %></div>
+                    </div>
+                  </div>
+                </div>
+                <div class="col-md-6">
+                  <div class="d-flex align-items-center mb-3">
+                    <div class="bg-light bg-opacity-50 rounded-circle p-2 me-3">
+                      <i class="fas fa-tag text-primary"></i>
+                    </div>
+                    <div>
+                      <div class="text-muted small">Type</div>
+                      <div class="fw-semibold"><%= vehicle.type %></div>
+                    </div>
+                  </div>
+                </div>
+                <div class="col-md-6">
+                  <div class="d-flex align-items-center mb-3">
+                    <div class="bg-light bg-opacity-50 rounded-circle p-2 me-3">
+                      <i class="fas fa-gas-pump text-primary"></i>
+                    </div>
+                    <div>
+                      <div class="text-muted small">Fuel Type</div>
+                      <div class="fw-semibold"><%= vehicle.fuelType %></div>
+                    </div>
+                  </div>
+                </div>
+                <div class="col-md-6">
+                  <div class="d-flex align-items-center mb-3">
+                    <div class="bg-light bg-opacity-50 rounded-circle p-2 me-3">
+                      <i class="fas fa-cog text-primary"></i>
+                    </div>
+                    <div>
+                      <div class="text-muted small">Transmission</div>
+                      <div class="fw-semibold"><%= vehicle.transmission %></div>
+                    </div>
+                  </div>
+                </div>
+              </div>
+
+              <div class="mb-4">
+                <h5 class="fw-bold mb-3">Pricing</h5>
+                <div class="row g-3">
+                  <div class="col-md-6">
+                    <div class="bg-light p-3 rounded">
+                      <div class="text-muted small">Daily Rate</div>
+                      <div class="h4 fw-bold text-primary">₹<%= vehicle.dailyRate %></div>
+                    </div>
+                  </div>
+                  <% if (vehicle.hourlyRate) { %>
+                    <div class="col-md-6">
+                      <div class="bg-light p-3 rounded">
+                        <div class="text-muted small">Hourly Rate</div>
+                        <div class="h4 fw-bold text-primary">₹<%= vehicle.hourlyRate %></div>
+                      </div>
+                    </div>
+                  <% } %>
+                </div>
+              </div>
+
+              <div class="mb-4">
+                <h5 class="fw-bold mb-3">Status</h5>
+                <% if (vehicle.status === 'available') { %>
+                  <span class="badge bg-success bg-opacity-10 text-success py-2 px-3 rounded-pill">
+                    <i class="fas fa-check-circle me-1"></i> Available for Rent
+                  </span>
+                <% } else if (vehicle.status === 'rented') { %>
+                  <span class="badge bg-warning bg-opacity-10 text-warning py-2 px-3 rounded-pill">
+                    <i class="fas fa-car me-1"></i> Currently Rented
+                  </span>
+                <% } else { %>
+                  <span class="badge bg-secondary bg-opacity-10 text-secondary py-2 px-3 rounded-pill">
+                    <i class="fas fa-wrench me-1"></i> Under Maintenance
+                  </span>
+                <% } %>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <!-- Features & Description -->
+        <div class="col-12">
+          <div class="row">
+            <!-- Features -->
+            <div class="col-md-6 mb-4">
+              <div class="card border-0 shadow-sm h-100">
+                <div class="card-body">
+                  <h5 class="card-title fw-bold mb-3">Features</h5>
+                  <% if (vehicle.features && vehicle.features.length > 0) { %>
+                    <div class="row g-2">
+                      <% vehicle.features.forEach(feature => { %>
+                        <div class="col-6">
+                          <div class="d-flex align-items-center mb-2">
+                            <i class="fas fa-check-circle text-success me-2"></i>
+                            <span><%= feature %></span>
+                          </div>
+                        </div>
+                      <% }); %>
+                    </div>
+                  <% } else { %>
+                    <div class="text-muted">No features listed</div>
+                  <% } %>
+                </div>
+              </div>
+            </div>
+
+            <!-- Description -->
+            <div class="col-md-6 mb-4">
+              <div class="card border-0 shadow-sm h-100">
+                <div class="card-body">
+                  <h5 class="card-title fw-bold mb-3">Description</h5>
+                  <% if (vehicle.description) { %>
+                    <p class="mb-0"><%= vehicle.description %></p>
+                  <% } else { %>
+                    <div class="text-muted">No description available</div>
+                  <% } %>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <!-- Rental History -->
+        <div class="col-12">
+          <div class="card border-0 shadow-sm">
+            <div class="card-header bg-white border-0 py-3">
+              <h5 class="card-title m-0 fw-bold">Rental History</h5>
+            </div>
+            <div class="card-body px-0 pb-0">
+              <% if (vehicle.rentals && vehicle.rentals.length > 0) { %>
+                <div class="table-responsive">
+                  <table class="table table-hover align-middle">
+                    <thead class="table-light">
+                      <tr>
+                        <th>Customer</th>
+                        <th>Rental Period</th>
+                        <th>Pickup Date</th>
+                        <th>Return Date</th>
+                        <th>Total Amount</th>
+                        <th>Status</th>
+                      </tr>
+                    </thead>
+                    <tbody>
+                      <% vehicle.rentals.forEach(rental => { %>
+                        <tr>
+                          <td>
+                            <div class="d-flex align-items-center">
+                              <div class="flex-shrink-0">
+                                <i class="fas fa-user-circle fa-2x text-muted"></i>
+                              </div>
+                              <div class="flex-grow-1 ms-3">
+                                <div class="fw-semibold"><%= rental.customer.name %></div>
+                                <div class="text-muted small"><%= rental.customer.email %></div>
+                              </div>
+                            </div>
+                          </td>
+                          <td><%= rental.duration %> days</td>
+                          <td><%= new Date(rental.pickupDate).toLocaleDateString() %></td>
+                          <td><%= new Date(rental.returnDate).toLocaleDateString() %></td>
+                          <td>₹<%= rental.totalAmount %></td>
+                          <td>
+                            <% if (rental.status === 'completed') { %>
+                              <span class="badge bg-success bg-opacity-10 text-success">Completed</span>
+                            <% } else if (rental.status === 'active') { %>
+                              <span class="badge bg-primary bg-opacity-10 text-primary">Active</span>
+                            <% } else { %>
+                              <span class="badge bg-secondary bg-opacity-10 text-secondary"><%= rental.status %></span>
+                            <% } %>
+                          </td>
+                        </tr>
+                      <% }); %>
+                    </tbody>
+                  </table>
+                </div>
+              <% } else { %>
+                <div class="text-center py-4">
+                  <i class="fas fa-history fa-3x text-muted mb-3"></i>
+                  <h5>No Rental History</h5>
+                  <p class="text-muted">This vehicle hasn't been rented yet</p>
+                </div>
+              <% } %>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<%- include('../../partials/footer') %>

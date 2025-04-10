@@ -1,0 +1,91 @@
+/* Sidebar Styles */
+.sidebar {
+    width: 250px;
+    min-height: 100vh;
+    background: #2c3e50;
+    position: fixed;
+    z-index: 100;
+    transition: all 0.3s;
+    box-shadow: 2px 0 10px rgba(0,0,0,0.1);
+  }
+  
+  .sidebar-brand {
+    padding: 1.5rem 1rem;
+    color: white;
+    background: #1a252f;
+    text-align: center;
+    font-size: 1.2rem;
+    font-weight: 600;
+  }
+  
+  .sidebar-menu {
+    padding: 0;
+    list-style: none;
+  }
+  
+  .sidebar-menu li {
+    position: relative;
+  }
+  
+  .sidebar-menu li a {
+    color: #b7c0cd;
+    padding: 1rem;
+    display: block;
+    text-decoration: none;
+    transition: all 0.3s;
+  }
+  
+  .sidebar-menu li a:hover,
+  .sidebar-menu li.active a {
+    color: white;
+    background: rgba(255,255,255,0.1);
+  }
+  
+  .sidebar-menu li a i {
+    margin-right: 10px;
+    width: 20px;
+    text-align: center;
+  }
+  
+  /* Main content area */
+  .main-content {
+    margin-left: 250px;
+    min-height: 100vh;
+    transition: all 0.3s;
+  }
+  
+  /* For collapsed sidebar */
+  .sidebar-collapsed .sidebar {
+    width: 80px;
+  }
+  
+  .sidebar-collapsed .sidebar-brand span,
+  .sidebar-collapsed .sidebar-menu li a span {
+    display: none;
+  }
+  
+  .sidebar-collapsed .sidebar-menu li a i {
+    margin-right: 0;
+    font-size: 1.2rem;
+  }
+  
+  .sidebar-collapsed .main-content {
+    margin-left: 80px;
+  }
+
+  @media (max-width: 768px) {
+    .sidebar {
+      width: 80px;
+    }
+    .sidebar-brand span,
+    .sidebar-menu li a span {
+      display: none;
+    }
+    .sidebar-menu li a i {
+      margin-right: 0;
+      font-size: 1.2rem;
+    }
+    .main-content {
+      margin-left: 80px;
+    }
+  }

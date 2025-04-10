@@ -6,6 +6,8 @@ const passport = require('passport');
 const flash = require('connect-flash');
 const path = require('path');
 const Db_name = "car_rental_db";
+const methodOverride = require('method-override');
+
 
 // Initialize app
 const app = express();
@@ -22,6 +24,8 @@ mongoose.connect(dbstring, {
 // Passport config
 require('./config/passport')(passport);
 
+
+
 // Middleware
 app.use(express.urlencoded({ extended: true }));
 app.use(express.json());
@@ -30,7 +34,7 @@ app.use(express.static(path.join(__dirname, 'public')));
 // EJS setup
 app.set('view engine', 'ejs');
 app.set('views', path.join(__dirname, 'views'));
-
+app.use(methodOverride('_method'));
 // Session
 app.use(session({
   secret: process.env.SESSION_SECRET || 'your-secret-key',
@@ -65,6 +69,7 @@ const bookingRoutes = require('./routes/bookings');
 const userRoutes = require('./routes/users');
 const adminRoutes = require('./routes/adminRoutes');
 
+
 // Use routes
 app.use('/', indexRoutes);
 app.use('/auth', authRoutes);
@@ -72,6 +77,7 @@ app.use('/cars', carRoutes);
 app.use('/bookings', bookingRoutes); // This is where bookings routes are mounted
 app.use('/users', userRoutes);
 app.use('/admin', adminRoutes);
+
 
 // Error handling
 // app.use((req, res) => {

@@ -1,0 +1,249 @@
+<%- include('../../partials/header') %>
+
+<div class="d-flex">
+  <%- include('../../partials/sidebar', {currentPage: 'vehicles'}) %>
+
+  <div class="main-content">
+    <nav class="topbar navbar navbar-expand navbar-light bg-white shadow-sm">
+      <!-- Topbar content same as vehicles.ejs -->
+    </nav>
+
+    <div class="container-fluid py-4">
+      <div class="d-flex justify-content-between align-items-center mb-4">
+        <div>
+          <h2 class="mb-0 fw-bold">Edit Vehicle</h2>
+          <nav aria-label="breadcrumb">
+            <ol class="breadcrumb">
+              <li class="breadcrumb-item"><a href="/admin">Dashboard</a></li>
+              <li class="breadcrumb-item"><a href="/admin/vehicles">Vehicles</a></li>
+              <li class="breadcrumb-item active">Edit <%= vehicle.make %> <%= vehicle.model %></li>
+            </ol>
+          </nav>
+        </div>
+      </div>
+
+      <div class="card border-0 shadow-sm">
+        <div class="card-body">
+          <form id="vehicleForm" action="/admin/vehicles/<%= vehicle._id %>?_method=PUT" method="POST" enctype="multipart/form-data">
+            <div class="row g-4">
+              <!-- Basic Info -->
+              <div class="col-md-6">
+                <h5 class="mb-3 fw-bold text-primary">Basic Information</h5>
+                <div class="mb-3">
+                  <label class="form-label">Make <span class="text-danger">*</span></label>
+                  <input type="text" class="form-control" name="make" value="<%= vehicle.make %>" required>
+                </div>
+                <div class="mb-3">
+                  <label class="form-label">Model <span class="text-danger">*</span></label>
+                  <input type="text" class="form-control" name="model" value="<%= vehicle.model %>" required>
+                </div>
+                <div class="mb-3">
+                  <label class="form-label">Year <span class="text-danger">*</span></label>
+                  <select class="form-select" name="year" required>
+                    <% for(let year = new Date().getFullYear() + 1; year >= 2000; year--) { %>
+                      <option value="<%= year %>" <%= vehicle.year == year ? 'selected' : '' %>><%= year %></option>
+                    <% } %>
+                  </select>
+                </div>
+                <div class="mb-3">
+                  <label class="form-label">Vehicle Type <span class="text-danger">*</span></label>
+                  <select class="form-select" name="type" required>
+                    <option value="Sedan" <%= vehicle.type === 'Sedan' ? 'selected' : '' %>>Sedan</option>
+                    <option value="SUV" <%= vehicle.type === 'SUV' ? 'selected' : '' %>>SUV</option>
+                    <option value="Hatchback" <%= vehicle.type === 'Hatchback' ? 'selected' : '' %>>Hatchback</option>
+                    <option value="Luxury" <%= vehicle.type === 'Luxury' ? 'selected' : '' %>>Luxury</option>
+                    <option value="Electric" <%= vehicle.type === 'Electric' ? 'selected' : '' %>>Electric</option>
+                  </select>
+                </div>
+              </div>
+
+              <!-- Pricing & Status -->
+              <div class="col-md-6">
+                <h5 class="mb-3 fw-bold text-primary">Pricing & Status</h5>
+                <div class="mb-3">
+                  <label class="form-label">Daily Rate (₹) <span class="text-danger">*</span></label>
+                  <input type="number" class="form-control" name="dailyRate" min="0" value="<%= vehicle.dailyRate %>" required>
+                </div>
+                <div class="mb-3">
+                  <label class="form-label">Hourly Rate (₹)</label>
+                  <input type="number" class="form-control" name="hourlyRate" min="0" value="<%= vehicle.hourlyRate || '' %>">
+                </div>
+                <div class="mb-3">
+                  <label class="form-label">Minimum Rental Period (days)</label>
+                  <input type="number" class="form-control" name="minRentalDays" min="1" value="<%= vehicle.minRentalDays || 1 %>">
+                </div>
+                <div class="mb-3">
+                  <label class="form-label">Status <span class="text-danger">*</span></label>
+                  <select class="form-select" name="status" required>
+                    <option value="available" <%= vehicle.status === 'available' ? 'selected' : '' %>>Available</option>
+                    <option value="rented" <%= vehicle.status === 'rented' ? 'selected' : '' %>>Rented</option>
+                    <option value="maintenance" <%= vehicle.status === 'maintenance' ? 'selected' : '' %>>Maintenance</option>
+                  </select>
+                </div>
+              </div>
+
+              <!-- Vehicle Details -->
+              <div class="col-12">
+                <h5 class="mb-3 fw-bold text-primary">Vehicle Details</h5>
+                <div class="row g-3">
+                  <div class="col-md-3">
+                    <label class="form-label">Transmission</label>
+                    <select class="form-select" name="transmission">
+                      <option value="Automatic" <%= vehicle.transmission === 'Automatic' ? 'selected' : '' %>>Automatic</option>
+                      <option value="Manual" <%= vehicle.transmission === 'Manual' ? 'selected' : '' %>>Manual</option>
+                    </select>
+                  </div>
+                  <div class="col-md-3">
+                    <label class="form-label">Fuel Type</label>
+                    <select class="form-select" name="fuelType">
+                      <option value="Petrol" <%= vehicle.fuelType === 'Petrol' ? 'selected' : '' %>>Petrol</option>
+                      <option value="Diesel" <%= vehicle.fuelType === 'Diesel' ? 'selected' : '' %>>Diesel</option>
+                      <option value="Electric" <%= vehicle.fuelType === 'Electric' ? 'selected' : '' %>>Electric</option>
+                      <option value="Hybrid" <%= vehicle.fuelType === 'Hybrid' ? 'selected' : '' %>>Hybrid</option>
+                    </select>
+                  </div>
+                  <div class="col-md-3">
+                    <label class="form-label">Seating Capacity</label>
+                    <input type="number" class="form-control" name="seats" min="2" max="12" value="<%= vehicle.seats || 5 %>">
+                  </div>
+                  <div class="col-md-3">
+                    <label class="form-label">Luggage Capacity</label>
+                    <input type="number" class="form-control" name="luggage" min="1" value="<%= vehicle.luggage || 2 %>">
+                  </div>
+                </div>
+              </div>
+
+              <!-- Features -->
+              <div class="col-12">
+                <h5 class="mb-3 fw-bold text-primary">Features</h5>
+                <div class="row g-3">
+                  <% const allFeatures = [
+                    'Air Conditioning', 'Bluetooth', 'Navigation', 'Sunroof',
+                    'Backup Camera', 'Keyless Entry', 'USB Ports', 'Heated Seats',
+                    'Child Seat', 'GPS Tracking', 'Toll Pass', 'First Aid Kit'
+                  ]; %>
+                  <% allFeatures.forEach(feature => { %>
+                    <div class="col-md-3">
+                      <div class="form-check">
+                        <input class="form-check-input" type="checkbox" name="features" 
+                               value="<%= feature %>" id="feature<%= feature.replace(/\s+/g, '') %>"
+                               <%= vehicle.features && vehicle.features.includes(feature) ? 'checked' : '' %>>
+                        <label class="form-check-label" for="feature<%= feature.replace(/\s+/g, '') %>">
+                          <%= feature %>
+                        </label>
+                      </div>
+                    </div>
+                  <% }); %>
+                </div>
+              </div>
+
+              <!-- Current Images -->
+              <div class="col-12">
+                <h5 class="mb-3 fw-bold text-primary">Current Images</h5>
+                <div class="d-flex flex-wrap gap-3 mb-3">
+                  <% if (vehicle.images && vehicle.images.length > 0) { %>
+                    <% vehicle.images.forEach((image, index) => { %>
+                      <div class="position-relative">
+                        <img src="<%= image %>" class="img-thumbnail" style="width: 150px; height: 100px; object-fit: cover;">
+                        <button type="button" class="btn btn-sm btn-danger position-absolute top-0 end-0 m-1 rounded-circle" 
+                                onclick="deleteImage('<%= vehicle._id %>', '<%= index %>')">
+                          <i class="fas fa-times"></i>
+                        </button>
+                      </div>
+                    <% }); %>
+                  <% } else { %>
+                    <div class="text-muted">No images uploaded</div>
+                  <% } %>
+                </div>
+              </div>
+
+              <!-- New Images -->
+              <div class="col-12">
+                <h5 class="mb-3 fw-bold text-primary">Add More Images</h5>
+                <div class="mb-3">
+                  <label class="form-label">Upload Additional Images</label>
+                  <input type="file" class="form-control" name="newImages" multiple accept="image/*" data-current-image-count="<%= typeof vehicle !== 'undefined' && vehicle.images ? vehicle.images.length : 0 %>">
+                  <small class="text-muted">Max 5 images total (including existing)</small>
+                </div>
+                <div class="image-preview d-flex flex-wrap gap-3 mt-3"></div>
+              </div>
+
+              <!-- Description -->
+              <div class="col-12">
+                <h5 class="mb-3 fw-bold text-primary">Description</h5>
+                <div class="mb-3">
+                  <label class="form-label">Vehicle Description</label>
+                  <textarea class="form-control" name="description" rows="4"><%= vehicle.description || '' %></textarea>
+                </div>
+              </div>
+
+              <!-- Form Actions -->
+              <div class="col-12">
+                <div class="d-flex justify-content-end gap-3">
+                  <a href="/admin/vehicles" class="btn btn-outline-secondary">Cancel</a>
+                  <button type="submit" class="btn btn-primary">Update Vehicle</button>
+                </div>
+              </div>
+            </div>
+          </form>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<script>
+  // Image preview functionality
+  document.querySelector('input[name="newImages"]').addEventListener('change', function(e) {
+    const previewContainer = document.querySelector('.image-preview');
+    previewContainer.innerHTML = '';
+    
+    const currentImageCount = parseInt(document.querySelector('input[name="newImages"]').dataset.currentImageCount, 10) || 0;
+    if (this.files.length + currentImageCount > 5) {
+      alert(`Maximum 5 images allowed (${currentImageCount} already uploaded)`);
+      this.value = '';
+      return;
+    }
+    
+    Array.from(this.files).forEach(file => {
+      if (!file.type.match('image.*')) return;
+      
+      const reader = new FileReader();
+      reader.onload = function(e) {
+        const img = document.createElement('img');
+        img.src = e.target.result;
+        img.classList.add('img-thumbnail');
+        img.style.width = '150px';
+        img.style.height = '100px';
+        img.style.objectFit = 'cover';
+        previewContainer.appendChild(img);
+      }
+      reader.readAsDataURL(file);
+    });
+  });
+
+  // Delete image function
+  function deleteImage(vehicleId, imageIndex) {
+    if (confirm('Are you sure you want to delete this image?')) {
+      fetch(`/admin/vehicles/${vehicleId}/images/${imageIndex}`, {
+        method: 'DELETE',
+        headers: {
+          'Content-Type': 'application/json'
+        }
+      })
+      .then(response => {
+        if (response.ok) {
+          location.reload();
+        } else {
+          alert('Error deleting image');
+        }
+      })
+      .catch(error => {
+        console.error('Error:', error);
+        alert('Error deleting image');
+      });
+    }
+  }
+</script>
+
+<%- include('../../partials/footer') %>

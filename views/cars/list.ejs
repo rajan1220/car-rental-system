@@ -1,62 +1,640 @@
 <%- include('../partials/header') %>
 
-<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css" integrity="sha384-k6RqeWeci5ZR/Lv4MR0sA0FfDOM8z4+2e5c1b7e5a5e5a5e5a5e5a5e5a5e5a5" crossorigin="anonymous">
-<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/css/bootstrap.min.css" integrity="sha384-KyZXEAg3QhqLMpG8r+Knujsl5/6/2e5c1b7e5a5e5a5e5a5e5a5e5a5e5a5e5a5" crossorigin="anonymous">
-<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.5.0/font/bootstrap-icons.css">
+<!-- Custom Styles -->
+<style>
+  :root {
+    --primary: #3B82F6;
+    --primary-light: #93C5FD;
+    --primary-dark: #1D4ED8;
+    --secondary: #10B981;
+    --accent: #F59E0B;
+    --dark: #1F2937;
+    --light: #F9FAFB;
+    --gray: #6B7280;
+    --light-gray: #E5E7EB;
+    --success: #10B981;
+    --danger: #EF4444;
+    --card-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1), 0 2px 4px -1px rgba(0, 0, 0, 0.06);
+    --card-shadow-hover: 0 20px 25px -5px rgba(0, 0, 0, 0.1), 0 10px 10px -5px rgba(0, 0, 0, 0.04);
+  }
+  
+  body {
+    background-color: #F3F4F6;
+    font-family: 'Inter', sans-serif;
+  }
+  
+  /* Hero Section */
+  .hero-section {
+    background: linear-gradient(135deg, var(--primary) 0%, var(--primary-dark) 100%);
+    color: white;
+    border-radius: 16px;
+    padding: 4rem 2rem;
+    margin-bottom: 3rem;
+    position: relative;
+    overflow: hidden;
+    box-shadow: var(--card-shadow);
+  }
+  
+  .hero-content {
+    position: relative;
+    z-index: 2;
+  }
+  
+  .hero-section::before {
+    content: "";
+    position: absolute;
+    top: -50%;
+    right: -50%;
+    width: 100%;
+    height: 200%;
+    background: radial-gradient(circle, rgba(255,255,255,0.1) 0%, rgba(255,255,255,0) 70%);
+    transform: rotate(30deg);
+  }
+  
+  .hero-title {
+    font-size: 2.5rem;
+    font-weight: 800;
+    margin-bottom: 1rem;
+    line-height: 1.2;
+  }
+  
+  .hero-subtitle {
+    font-size: 1.1rem;
+    opacity: 0.9;
+    margin-bottom: 2rem;
+    max-width: 600px;
+  }
+  
+  /* Filter Section */
+  .filter-card {
+    background: white;
+    border-radius: 16px;
+    padding: 1.5rem;
+    margin-bottom: 2rem;
+    box-shadow: var(--card-shadow);
+    transition: all 0.3s ease;
+  }
+  
+  .filter-card:hover {
+    box-shadow: 0 10px 15px -3px rgba(0, 0, 0, 0.1);
+  }
+  
+  .filter-title {
+    font-size: 1.25rem;
+    font-weight: 700;
+    color: var(--dark);
+    margin-bottom: 1.5rem;
+    display: flex;
+    align-items: center;
+  }
+  
+  .filter-title i {
+    margin-right: 10px;
+    color: var(--primary);
+    font-size: 1.1rem;
+  }
+  
+  /* Car Cards */
+  .car-card {
+    background: white;
+    border-radius: 16px;
+    overflow: hidden;
+    box-shadow: var(--card-shadow);
+    transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+    height: 100%;
+    display: flex;
+    flex-direction: column;
+  }
+  
+  .car-card:hover {
+    transform: translateY(-5px);
+    box-shadow: var(--card-shadow-hover);
+  }
+  
+  .car-image-container {
+    height: 220px;
+    overflow: hidden;
+    position: relative;
+  }
+  
+  .car-image {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    transition: transform 0.5s ease;
+  }
+  
+  .car-card:hover .car-image {
+    transform: scale(1.05);
+  }
+  
+  .car-badge {
+    position: absolute;
+    top: 16px;
+    right: 16px;
+    z-index: 2;
+    font-size: 0.75rem;
+    font-weight: 600;
+    padding: 0.35rem 0.75rem;
+    border-radius: 50px;
+    box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+  }
+  
+  .type-badge {
+    background: var(--primary);
+    color: white;
+  }
+  
+  .available-badge {
+    background: var(--success);
+    color: white;
+  }
+  
+  .unavailable-badge {
+    background: var(--danger);
+    color: white;
+  }
+  
+  .car-body {
+    padding: 1.5rem;
+    flex-grow: 1;
+    display: flex;
+    flex-direction: column;
+  }
+  
+  .car-title {
+    font-size: 1.4rem;
+    font-weight: 700;
+    color: var(--dark);
+    margin-bottom: 0.25rem;
+  }
+  
+  .car-subtitle {
+    color: var(--gray);
+    font-size: 0.9rem;
+    margin-bottom: 1rem;
+  }
+  
+  .car-specs {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 1rem;
+    margin-bottom: 1.5rem;
+  }
+  
+  .spec-item {
+    display: flex;
+    align-items: center;
+    font-size: 0.85rem;
+    color: var(--gray);
+  }
+  
+  .spec-icon {
+    color: var(--primary);
+    margin-right: 6px;
+    font-size: 0.9rem;
+    width: 18px;
+    text-align: center;
+  }
+  
+  .features-container {
+    margin-top: auto;
+  }
+  
+  .features-title {
+    font-size: 0.9rem;
+    font-weight: 600;
+    color: var(--dark);
+    margin-bottom: 0.75rem;
+    display: flex;
+    align-items: center;
+  }
+  
+  .features-title i {
+    margin-right: 6px;
+    color: var(--accent);
+  }
+  
+  .features-list {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0.5rem;
+    margin-bottom: 1.5rem;
+  }
+  
+  .feature-tag {
+    background: var(--light);
+    color: var(--dark);
+    padding: 0.25rem 0.75rem;
+    border-radius: 50px;
+    font-size: 0.75rem;
+    display: inline-flex;
+    align-items: center;
+  }
+  
+  .feature-tag i {
+    margin-right: 4px;
+    font-size: 0.7rem;
+    color: var(--primary);
+  }
+  
+  .car-footer {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-top: auto;
+  }
+  
+  .price-container {
+    line-height: 1.2;
+  }
+  
+  .car-price {
+    font-size: 1.5rem;
+    font-weight: 700;
+    color: var(--primary);
+  }
+  
+  .price-period {
+    font-size: 0.8rem;
+    color: var(--gray);
+  }
+  
+  .action-buttons {
+    display: flex;
+    gap: 0.75rem;
+  }
+  
+  .btn-details {
+    background: white;
+    color: var(--primary);
+    border: 1px solid var(--primary-light);
+    border-radius: 8px;
+    padding: 0.5rem 1rem;
+    font-weight: 500;
+    transition: all 0.2s;
+  }
+  
+  .btn-details:hover {
+    background: var(--primary-light);
+    color: white;
+    border-color: var(--primary-light);
+  }
+  
+  .btn-book {
+    background: var(--primary);
+    color: white;
+    border: none;
+    border-radius: 8px;
+    padding: 0.5rem 1.25rem;
+    font-weight: 500;
+    transition: all 0.2s;
+    display: inline-flex;
+    align-items: center;
+  }
+  
+  .btn-book:hover {
+    background: var(--primary-dark);
+    transform: translateY(-2px);
+  }
+  
+  .btn-book i {
+    margin-right: 6px;
+  }
+  
+  /* Empty State */
+  .empty-state {
+    background: white;
+    border-radius: 16px;
+    padding: 3rem 2rem;
+    text-align: center;
+    box-shadow: var(--card-shadow);
+  }
+  
+  .empty-icon {
+    font-size: 4rem;
+    color: var(--light-gray);
+    margin-bottom: 1.5rem;
+    opacity: 0.7;
+  }
+  
+  .empty-title {
+    font-size: 1.5rem;
+    font-weight: 600;
+    color: var(--dark);
+    margin-bottom: 0.5rem;
+  }
+  
+  .empty-text {
+    color: var(--gray);
+    margin-bottom: 1.5rem;
+    max-width: 500px;
+    margin-left: auto;
+    margin-right: auto;
+  }
+  
+  /* Section Header */
+  .section-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 2rem;
+  }
+  
+  .section-title {
+    font-size: 1.8rem;
+    font-weight: 700;
+    color: var(--dark);
+    position: relative;
+    padding-bottom: 0.5rem;
+  }
+  
+  .section-title::after {
+    content: "";
+    position: absolute;
+    bottom: 0;
+    left: 0;
+    width: 60px;
+    height: 4px;
+    background: var(--primary);
+    border-radius: 2px;
+  }
+  
+  .btn-add-car {
+    background: var(--accent);
+    color: white;
+    border: none;
+    border-radius: 8px;
+    padding: 0.75rem 1.5rem;
+    font-weight: 500;
+    display: inline-flex;
+    align-items: center;
+    transition: all 0.2s;
+    box-shadow: 0 4px 6px rgba(245, 158, 11, 0.1);
+  }
+  
+  .btn-add-car:hover {
+    background: #E67E22;
+    transform: translateY(-2px);
+    box-shadow: 0 6px 8px rgba(245, 158, 11, 0.15);
+  }
+  
+  .btn-add-car i {
+    margin-right: 8px;
+  }
+  
+  /* Responsive Adjustments */
+  @media (max-width: 992px) {
+    .hero-title {
+      font-size: 2rem;
+    }
+    
+    .hero-subtitle {
+      font-size: 1rem;
+    }
+  }
+  
+  @media (max-width: 768px) {
+    .hero-section {
+      padding: 3rem 1.5rem;
+      text-align: center;
+    }
+    
+    .hero-subtitle {
+      margin-left: auto;
+      margin-right: auto;
+    }
+    
+    .section-title {
+      font-size: 1.5rem;
+    }
+    
+    .car-image-container {
+      height: 180px;
+    }
+  }
+  
+  @media (max-width: 576px) {
+    .hero-section {
+      padding: 2rem 1rem;
+    }
+    
+    .hero-title {
+      font-size: 1.75rem;
+    }
+    
+    .car-footer {
+      flex-direction: column;
+      align-items: flex-start;
+      gap: 1rem;
+    }
+    
+    .action-buttons {
+      width: 100%;
+      justify-content: space-between;
+    }
+    
+    .btn-details, .btn-book {
+      flex-grow: 1;
+      text-align: center;
+    }
+  }
+</style>
 
-<!-- body -->
-<div class="container my-5">
-  <div class="d-flex justify-content-between align-items-center mb-4">
-    <h1 class="display-6 fw-bold">Available Vehicles</h1>
-    <% if(user && user.role === 'admin') { %>
-      <a href="/cars/add" class="btn btn-success">
-        <i class="fas fa-plus me-2"></i>Add New Car
+<!-- Main Content -->
+<div class="container py-4">
+  <!-- Hero Section -->
+  <section class="hero-section mb-5">
+    <div class="hero-content">
+      <h1 class="hero-title">Find Your Perfect Ride</h1>
+      <p class="hero-subtitle">Discover our premium collection of vehicles for your next adventure. Luxury, comfort, and performance at your fingertips.</p>
+      <a href="#car-listings" class="btn btn-light btn-lg px-4">
+        <i class="fas fa-car me-2"></i>Browse Fleet
       </a>
-    <% } %>
-  </div>
+    </div>
+  </section>
 
-  <div class="row g-4">
-    <% if (cars.length > 0) { %>
-      <% cars.forEach(car => { %>
-        <div class="col-md-6 col-lg-4">
-          <div class="card h-100 shadow-sm">
-            <img src="/uploads/cars/<%= car.image || 'default-car.jpg' %>" class="card-img-top" alt="<%= car.make %> <%= car.model %>">
-            <div class="card-body">
-              <div class="d-flex justify-content-between mb-2">
-                <h2 class="h5 card-title mb-0"><%= car.make %> <%= car.model %></h2>
-                <span class="badge bg-primary"><%= car.type %></span>
-              </div>
-              
-              <div class="d-flex gap-2 mb-3">
-                <small class="text-muted"><i class="fas fa-users me-1"></i> <%= car.seats %> seats</small>
-                <small class="text-muted"><i class="fas fa-suitcase me-1"></i> <%= car.luggage %> bags</small>
-                <% if(car.aircon) { %>
-                  <small class="text-muted"><i class="fas fa-snowflake me-1"></i> A/C</small>
+  <!-- Filter Section -->
+  <section class="mb-5">
+    <form id="filterForm" action="/cars" method="GET" class="filter-card">
+      <h3 class="filter-title"><i class="fas fa-filter"></i> Refine Your Search</h3>
+      <div class="row g-3">
+        <div class="col-md-3">
+          <label for="type" class="form-label">Vehicle Type</label>
+          <select name="type" id="type" class="form-select">
+            <option value="">All Types</option>
+            <option value="Sedan" <%= typeof type !== 'undefined' && type === 'Sedan' ? 'selected' : '' %>>Sedan</option>
+            <option value="SUV" <%= typeof type !== 'undefined' && type === 'SUV' ? 'selected' : '' %>>SUV</option>
+            <option value="Luxury" <%= typeof type !== 'undefined' && type === 'Luxury' ? 'selected' : '' %>>Luxury</option>
+            <option value="Sports" <%= typeof type !== 'undefined' && type === 'Sports' ? 'selected' : '' %>>Sports</option>
+          </select>
+        </div>
+        <div class="col-md-3">
+          <label for="priceRange" class="form-label">Price Range</label>
+          <select name="priceRange" id="priceRange" class="form-select">
+            <option value="">Any Price</option>
+            <option value="0-50" <%= typeof priceRange !== 'undefined' && priceRange === '0-50' ? 'selected' : '' %>>Under ₹50/day</option>
+            <option value="50-100" <%= typeof priceRange !== 'undefined' && priceRange === '50-100' ? 'selected' : '' %>>₹50 - ₹100/day</option>
+            <option value="100-9999" <%= typeof priceRange !== 'undefined' && priceRange === '100-9999' ? 'selected' : '' %>>Over ₹100/day</option>
+          </select>
+        </div>
+        <div class="col-md-3">
+          <label for="transmission" class="form-label">Transmission</label>
+          <select name="transmission" id="transmission" class="form-select">
+            <option value="">Any</option>
+            <option value="Automatic" <%= typeof transmission !== 'undefined' && transmission === 'Automatic' ? 'selected' : '' %>>Automatic</option>
+            <option value="Manual" <%= typeof transmission !== 'undefined' && transmission === 'Manual' ? 'selected' : '' %>>Manual</option>
+          </select>
+        </div>
+        <div class="col-md-3 d-flex align-items-end">
+          <button type="submit" class="btn btn-primary w-100 py-2">
+            <i class="fas fa-search me-2"></i>Search
+          </button>
+        </div>
+      </div>
+    </form>
+  </section>
+
+  <!-- Car Listings -->
+  <section id="car-listings">
+    <div class="section-header">
+      <h2 class="section-title">Our Fleet</h2>
+      <% if(user && user.role === 'admin') { %>
+        <a href="/cars/add" class="btn-add-car">
+          <i class="fas fa-plus me-2"></i>Add New Car
+        </a>
+      <% } %>
+    </div>
+
+    <div class="row g-4">
+      <% if (cars.length > 0) { %>
+        <% cars.forEach(car => { %>
+          <div class="col-md-6 col-lg-4">
+            <div class="car-card">
+              <div class="car-image-container">
+                <img src="/uploads/cars/<%= car.image || 'default-car.jpg' %>" alt="<%= car.make %> <%= car.model %>" class="car-image">
+                <span class="car-badge type-badge"><%= car.type %></span>
+                <% if(car.available) { %>
+                  <span class="car-badge available-badge">Available</span>
+                <% } else { %>
+                  <span class="car-badge unavailable-badge">Unavailable</span>
                 <% } %>
               </div>
               
-              <p class="card-text"><%= car.features.join(', ') %></p>
-              
-              <div class="d-flex justify-content-between align-items-center">
-                <h3 class="text-primary mb-0">$<%= car.dailyRate %>/day</h3>
+              <div class="car-body">
                 <div>
-                  <a href="/cars/update/<%=car._id%>" class="btn btn-sm btn-outline-warning me-2">Update</a>
-                  <a href="/cars/<%= car._id %>" class="btn btn-sm btn-outline-primary me-2">Details</a>
-                  <% if(car.available) { %>
-                    <a href="/cars/<%= car._id %>" class="btn btn-sm btn-success">Book Now</a>
+                  <h3 class="car-title"><%= car.make %> <%= car.model %></h3>
+                  <p class="car-subtitle"><%= car.year %> • <%= car.fuelType %></p>
+                  
+                  <div class="car-specs">
+                    <div class="spec-item">
+                      <i class="fas fa-users spec-icon"></i>
+                      <%= car.seats %> Seats
+                    </div>
+                    <div class="spec-item">
+                      <i class="fas fa-suitcase spec-icon"></i>
+                      <%= car.luggage %> Bags
+                    </div>
+                    <% if(car.aircon) { %>
+                      <div class="spec-item">
+                        <i class="fas fa-snowflake spec-icon"></i>
+                        A/C
+                      </div>
+                    <% } %>
+                    <div class="spec-item">
+                      <i class="fas fa-tachometer-alt spec-icon"></i>
+                      <%= car.transmission || 'Automatic' %>
+                    </div>
+                  </div>
+                  
+                  <% if (car.features && car.features.length > 0) { %>
+                    <div class="features-container">
+                      <p class="features-title">
+                        <i class="fas fa-star"></i>
+                        Key Features
+                      </p>
+                      <div class="features-list">
+                        <% car.features.slice(0, 3).forEach(feature => { %>
+                          <span class="feature-tag">
+                            <i class="fas fa-check"></i>
+                            <%= feature %>
+                          </span>
+                        <% }); %>
+                      </div>
+                    </div>
                   <% } %>
+                </div>
+                
+                <div class="car-footer">
+                  <div class="price-container">
+                    <span class="car-price">₹<%= car.dailyRate %></span>
+                    <span class="price-period">/day</span>
+                  </div>
+                  <div class="action-buttons">
+                    <a href="/cars/<%= car._id %>" class="btn-details">
+                      Details
+                    </a>
+                    <% if(car.available) { %>
+                      <a href="/cars/<%= car._id %>" class="btn-book">
+                        <i class="fas fa-calendar-alt"></i> Book
+                      </a>
+                    <% } %>
+                  </div>
                 </div>
               </div>
             </div>
           </div>
+        <% }); %>
+      <% } else { %>
+        <div class="col-12">
+          <div class="empty-state">
+            <i class="fas fa-car-crash empty-icon"></i>
+            <h3 class="empty-title">No Vehicles Found</h3>
+            <p class="empty-text">We couldn't find any cars matching your criteria. Try adjusting your filters or browse our full collection.</p>
+            <a href="/cars" class="btn btn-primary">
+              <i class="fas fa-sync-alt me-2"></i>Reset Filters
+            </a>
+          </div>
         </div>
-      <% }); %>
-    <% } else { %>
-      <div class="col-12">
-        <div class="alert alert-info">No vehicles available at the moment. Please check back later.</div>
-      </div>
-    <% } %>
-  </div>
+      <% } %>
+    </div>
+  </section>
 </div>
+
+<!-- JavaScript for Enhanced Filtering -->
+<script>
+  document.addEventListener('DOMContentLoaded', function() {
+    // Enhance filter form submission
+    const filterForm = document.getElementById('filterForm');
+    
+    if (filterForm) {
+      filterForm.addEventListener('submit', function(e) {
+        // Get all selected filter values
+        const type = this.elements.type.value;
+        const priceRange = this.elements.priceRange.value;
+        const transmission = this.elements.transmission.value;
+        
+        // Build query string
+        const params = new URLSearchParams();
+        if (type) params.append('type', type);
+        if (priceRange) params.append('priceRange', priceRange);
+        if (transmission) params.append('transmission', transmission);
+        
+        // Update form action with query parameters
+        this.action = '/cars?' + params.toString();
+      });
+    }
+    
+    // Add smooth scrolling for anchor links
+    document.querySelectorAll('a[href^="#"]').forEach(anchor => {
+      anchor.addEventListener('click', function(e) {
+        e.preventDefault();
+        document.querySelector(this.getAttribute('href')).scrollIntoView({
+          behavior: 'smooth'
+        });
+      });
+    });
+  });
+</script>
 
 <%- include('../partials/footer') %>

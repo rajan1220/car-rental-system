@@ -1,0 +1,325 @@
+<%- include('partials/sidebar', {currentPage: 'vehicles'}) %>
+
+<!-- CSS Libraries -->
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+<link href="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/css/bootstrap.min.css" rel="stylesheet">
+<link rel="stylesheet" href="/css/admin-dashboard.css">
+<style>
+  .main-content {
+    margin-left: 250px;
+    padding: 20px;
+    min-height: 100vh;
+    background-color: #f8f9fa;
+    transition: all 0.3s;
+  }
+  
+  @media (max-width: 768px) {
+    .main-content {
+      margin-left: 0;
+    }
+  }
+  
+  .topbar {
+    height: 60px;
+    background: white;
+    box-shadow: 0 0.15rem 1.75rem 0 rgba(58, 59, 69, 0.1);
+    padding: 0 20px;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    margin-bottom: 20px;
+    border-radius: 8px;
+  }
+  
+  .card {
+    border: none;
+    border-radius: 10px;
+    box-shadow: 0 0.15rem 1.75rem 0 rgba(58, 59, 69, 0.1);
+  }
+  
+  .form-section-title {
+    font-size: 1.1rem;
+    font-weight: 600;
+    color: #4e73df;
+    border-bottom: 1px solid #eee;
+    padding-bottom: 10px;
+    margin-bottom: 20px;
+  }
+  
+  .image-preview {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 15px;
+  }
+  
+  .image-preview img {
+    width: 150px;
+    height: 100px;
+    object-fit: cover;
+    border-radius: 8px;
+    border: 1px solid #dee2e6;
+  }
+  
+  .breadcrumb {
+    background-color: transparent;
+    padding: 0;
+    margin-bottom: 0;
+  }
+  
+  .breadcrumb-item a {
+    color: #4e73df;
+    text-decoration: none;
+  }
+</style>
+
+<div class="main-content">
+  <!-- Top Navigation Bar -->
+  <nav class="topbar navbar navbar-expand navbar-light bg-white shadow-sm">
+    <div class="container-fluid">
+      <button class="btn btn-link d-md-none rounded-circle me-3">
+        <i class="fas fa-bars"></i>
+      </button>
+      
+      <div class="d-flex align-items-center">
+        <h5 class="mb-0 text-gray-800">Add New Vehicle</h5>
+      </div>
+      
+      <div class="d-flex align-items-center">
+        <div class="dropdown me-3">
+          <a class="dropdown-toggle" href="#" role="button" data-bs-toggle="dropdown">
+            <i class="fas fa-bell fa-fw"></i>
+            <span class="badge bg-danger badge-counter">3+</span>
+          </a>
+        </div>
+        
+        <div class="dropdown">
+          <a class="dropdown-toggle d-flex align-items-center" href="#" role="button" data-bs-toggle="dropdown">
+            <img class="rounded-circle me-2" src="https://via.placeholder.com/40" width="32" height="32">
+            <span>Admin</span>
+          </a>
+        </div>
+      </div>
+    </div>
+  </nav>
+
+  <!-- Main Content -->
+  <div class="container-fluid py-4">
+    <!-- Breadcrumb -->
+    <div class="d-flex justify-content-between align-items-center mb-4">
+      <div>
+        <h2 class="mb-0 fw-bold">Add New Vehicle</h2>
+        <nav aria-label="breadcrumb">
+          <ol class="breadcrumb">
+            <li class="breadcrumb-item"><a href="/admin">Dashboard</a></li>
+            <li class="breadcrumb-item"><a href="/admin/vehicles">Vehicles</a></li>
+            <li class="breadcrumb-item active">Add New</li>
+          </ol>
+        </nav>
+      </div>
+    </div>
+
+    <!-- Vehicle Form -->
+    <div class="card border-0 shadow-sm">
+      <div class="card-body">
+        <form id="vehicleForm" action="/admin/vehicles" method="POST" enctype="multipart/form-data">
+          <div class="row g-4">
+            <!-- Basic Information Section -->
+            <div class="col-md-6">
+              <h5 class="form-section-title">Basic Information</h5>
+              
+              <div class="mb-3">
+                <label class="form-label">Make <span class="text-danger">*</span></label>
+                <input type="text" class="form-control" name="make" required>
+              </div>
+              
+              <div class="mb-3">
+                <label class="form-label">Model <span class="text-danger">*</span></label>
+                <input type="text" class="form-control" name="model" required>
+              </div>
+              
+              <div class="mb-3">
+                <label class="form-label">Year <span class="text-danger">*</span></label>
+                <select class="form-select" name="year" required>
+                  <option value="">Select Year</option>
+                  <% for(let year = new Date().getFullYear() + 1; year >= 2000; year--) { %>
+                    <option value="<%= year %>"><%= year %></option>
+                  <% } %>
+                </select>
+              </div>
+              
+              <div class="mb-3">
+                <label class="form-label">Vehicle Type <span class="text-danger">*</span></label>
+                <select class="form-select" name="type" required>
+                  <option value="">Select Type</option>
+                  <option value="Sedan">Sedan</option>
+                  <option value="SUV">SUV</option>
+                  <option value="Hatchback">Hatchback</option>
+                  <option value="Luxury">Luxury</option>
+                  <option value="Electric">Electric</option>
+                </select>
+              </div>
+            </div>
+
+            <!-- Pricing & Status Section -->
+            <div class="col-md-6">
+              <h5 class="form-section-title">Pricing & Status</h5>
+              
+              <div class="mb-3">
+                <label class="form-label">Daily Rate (₹) <span class="text-danger">*</span></label>
+                <input type="number" class="form-control" name="dailyRate" min="0" required>
+              </div>
+              
+              <div class="mb-3">
+                <label class="form-label">Hourly Rate (₹)</label>
+                <input type="number" class="form-control" name="hourlyRate" min="0">
+              </div>
+              
+              <div class="mb-3">
+                <label class="form-label">Minimum Rental Period (days)</label>
+                <input type="number" class="form-control" name="minRentalDays" min="1" value="1">
+              </div>
+              
+              <div class="mb-3">
+                <label class="form-label">Initial Status <span class="text-danger">*</span></label>
+                <select class="form-select" name="status" required>
+                  <option value="available">Available</option>
+                  <option value="maintenance">Maintenance</option>
+                </select>
+              </div>
+            </div>
+
+            <!-- Vehicle Details Section -->
+            <div class="col-12">
+              <h5 class="form-section-title">Vehicle Details</h5>
+              <div class="row g-3">
+                <div class="col-md-3">
+                  <label class="form-label">Transmission</label>
+                  <select class="form-select" name="transmission">
+                    <option value="Automatic">Automatic</option>
+                    <option value="Manual">Manual</option>
+                  </select>
+                </div>
+                
+                <div class="col-md-3">
+                  <label class="form-label">Fuel Type</label>
+                  <select class="form-select" name="fuelType">
+                    <option value="Petrol">Petrol</option>
+                    <option value="Diesel">Diesel</option>
+                    <option value="Electric">Electric</option>
+                    <option value="Hybrid">Hybrid</option>
+                  </select>
+                </div>
+                
+                <div class="col-md-3">
+                  <label class="form-label">Seating Capacity</label>
+                  <input type="number" class="form-control" name="seats" min="2" max="12" value="5">
+                </div>
+                
+                <div class="col-md-3">
+                  <label class="form-label">Luggage Capacity</label>
+                  <input type="number" class="form-control" name="luggage" min="1" value="2">
+                </div>
+              </div>
+            </div>
+
+            <!-- Features Section -->
+            <div class="col-12">
+              <h5 class="form-section-title">Features</h5>
+              <div class="row g-3">
+                <% const features = [
+                  'Air Conditioning', 'Bluetooth', 'Navigation', 'Sunroof',
+                  'Backup Camera', 'Keyless Entry', 'USB Ports', 'Heated Seats',
+                  'Child Seat', 'GPS Tracking', 'Toll Pass', 'First Aid Kit'
+                ]; %>
+                <% features.forEach(feature => { %>
+                  <div class="col-md-3">
+                    <div class="form-check">
+                      <input class="form-check-input" type="checkbox" name="features" value="<%= feature %>" id="feature<%= feature.replace(/\s+/g, '') %>">
+                      <label class="form-check-label" for="feature<%= feature.replace(/\s+/g, '') %>">
+                        <%= feature %>
+                      </label>
+                    </div>
+                  </div>
+                <% }); %>
+              </div>
+            </div>
+
+            <!-- Images Section -->
+            <div class="col-12">
+              <h5 class="form-section-title">Vehicle Images</h5>
+              <div class="mb-3">
+                <label class="form-label">Upload Images (Max 5)</label>
+                <input type="file" class="form-control" name="images" multiple accept="image/*">
+                <small class="text-muted">First image will be used as thumbnail</small>
+              </div>
+              <div class="image-preview"></div>
+            </div>
+
+            <!-- Description Section -->
+            <div class="col-12">
+              <h5 class="form-section-title">Description</h5>
+              <div class="mb-3">
+                <label class="form-label">Vehicle Description</label>
+                <textarea class="form-control" name="description" rows="4"></textarea>
+              </div>
+            </div>
+
+            <!-- Form Actions -->
+            <div class="col-12">
+              <div class="d-flex justify-content-end gap-3">
+                <a href="/admin/vehicles" class="btn btn-outline-secondary">Cancel</a>
+                <button type="submit" class="btn btn-primary">Save Vehicle</button>
+              </div>
+            </div>
+          </div>
+        </form>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- JavaScript Libraries -->
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/js/bootstrap.bundle.min.js"></script>
+<script>
+  // Image preview functionality
+  document.querySelector('input[name="images"]').addEventListener('change', function(e) {
+    const previewContainer = document.querySelector('.image-preview');
+    previewContainer.innerHTML = '';
+    
+    if (this.files.length > 5) {
+      alert('Maximum 5 images allowed');
+      this.value = '';
+      return;
+    }
+    
+    Array.from(this.files).forEach(file => {
+      if (!file.type.match('image.*')) return;
+      
+      const reader = new FileReader();
+      reader.onload = function(e) {
+        const img = document.createElement('img');
+        img.src = e.target.result;
+        img.classList.add('img-thumbnail');
+        img.style.width = '150px';
+        img.style.height = '100px';
+        img.style.objectFit = 'cover';
+        previewContainer.appendChild(img);
+      }
+      reader.readAsDataURL(file);
+    });
+  });
+
+  // Form validation
+  document.getElementById('vehicleForm').addEventListener('submit', function(e) {
+    const make = this.elements.make.value.trim();
+    const model = this.elements.model.value.trim();
+    const year = this.elements.year.value;
+    const type = this.elements.type.value;
+    const dailyRate = this.elements.dailyRate.value;
+    
+    if (!make || !model || !year || !type || !dailyRate) {
+      e.preventDefault();
+      alert('Please fill all required fields (marked with *)');
+    }
+  });
+</script>

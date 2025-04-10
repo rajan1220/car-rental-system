@@ -1,17 +1,17 @@
-// Ensure user is authenticated
-exports.ensureAuthenticated = (req, res, next) => {
-    if (req.isAuthenticated()) {
-      return next();
-    }
-    req.flash('error_msg', 'Please log in to access that page');
-    res.redirect('/auth/login');
-  };
-  
-  // Ensure user is admin
-  exports.ensureAdmin = (req, res, next) => {
-    if (req.user && req.user.role === 'admin') {
-      return next();
-    }
-    req.flash('error_msg', 'You are not authorized to access that page');
-    res.redirect('/');
-  };
+const ensureAuthenticated = (req, res, next) => {
+  if (req.isAuthenticated()) {
+    return next();
+  }
+  req.flash('error_msg', 'Please log in to view this resource');
+  res.redirect('/auth/login');
+};
+
+const ensureAdmin = (req, res, next) => {
+  if (req.isAuthenticated() && req.user.role === 'admin') {
+    return next();
+  }
+  req.flash('error_msg', 'Unauthorized access');
+  res.redirect('/admin');
+};
+
+module.exports = { ensureAuthenticated, ensureAdmin };

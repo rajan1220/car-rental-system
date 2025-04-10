@@ -1,54 +1,527 @@
 <%- include('partials/header') %>
 
-<div class="container my-5">
-  <div class="row">
-    <div class="col-lg-8 mx-auto">
-      <h1 class="display-4 fw-bold mb-4">About DriveEase</h1>
-      
-      <div class="card mb-4 border-0 shadow-sm">
-        <div class="card-body">
-          <h2 class="h4 fw-bold">Our Story</h2>
-          <p>Founded in 2023, DriveEase began with a simple mission: to make car rental easy, affordable, and stress-free for everyone. What started as a small local service has grown into a trusted name in vehicle rentals.</p>
+<!-- Animated Background Hero -->
+<section class="about-hero position-relative overflow-hidden py-6 py-lg-8">
+  <div class="particles-container position-absolute w-100 h-100"></div>
+  <div class="container position-relative py-5 my-4">
+    <div class="row justify-content-center text-center">
+      <div class="col-lg-10 col-xl-8">
+        <div class="mb-4">
+          <div class="d-inline-block p-3 bg-white bg-opacity-10 rounded-5 backdrop-blur">
+            <div class="d-inline-block p-3 bg-primary bg-opacity-10 rounded-4">
+              <i class="fas fa-car text-white fs-1"></i>
+            </div>
+          </div>
         </div>
+        <h1 class="display-2 fw-bold text-white mb-4">Driving <span class="text-gradient">Innovation</span> Forward</h1>
+        <p class="lead text-light opacity-75 mb-5">Since 2023, we've been redefining what it means to rent a car with seamless technology and exceptional service.</p>
+        <a href="#our-story" class="btn btn-lg btn-outline-light rounded-pill px-4 py-2 scroll-to">
+          Explore Our Journey <i class="fas fa-arrow-down ms-2"></i>
+        </a>
       </div>
+    </div>
+  </div>
+  <div class="hero-wave position-absolute bottom-0 start-0 w-100">
+    <svg viewBox="0 0 1200 120" preserveAspectRatio="none">
+      <path d="M0,0V46.29c47.79,22.2,103.59,32.17,158,28,70.36-5.37,136.33-33.31,206.8-37.5C438.64,32.43,512.34,53.67,583,72.05c69.27,18,138.3,24.88,209.4,13.08,36.15-6,69.85-17.84,104.45-29.34C989.49,25,1113-14.29,1200,52.47V0Z" opacity=".25" fill="#fff"></path>
+      <path d="M0,0V15.81C13,36.92,27.64,56.86,47.69,72.05,99.41,111.27,165,111,224.58,91.58c31.15-10.15,60.09-26.07,89.67-39.8,40.92-19,84.73-46,130.83-49.67,36.26-2.85,70.9,9.42,98.6,31.56,31.77,25.39,62.32,62,103.63,73,40.44,10.79,81.35-6.69,119.13-24.28s75.16-39,116.92-43.05c59.73-5.85,113.28,22.88,168.9,38.84,30.2,8.66,59,6.17,87.09-7.5,22.43-10.89,48-26.93,60.65-49.24V0Z" opacity=".5" fill="#fff"></path>
+      <path d="M0,0V5.63C149.93,59,314.09,71.32,475.83,42.57c43-7.64,84.23-20.12,127.61-26.46,59-8.63,112.48,12.24,165.56,35.4C827.93,77.22,886,95.24,951.2,90c86.53-7,172.46-45.71,248.8-84.81V0Z" fill="#fff"></path>
+    </svg>
+  </div>
+</section>
 
-      <div class="card mb-4 border-0 shadow-sm">
-        <div class="card-body">
-          <h2 class="h4 fw-bold">Our Mission</h2>
-          <p>We're committed to providing:</p>
-          <ul>
-            <li>Top-quality vehicles at competitive prices</li>
-            <li>Exceptional customer service</li>
-            <li>Flexible rental options</li>
-            <li>Transparent pricing with no hidden fees</li>
-          </ul>
-        </div>
-      </div>
-
-      <div class="card border-0 shadow-sm">
-        <div class="card-body">
-          <h2 class="h4 fw-bold">Our Team</h2>
+<!-- Our Story Section -->
+<section id="our-story" class="py-6 py-lg-8 bg-white position-relative">
+  <div class="container">
+    <div class="row align-items-center g-5">
+      <div class="col-lg-6">
+        <div class="pe-lg-5">
+          <span class="badge bg-primary bg-opacity-10 text-primary rounded-pill px-3 py-2 mb-3">Our Beginning</span>
+          <h2 class="display-5 fw-bold mb-4">The DriveEase Story</h2>
+          <p class="lead text-muted mb-4">Founded in 2023 by automotive enthusiasts, DriveEase emerged from a simple idea: car rental should be effortless, transparent, and enjoyable.</p>
+          <p class="text-muted mb-5">What began as a small fleet of 5 vehicles has grown into one of the most trusted names in mobility solutions, serving thousands of satisfied customers across the region.</p>
+          
           <div class="row g-4">
-            <div class="col-md-4 text-center">
-              <img src="/images/team1.jpg" class="rounded-circle mb-3" width="120" height="120" alt="Team Member">
-              <h3 class="h5">John Smith</h3>
-              <p class="text-muted">Founder & CEO</p>
+            <div class="col-6">
+              <div class="d-flex">
+                <div class="flex-shrink-0 text-primary fs-2 me-3">
+                  <i class="fas fa-car-alt"></i>
+                </div>
+                <div>
+                  <h3 class="h4 mb-0"><span class="counter" data-target="250">0</span>+</h3>
+                  <p class="text-muted mb-0">Vehicles</p>
+                </div>
+              </div>
             </div>
-            <div class="col-md-4 text-center">
-              <img src="/images/team2.jpg" class="rounded-circle mb-3" width="120" height="120" alt="Team Member">
-              <h3 class="h5">Sarah Johnson</h3>
-              <p class="text-muted">Operations Manager</p>
+            <div class="col-6">
+              <div class="d-flex">
+                <div class="flex-shrink-0 text-primary fs-2 me-3">
+                  <i class="fas fa-smile"></i>
+                </div>
+                <div>
+                  <h3 class="h4 mb-0"><span class="counter" data-target="12000">0</span>+</h3>
+                  <p class="text-muted mb-0">Happy Customers</p>
+                </div>
+              </div>
             </div>
-            <div class="col-md-4 text-center">
-              <img src="/images/team3.jpg" class="rounded-circle mb-3" width="120" height="120" alt="Team Member">
-              <h3 class="h5">Michael Chen</h3>
-              <p class="text-muted">Customer Support</p>
+          </div>
+        </div>
+      </div>
+      <div class="col-lg-6">
+        <div class="position-relative rounded-4 overflow-hidden shadow-lg">
+          <img src="/images/image.jpg" alt="DriveEase Founding Team" class="img-fluid w-100">
+          <div class="position-absolute bottom-0 start-0 w-100 p-4 bg-dark bg-opacity-50 text-white">
+            <div class="d-flex align-items-center">
+              <div class="flex-shrink-0 me-3">
+                <i class="fas fa-quote-left fs-1 text-primary"></i>
+              </div>
+              <div>
+                <p class="mb-0 fst-italic">"We built DriveEase to remove the friction from car rentals - because getting where you need to go should be the easiest part of your journey."</p>
+                <div class="mt-2 text-primary">— John Smith, Founder</div>
+              </div>
             </div>
           </div>
         </div>
       </div>
     </div>
   </div>
-</div>
+</section>
+
+<!-- Mission Section -->
+<section class="py-6 py-lg-8 bg-light position-relative">
+  <div class="container">
+    <div class="row justify-content-center text-center mb-5">
+      <div class="col-lg-8">
+        <span class="badge bg-primary bg-opacity-10 text-primary rounded-pill px-3 py-2 mb-3">Our Promise</span>
+        <h2 class="display-5 fw-bold mb-3">The DriveEase Difference</h2>
+        <p class="lead text-muted">We're not just renting cars - we're delivering peace of mind</p>
+      </div>
+    </div>
+    
+    <div class="row g-4">
+      <div class="col-md-6 col-lg-3">
+        <div class="card border-0 shadow-sm h-100 hover-lift">
+          <div class="card-body p-4 text-center">
+            <div class="icon-box-lg bg-primary bg-opacity-10 text-primary rounded-3 mb-4 mx-auto">
+              <i class="fas fa-bolt fa-2x"></i>
+            </div>
+            <h3 class="h4 mb-3">Instant Booking</h3>
+            <p class="text-muted mb-0">Reserve your perfect vehicle in under 60 seconds with our streamlined platform.</p>
+          </div>
+        </div>
+      </div>
+      <div class="col-md-6 col-lg-3">
+        <div class="card border-0 shadow-sm h-100 hover-lift">
+          <div class="card-body p-4 text-center">
+            <div class="icon-box-lg bg-primary bg-opacity-10 text-primary rounded-3 mb-4 mx-auto">
+              <i class="fas fa-tag fa-2x"></i>
+            </div>
+            <h3 class="h4 mb-3">No Hidden Fees</h3>
+            <p class="text-muted mb-0">Transparent pricing with all costs included upfront - no surprises.</p>
+          </div>
+        </div>
+      </div>
+      <div class="col-md-6 col-lg-3">
+        <div class="card border-0 shadow-sm h-100 hover-lift">
+          <div class="card-body p-4 text-center">
+            <div class="icon-box-lg bg-primary bg-opacity-10 text-primary rounded-3 mb-4 mx-auto">
+              <i class="fas fa-shield-alt fa-2x"></i>
+            </div>
+            <h3 class="h4 mb-3">Premium Insurance</h3>
+            <p class="text-muted mb-0">Comprehensive coverage options for complete peace of mind.</p>
+          </div>
+        </div>
+      </div>
+      <div class="col-md-6 col-lg-3">
+        <div class="card border-0 shadow-sm h-100 hover-lift">
+          <div class="card-body p-4 text-center">
+            <div class="icon-box-lg bg-primary bg-opacity-10 text-primary rounded-3 mb-4 mx-auto">
+              <i class="fas fa-headset fa-2x"></i>
+            </div>
+            <h3 class="h4 mb-3">24/7 Support</h3>
+            <p class="text-muted mb-0">Real humans ready to help whenever you need assistance.</p>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- Team Section -->
+<section class="py-6 py-lg-8 position-relative bg-white">
+  <div class="container">
+    <div class="row justify-content-center text-center mb-5">
+      <div class="col-lg-8">
+        <span class="badge bg-primary bg-opacity-10 text-primary rounded-pill px-3 py-2 mb-3">Meet Us</span>
+        <h2 class="display-5 fw-bold mb-3">Our Leadership Team</h2>
+        <p class="lead text-muted">The passionate professionals driving our success</p>
+      </div>
+    </div>
+    
+    <div class="row g-4 justify-content-center">
+      <div class="col-md-6 col-lg-4">
+        <div class="team-card card border-0 shadow-sm h-100 overflow-hidden">
+          <div class="team-image position-relative overflow-hidden">
+            <img src="/images/image (3).jpg" class="img-fluid w-100" alt="John Smith">
+            <div class="team-overlay position-absolute w-100 h-100 d-flex align-items-center justify-content-center">
+              <div class="social-links">
+                <a href="#" class="text-white mx-2"><i class="fab fa-linkedin-in"></i></a>
+                <a href="#" class="text-white mx-2"><i class="fab fa-twitter"></i></a>
+                <a href="#" class="text-white mx-2"><i class="fas fa-envelope"></i></a>
+              </div>
+            </div>
+          </div>
+          <div class="card-body text-center p-4">
+            <h3 class="h4 mb-1">Rajan Kumar</h3>
+            <p class="text-primary mb-3">Founder & CEO</p>
+            <p class="text-muted small mb-0">Former automotive executive with a vision for frictionless mobility solutions.</p>
+          </div>
+        </div>
+      </div>
+      <div class="col-md-6 col-lg-4">
+        <div class="team-card card border-0 shadow-sm h-100 overflow-hidden">
+          <div class="team-image position-relative overflow-hidden">
+            <img src="/images/image (4).jpg" class="img-fluid w-100" alt="Sarah Johnson">
+            <div class="team-overlay position-absolute w-100 h-100 d-flex align-items-center justify-content-center">
+              <div class="social-links">
+                <a href="#" class="text-white mx-2"><i class="fab fa-linkedin-in"></i></a>
+                <a href="#" class="text-white mx-2"><i class="fab fa-twitter"></i></a>
+                <a href="#" class="text-white mx-2"><i class="fas fa-envelope"></i></a>
+              </div>
+            </div>
+          </div>
+          <div class="card-body text-center p-4">
+            <h3 class="h4 mb-1">Saksham Pradhan</h3>
+            <p class="text-primary mb-3">Chief Operations Officer</p>
+            <p class="text-muted small mb-0">Logistics expert ensuring seamless experiences for every customer.</p>
+          </div>
+        </div>
+      </div>
+      <div class="col-md-6 col-lg-4">
+        <div class="team-card card border-0 shadow-sm h-100 overflow-hidden">
+          <div class="team-image position-relative overflow-hidden">
+            <img src="/images/image (5).jpg" class="img-fluid w-100" alt="Michael Chen">
+            <div class="team-overlay position-absolute w-100 h-100 d-flex align-items-center justify-content-center">
+              <div class="social-links">
+                <a href="#" class="text-white mx-2"><i class="fab fa-linkedin-in"></i></a>
+                <a href="#" class="text-white mx-2"><i class="fab fa-twitter"></i></a>
+                <a href="#" class="text-white mx-2"><i class="fas fa-envelope"></i></a>
+              </div>
+            </div>
+          </div>
+          <div class="card-body text-center p-4">
+            <h3 class="h4 mb-1">Prashant Swami</h3>
+            <p class="text-primary mb-3">Customer Experience Director</p>
+            <p class="text-muted small mb-0">Customer service visionary building lasting relationships.</p>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- Values Section -->
+<section class="py-6 py-lg-8 bg-dark text-white position-relative">
+  <div class="container position-relative">
+    <div class="row justify-content-center text-center mb-5">
+      <div class="col-lg-8">
+        <span class="badge bg-primary bg-opacity-10 text-primary rounded-pill px-3 py-2 mb-3">Our Core</span>
+        <h2 class="display-5 fw-bold mb-3">Company Values</h2>
+        <p class="lead text-light opacity-75">The principles that guide every decision we make</p>
+      </div>
+    </div>
+    
+    <div class="row g-4">
+      <div class="col-md-6 col-lg-3">
+        <div class="p-4 h-100 rounded-4 bg-dark bg-opacity-50 hover-lift">
+          <div class="d-flex align-items-center mb-3">
+            <div class="flex-shrink-0 bg-primary bg-opacity-10 text-primary rounded-3 p-3 me-3">
+              <i class="fas fa-hand-holding-heart fs-2"></i>
+            </div>
+            <h3 class="h4 mb-0">Customer First</h3>
+          </div>
+          <p class="text-light opacity-75 mb-0">Every decision starts with what's best for our customers.</p>
+        </div>
+      </div>
+      <div class="col-md-6 col-lg-3">
+        <div class="p-4 h-100 rounded-4 bg-dark bg-opacity-50 hover-lift">
+          <div class="d-flex align-items-center mb-3">
+            <div class="flex-shrink-0 bg-primary bg-opacity-10 text-primary rounded-3 p-3 me-3">
+              <i class="fas fa-lightbulb fs-2"></i>
+            </div>
+            <h3 class="h4 mb-0">Innovate Daily</h3>
+          </div>
+          <p class="text-light opacity-75 mb-0">We constantly seek better ways to serve you.</p>
+        </div>
+      </div>
+      <div class="col-md-6 col-lg-3">
+        <div class="p-4 h-100 rounded-4 bg-dark bg-opacity-50 hover-lift">
+          <div class="d-flex align-items-center mb-3">
+            <div class="flex-shrink-0 bg-primary bg-opacity-10 text-primary rounded-3 p-3 me-3">
+              <i class="fas fa-balance-scale fs-2"></i>
+            </div>
+            <h3 class="h4 mb-0">Integrity Always</h3>
+          </div>
+          <p class="text-light opacity-75 mb-0">Honesty and transparency in all we do.</p>
+        </div>
+      </div>
+      <div class="col-md-6 col-lg-3">
+        <div class="p-4 h-100 rounded-4 bg-dark bg-opacity-50 hover-lift">
+          <div class="d-flex align-items-center mb-3">
+            <div class="flex-shrink-0 bg-primary bg-opacity-10 text-primary rounded-3 p-3 me-3">
+              <i class="fas fa-users fs-2"></i>
+            </div>
+            <h3 class="h4 mb-0">Teamwork</h3>
+          </div>
+          <p class="text-light opacity-75 mb-0">Together we achieve extraordinary results.</p>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- CTA Section -->
+<section class="py-6 py-lg-8 bg-primary position-relative overflow-hidden">
+  <div class="container position-relative">
+    <div class="row justify-content-center text-center">
+      <div class="col-lg-10">
+        <h2 class="display-5 fw-bold text-white mb-4">Ready to Experience the DriveEase Difference?</h2>
+        <p class="lead text-light opacity-75 mb-5">Join thousands of satisfied customers who've made us their preferred mobility partner.</p>
+        <div class="d-flex flex-column flex-sm-row justify-content-center gap-3">
+          <a href="/cars" class="btn btn-light btn-lg px-5 rounded-pill shadow-sm">
+            Browse Our Fleet <i class="fas fa-arrow-right ms-2"></i>
+          </a>
+          <a href="/contact" class="btn btn-outline-light btn-lg px-5 rounded-pill">
+            Contact Us <i class="fas fa-phone-alt ms-2"></i>
+          </a>
+        </div>
+      </div>
+    </div>
+  </div>
+  <div class="position-absolute top-0 end-0 w-100 h-100">
+    <div class="particles-js" style="width: 100%; height: 100%;"></div>
+  </div>
+</section>
 
 <%- include('partials/footer') %>
+
+<style>
+  /* Custom Styles */
+  :root {
+    --primary: #4cc9f0;
+    --primary-dark: #4895ef;
+    --dark: #16213e;
+    --darker: #1a1a2e;
+  }
+  
+  body {
+    overflow-x: hidden;
+  }
+  
+  /* Hero Section */
+  .about-hero {
+    background: linear-gradient(135deg, var(--darker) 0%, var(--dark) 100%);
+    padding-top: 8rem;
+    padding-bottom: 6rem;
+  }
+  
+  .hero-wave {
+    z-index: 1;
+  }
+  
+  .hero-wave svg {
+    display: block;
+    width: calc(100% + 1.3px);
+    height: 120px;
+  }
+  
+  /* Text Gradient */
+  .text-gradient {
+    background: linear-gradient(to right, var(--primary), var(--primary-dark));
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    background-clip: text;
+  }
+  
+  /* Particles Background */
+  .particles-container {
+    z-index: 0;
+    background: url('/images/particle-pattern.png') center/cover;
+    opacity: 0.15;
+  }
+  
+  /* Cards */
+  .hover-lift {
+    transition: all 0.3s ease;
+  }
+  
+  .hover-lift:hover {
+    transform: translateY(-10px);
+    box-shadow: 0 15px 30px rgba(0,0,0,0.1) !important;
+  }
+  
+  /* Team Cards */
+  .team-card {
+    transition: all 0.3s ease;
+  }
+  
+  .team-card:hover {
+    transform: translateY(-5px);
+  }
+  
+  .team-image {
+    height: 300px;
+  }
+  
+  .team-image img {
+    height: 100%;
+    object-fit: cover;
+    transition: all 0.5s ease;
+  }
+  
+  .team-overlay {
+    background: rgba(22, 33, 62, 0.8);
+    opacity: 0;
+    transition: all 0.3s ease;
+  }
+  
+  .team-card:hover .team-overlay {
+    opacity: 1;
+  }
+  
+  .team-card:hover .team-image img {
+    transform: scale(1.05);
+  }
+  
+  .social-links a {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    width: 40px;
+    height: 40px;
+    border-radius: 50%;
+    background: rgba(255,255,255,0.1);
+    transition: all 0.3s ease;
+  }
+  
+  .social-links a:hover {
+    background: var(--primary);
+    transform: translateY(-3px);
+  }
+  
+  /* Backdrop Filter */
+  .backdrop-blur {
+    backdrop-filter: blur(8px);
+    -webkit-backdrop-filter: blur(8px);
+  }
+  
+  /* Scroll Animation */
+  [data-animate] {
+    opacity: 0;
+    transition: all 0.8s ease;
+  }
+  
+  [data-animate="fade-up"] {
+    transform: translateY(30px);
+  }
+  
+  [data-animate="fade-in"] {
+    transform: scale(0.95);
+  }
+  
+  [data-animate].animated {
+    opacity: 1;
+    transform: none;
+  }
+  
+  /* Responsive Adjustments */
+  @media (max-width: 767.98px) {
+    .about-hero {
+      padding-top: 6rem;
+      padding-bottom: 4rem;
+    }
+    
+    .display-2 {
+      font-size: 2.5rem;
+    }
+    
+    .team-image {
+      height: 250px;
+    }
+  }
+</style>
+
+<script>
+  // Initialize particles.js if you choose to use it
+  document.addEventListener('DOMContentLoaded', function() {
+    // Scroll animations
+    const animateOnScroll = function() {
+      const elements = document.querySelectorAll('[data-animate]');
+      const windowHeight = window.innerHeight;
+      
+      elements.forEach(element => {
+        const elementPosition = element.getBoundingClientRect().top;
+        const elementVisible = 100;
+        
+        if (elementPosition < windowHeight - elementVisible) {
+          const delay = element.getAttribute('data-delay') || 0;
+          setTimeout(() => {
+            element.classList.add('animated');
+          }, delay);
+        }
+      });
+    };
+    
+    window.addEventListener('scroll', animateOnScroll);
+    animateOnScroll();
+    
+    // Counter animation
+    const counters = document.querySelectorAll('.counter');
+    const speed = 200;
+    
+    function animateCounters() {
+      counters.forEach(counter => {
+        const target = +counter.getAttribute('data-target');
+        const count = +counter.innerText;
+        const increment = target / speed;
+        
+        if (count < target) {
+          counter.innerText = Math.ceil(count + increment);
+          setTimeout(animateCounters, 1);
+        } else {
+          counter.innerText = target;
+        }
+      });
+    }
+    
+    // Start counters when section is in view
+    const counterSection = document.querySelector('#our-story');
+    const observer = new IntersectionObserver((entries) => {
+      entries.forEach(entry => {
+        if (entry.isIntersecting) {
+          animateCounters();
+          observer.unobserve(entry.target);
+        }
+      });
+    }, { threshold: 0.5 });
+    
+    if (counterSection) {
+      observer.observe(counterSection);
+    }
+    
+    // Smooth scrolling for anchor links
+    document.querySelectorAll('.scroll-to').forEach(anchor => {
+      anchor.addEventListener('click', function(e) {
+        e.preventDefault();
+        
+        const targetId = this.getAttribute('href');
+        const targetElement = document.querySelector(targetId);
+        
+        window.scrollTo({
+          top: targetElement.offsetTop - 80,
+          behavior: 'smooth'
+        });
+      });
+    });
+  });
+</script>
